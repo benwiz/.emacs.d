@@ -119,11 +119,11 @@
 (use-package magit)
 
 (use-package flycheck
- :init (global-flycheck-mode))
+  :init (global-flycheck-mode))
 
-;(use-package color-identifiers-mode
-;  :init
-;  (add-hook 'clojure-mode-hook 'color-identifiers-mode))
+(use-package color-identifiers-mode
+  :init
+  (add-hook 'clojure-mode-hook 'color-identifiers-mode))
 
 (defun paredit-delete-indentation (&optional arg)
   "Handle joining lines that end in a comment."
@@ -154,11 +154,13 @@
   :bind ("M-^" . paredit-delete-indentation)
   :bind ("C-^" . paredit-remove-newlines)
   :init
-  (add-hook 'clojure-mode-hook 'paredit-mode))
+  (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+  (add-hook 'clojure-mode-hook 'paredit-mode)
+  (add-hook 'cider-repl-mode-hook 'paredit-mode))
 
 
 
-; (use-package clojure-snippets)
+(use-package clojure-snippets)
 
 (use-package flycheck-clj-kondo)
 

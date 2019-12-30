@@ -141,45 +141,47 @@
 * Language
 ** All
 #+BEGIN_SRC emacs-lisp
-(use-package flycheck
- :init (global-flycheck-mode))
+  (use-package flycheck
+    :init (global-flycheck-mode))
 
-;(use-package color-identifiers-mode
-;  :init
-;  (add-hook 'clojure-mode-hook 'color-identifiers-mode))
+  ;; (use-package color-identifiers-mode
+  ;;   :init
+  ;;   (add-hook 'clojure-mode-hook 'color-identifiers-mode))
 #+END_SRC
 ** Lisp
 #+BEGIN_SRC emacs-lisp
-(defun paredit-delete-indentation (&optional arg)
-  "Handle joining lines that end in a comment."
-  (interactive "*P")
-  (let (comt)
-    (save-excursion
-      (move-beginning-of-line (if arg 1 0))
-      (when (skip-syntax-forward "^<" (point-at-eol))
-        (setq comt (delete-and-extract-region (point) (point-at-eol)))))
-    (delete-indentation arg)
-    (when comt
+  (defun paredit-delete-indentation (&optional arg)
+    "Handle joining lines that end in a comment."
+    (interactive "*P")
+    (let (comt)
       (save-excursion
-        (move-end-of-line 1)
-        (insert " ")
-        (insert comt)))))
+        (move-beginning-of-line (if arg 1 0))
+        (when (skip-syntax-forward "^<" (point-at-eol))
+          (setq comt (delete-and-extract-region (point) (point-at-eol)))))
+      (delete-indentation arg)
+      (when comt
+        (save-excursion
+          (move-end-of-line 1)
+          (insert " ")
+          (insert comt)))))
 
-(defun paredit-remove-newlines ()
-  "Removes extras whitespace and newlines from the current point
-   to the next parenthesis."
-  (interactive)
-  (let ((up-to (point))
-        (from (re-search-forward "[])}]")))
-     (backward-char)
-     (while (> (point) up-to)
-       (paredit-delete-indentation))))
+  (defun paredit-remove-newlines ()
+    "Removes extras whitespace and newlines from the current point
+     to the next parenthesis."
+    (interactive)
+    (let ((up-to (point))
+          (from (re-search-forward "[])}]")))
+       (backward-char)
+       (while (> (point) up-to)
+         (paredit-delete-indentation))))
 
-(use-package paredit
-  :bind ("M-^" . paredit-delete-indentation)
-  :bind ("C-^" . paredit-remove-newlines)
-  :init
-  (add-hook 'clojure-mode-hook 'paredit-mode))
+  (use-package paredit
+    :bind ("M-^" . paredit-delete-indentation)
+    :bind ("C-^" . paredit-remove-newlines)
+    :init
+    (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+    (add-hook 'clojure-mode-hook 'paredit-mode)
+    (add-hook 'cider-repl-mode-hook 'paredit-mode))
 #+END_SRC
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
@@ -187,7 +189,7 @@
 #+END_SRC
 ** Clojure
 #+BEGIN_SRC emacs-lisp
-  ; (use-package clojure-snippets)
+  (use-package clojure-snippets)
 
   (use-package flycheck-clj-kondo)
 
