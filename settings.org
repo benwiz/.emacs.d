@@ -1,18 +1,26 @@
 * Notes
 ** https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#use-better-defaults
 ** https://pages.sachachua.com/.emacs.d/Sacha.html
+* To Do
+** Key combo to get to this file
+** Key combo to realod init.el
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
 #+END_SRC
-* Install packages
+* Packages
 #+BEGIN_SRC emacs-lisp
 (require 'package)
-(add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/"))
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+
+;; (add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/") t)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
+;; (add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+;; (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
+
+;; (package-refresh-contents)
 
 ;; list the packages you want
 (setq package-list
@@ -33,7 +41,19 @@
     (package-install package)))
 
 (require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
+(use-package auto-package-update
+  :config
+  (setq auto-package-update-delete-old-versions t)
+  (setq auto-package-update-hide-results t)
+  (auto-package-update-maybe))
+
+(use-package gnu-elpa-keyring-update)
 #+END_SRC
+
+#+RESULTS:
+
 * Better defaults (a lot of GUI)
 #+BEGIN_SRC emacs-lisp
 (when window-system
@@ -118,4 +138,123 @@
 * Version Control
 #+BEGIN_SRC emacs-lisp
 (use-package magit)
+#+END_SRC
+* Language
+** All
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+ :init (global-flycheck-mode))
+
+;(use-package color-identifiers-mode
+;  :init
+;  (add-hook 'clojure-mode-hook 'color-identifiers-mode))
+#+END_SRC
+** Lisp
+#+BEGIN_SRC emacs-lisp
+(defun paredit-delete-indentation (&optional arg)
+  "Handle joining lines that end in a comment."
+  (interactive "*P")
+  (let (comt)
+    (save-excursion
+      (move-beginning-of-line (if arg 1 0))
+      (when (skip-syntax-forward "^<" (point-at-eol))
+        (setq comt (delete-and-extract-region (point) (point-at-eol)))))
+    (delete-indentation arg)
+    (when comt
+      (save-excursion
+        (move-end-of-line 1)
+        (insert " ")
+        (insert comt)))))
+
+(defun paredit-remove-newlines ()
+  "Removes extras whitespace and newlines from the current point
+to the next parenthesis."
+  (interactive)
+  (let ((up-to (point))
+        (from (re-search-forward "[])}]")))
+     (backward-char)
+     (while (> (point) up-to)
+       (paredit-delete-indentation))))
+
+(use-package paredit
+  :bind ("M-^" . paredit-delete-indentation)
+  :bind ("C-^" . paredit-remove-newlines)
+  :init
+  (add-hook 'clojure-mode-hook 'paredit-mode))
+#+END_SRC
+** Emacs Lisp
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC
+** Clojure
+#+BEGIN_SRC emacs-lisp
+; (use-package clojure-snippets)
+
+(use-package flycheck-clj-kondo)
+
+(use-package clojure-mode
+ :bind (("C-c d f" . cider-code)
+        ("C-c d g" . cider-grimoire)
+        ("C-c d w" . cider-grimoire-web)
+        ("C-c d c" . clojure-cheatsheet)
+        ("C-c d d" . dash-at-point))
+ :config
+ (require 'flycheck-clj-kondo))
+
+(defun cider-send-and-evaluate-sexp ()
+  "Sends the s-expression located before the point or the active
+  region to the REPL and evaluates it. Then the Clojure buffer is
+  activated as if nothing happened."
+  (interactive)
+  (if (not (region-active-p))
+      (cider-insert-last-sexp-in-repl)
+    (cider-insert-in-repl
+     (buffer-substring (region-beginning) (region-end)) nil))
+  (cider-switch-to-repl-buffer)
+  (cider-repl-closing-return)
+  (cider-switch-to-last-clojure-buffer)
+  (message ""))
+
+(use-package queue-0.2 :ensure t) ;; a dep of cider
+
+(use-package cider
+  :commands (cider cider-connect cider-jack-in)
+
+  :init
+  (setq cider-auto-select-error-buffer t
+        cider-repl-pop-to-buffer-on-connect nil
+        cider-repl-use-clojure-font-lock t
+        cider-repl-wrap-history t
+        Cider-repl-history-size 1000
+        cider-show-error-buffer t
+        nrepl-hide-special-buffers t
+        ;; Stop error buffer from popping up while working in buffers other than the REPL:
+        nrepl-popup-stacktraces nil)
+
+  ;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  (add-hook 'cider-mode-hook 'company-mode)
+
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  (add-hook 'cider-repl-mode-hook 'superword-mode)
+  (add-hook 'cider-repl-mode-hook 'company-mode)
+  (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
+
+  :bind (:map cider-mode-map
+         ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
+         ("C-c C-p"     . cider-eval-print-last-sexp))
+
+  :config
+  (use-package slamhound))
+
+(defun ha/cider-append-comment ()
+  (when (null (nth 8 (syntax-ppss)))
+    (insert " ; ")))
+
+(advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
+
+(use-package ob-clojure
+  :init
+  (setq org-babel-clojure-backend 'cider))
+
+
 #+END_SRC
