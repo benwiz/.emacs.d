@@ -2,6 +2,25 @@
 (when (string-equal system-type "darwin")
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
+(setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+(defvar me/erc-nick               nil        "The ERC nick to use.")
+(defvar me/erc-password           nil        "The ERC password to use.")
+(defvar me/erc-port               nil        "The ERC port to use.")
+(defvar me/erc-server             nil        "The ERC server to use.")
+(defvar me/font-family            "Courier"  "The font to use.")
+(defvar me/font-size-default      110        "The font size to use for default text.")
+(defvar me/font-size-header-line  120        "The font size to use for the header-line.")
+(defvar me/font-size-mode-line    110        "The font size to use for the mode-line.")
+(defvar me/font-size-small        100        "The font size to use for smaller text.")
+(defvar me/font-size-title        140        "The font size to use for titles.")
+
+(let ((secret.el (expand-file-name "secret.el" user-emacs-directory)))
+  (when (file-exists-p secret.el)
+    (load secret.el)))
+
 (require 'package)
 
 (add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/") t)
@@ -95,34 +114,53 @@
 
 (add-hook 'focus-out-hook #'garbage-collect)
 
-(setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
-  (load custom-file))
-
-(defvar me/erc-nick               nil        "The ERC nick to use.")
-(defvar me/erc-password           nil        "The ERC password to use.")
-(defvar me/erc-port               nil        "The ERC port to use.")
-(defvar me/erc-server             nil        "The ERC server to use.")
-(defvar me/font-family            "Courier"  "The font to use.")
-(defvar me/font-size-default      110        "The font size to use for default text.")
-(defvar me/font-size-header-line  120        "The font size to use for the header-line.")
-(defvar me/font-size-mode-line    110        "The font size to use for the mode-line.")
-(defvar me/font-size-small        100        "The font size to use for smaller text.")
-(defvar me/font-size-title        140        "The font size to use for titles.")
-
-(let ((secret.el (expand-file-name "secret.el" user-emacs-directory)))
-  (when (file-exists-p secret.el)
-    (load secret.el)))
-
 (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes")
 (load-theme 'spolsky t)
 
 (use-package magit)
 
+(use-package ivy
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (setq enable-recursive-minibuffers t)
+  (setq ivy-count-format "(%d/%d) ")
+  (global-set-key (kbd "C-c C-r") 'ivy-resume)
+  (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+  (global-set-key (kbd "C-c v") 'ivy-push-view)
+  (global-set-key (kbd "C-c V") 'ivy-pop-view))
+
+(use-package swiper
+  :config
+  (global-set-key (kbd "C-s") 'swiper-isearch))
+
+(use-package counsel
+  :config
+  ;; tons more suggested key bindings here https://oremacs.com/swiper
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (global-set-key (kbd "M-y") 'counsel-yank-pop)
+  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+  (global-set-key (kbd "<f1> l") 'counsel-find-library)
+  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+  (global-set-key (kbd "<f2> j") 'counsel-set-variable)
+  (global-set-key (kbd "C-c c") 'counsel-compile)
+  (global-set-key (kbd "C-c g") 'counsel-git)
+  (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  )
+
 (use-package flycheck
   :init (global-flycheck-mode))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+(use-package rainbow-delimiters
+  :config
+  (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
 
 ;; (use-package color-identifiers-mode
 ;;   :init
