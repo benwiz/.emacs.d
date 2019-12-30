@@ -122,6 +122,8 @@
 (use-package flycheck
   :init (global-flycheck-mode))
 
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
 ;; (use-package color-identifiers-mode
 ;;   :init
 ;;   (add-hook 'clojure-mode-hook 'color-identifiers-mode))

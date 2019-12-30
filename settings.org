@@ -1,13 +1,18 @@
 * Notes
-** https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#use-better-defaults
-** https://pages.sachachua.com/.emacs.d/Sacha.html
+**  Find keybinding for command: `C-h w <command-name>`
+**  Find command for keybinding: `C-h k <key-sequence>`
 * To Do
-** Key combo to get to this file
-** Key combo to realod init.el
+** key bindings
+*** open ~/.emacs.d/settings.org
+*** reload-file ~/.emacs.d/init.el
+*** various paredit command
+*** magit-status
+*** delete-trailing-whitespace
 ** smex
 ** maybe ivy
 ** definitely swiper
 ** remove trailing whitespace on save
+** maybe more space between line numbers and code
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -146,12 +151,14 @@
 * Language
 ** All
 #+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :init (global-flycheck-mode))
+(use-package flycheck
+  :init (global-flycheck-mode))
 
-  ;; (use-package color-identifiers-mode
-  ;;   :init
-  ;;   (add-hook 'clojure-mode-hook 'color-identifiers-mode))
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; (use-package color-identifiers-mode
+;;   :init
+;;   (add-hook 'clojure-mode-hook 'color-identifiers-mode))
 #+END_SRC
 ** Lisp
 #+BEGIN_SRC emacs-lisp
