@@ -78,7 +78,7 @@
  x-stretch-cursor t)                              ; Stretch cursor to the glyph width
 (cd "~/")                                         ; Move to the user directory
 (delete-selection-mode 1)                         ; Replace region when inserting text
-(display-time-mode 1)                             ; Enable time in the mode-line
+(display-time-mode 1)                             ; Enable time in the mode-line                 ;; FIXME: Time not displaying
 (fringe-mode 0)                                   ; Disable fringes
 (fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
 (global-subword-mode 1)                           ; Iterate through CamelCase words
@@ -86,7 +86,8 @@
 (mouse-avoidance-mode 'banish)                    ; Avoid collision of mouse with point
 (put 'downcase-region 'disabled nil)              ; Enable downcase-region
 (put 'upcase-region 'disabled nil)                ; Enable upcase-region
-(set-default-coding-systems 'utf-8)               ; Default to utf-8 encoding
+(set-default-coding-systems 'utf-8)               ; Default to utf-8 encodingo
+(global-display-line-numbers-mode)                ; Display line numbers
 
 (if (eq window-system 'ns)
     (toggle-frame-maximized)
@@ -121,9 +122,9 @@
 (use-package flycheck
   :init (global-flycheck-mode))
 
-(use-package color-identifiers-mode
-  :init
-  (add-hook 'clojure-mode-hook 'color-identifiers-mode))
+;; (use-package color-identifiers-mode
+;;   :init
+;;   (add-hook 'clojure-mode-hook 'color-identifiers-mode))
 
 (defun paredit-delete-indentation (&optional arg)
   "Handle joining lines that end in a comment."
