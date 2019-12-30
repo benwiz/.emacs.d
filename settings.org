@@ -11,6 +11,8 @@
 *** move forward to char, delete to char (should look into emacs equivalents of common vim commands)
 *** new line above (Again look into a vim but not evil translation)
 *** new line below
+** paredit
+*** kill sexp
 ** counsel-find-file go up a level like C-h or C-l did in spacemacs
 ** remove trailing whitespace on save
 ** maybe more space between line numbers and code
@@ -153,7 +155,7 @@
    #+BEGIN_SRC emacs-lisp
    (defun load-init-el ()
      (load-file "~/.emacs.d/init.el"))
-   (global-set-key (kdb "C-c i") 'load-init-el)
+   (global-set-key (kbd "C-c i") 'load-init-el)
    #+END_SRC
 ** Magit
  #+BEGIN_SRC emacs-lisp
@@ -195,16 +197,19 @@
 * Programming
 ** All
 #+BEGIN_SRC emacs-lisp
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
 (use-package flycheck
   :init (global-flycheck-mode))
-
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package rainbow-delimiters
   :config
   (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
+
+(use-package company
+  :init (global-company-mode))
 
 ;; (use-package color-identifiers-mode
 ;;   :init
@@ -239,8 +244,9 @@
          (paredit-delete-indentation))))
 
   (use-package paredit
-    :bind ("M-^" . paredit-delete-indentation)
-    :bind ("C-^" . paredit-remove-newlines)
+    :bind (("M-^" . paredit-delete-indentation)
+           ("C-^" . paredit-remove-newlines)
+           ("C-<return>" . paredit-close-parenthesis-and-newline))
     :init
     (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
     (add-hook 'clojure-mode-hook 'paredit-mode)
@@ -262,6 +268,9 @@
           ("C-c d w" . cider-grimoire-web)
           ("C-c d c" . clojure-cheatsheet)
           ("C-c d d" . dash-at-point))
+   :init
+   (setq clojure-indent-style 'align-arguments
+         clojure-align-forms-automatically t)
    :config
    (require 'flycheck-clj-kondo))
 
@@ -285,6 +294,7 @@
     :init
     (setq cider-auto-select-error-buffer t
           cider-repl-pop-to-buffer-on-connect nil
+          cider-repl-display-in-current-window t
           cider-repl-use-clojure-font-lock t
           cider-repl-wrap-history t
           Cider-repl-history-size 1000
