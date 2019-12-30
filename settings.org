@@ -31,6 +31,8 @@
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
+
+(require 'use-package-ensure)
 #+END_SRC
 * Better defaults (a lot of GUI)
 #+BEGIN_SRC emacs-lisp
@@ -115,8 +117,5 @@
 #+END_SRC
 * Version Control
 #+BEGIN_SRC emacs-lisp
-; (require 'use-package-ensure)
-; (use-package magit)
-(use-package magit
-  :ensure t)
+(use-package magit)
 #+END_SRC
