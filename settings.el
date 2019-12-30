@@ -154,6 +154,10 @@
   (global-set-key (kbd "C-c g") 'counsel-git)
   (global-set-key (kbd "C-c j") 'counsel-git-grep))
 
+(use-package load-env-vars
+  :init
+  (load-env-vars "~/.emacs.d/emacs.env"))
+
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package flycheck

@@ -8,3 +8,6 @@ settings.org~
 auto-save-list/
 transient/
 .last-package-update-day
+.gitignore~
+recent~
+emacs.env
