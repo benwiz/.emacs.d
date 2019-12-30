@@ -117,6 +117,10 @@
 (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes")
 (load-theme 'spolsky t)
 
+(defun load-init-el ()
+  (load-file "~/.emacs.d/init.el"))
+(global-set-key (kdb "C-c i") 'load-init-el)
+
 (use-package magit)
 
 (use-package ivy
@@ -148,8 +152,7 @@
   (global-set-key (kbd "<f2> j") 'counsel-set-variable)
   (global-set-key (kbd "C-c c") 'counsel-compile)
   (global-set-key (kbd "C-c g") 'counsel-git)
-  (global-set-key (kbd "C-c j") 'counsel-git-grep)
-  )
+  (global-set-key (kbd "C-c j") 'counsel-git-grep))
 
 (use-package flycheck
   :init (global-flycheck-mode))

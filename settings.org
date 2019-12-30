@@ -1,20 +1,22 @@
 * Notes
 ** Find keybinding for command: `C-h w <command-name>`
 ** Find command for keybinding: `C-h k <key-sequence>`
+** Access bookmarks `C-x r b` and create one `C-x r m`
 ** Resources
 *** https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org
 * To Do
 ** key bindings
-*** open ~/.emacs.d/settings.org
-*** reload-file ~/.emacs.d/init.el
+*** FIX:: reload-file ~/.emacs.d/init.el
 *** various paredit command
-*** magit-status
-*** forward to char, delete to char (should look into emacs equivalents of common vim commands)
+*** move forward to char, delete to char (should look into emacs equivalents of common vim commands)
+*** new line above (Again look into a vim but not evil translation)
+*** new line below
 ** counsel-find-file go up a level like C-h or C-l did in spacemacs
 ** remove trailing whitespace on save
 ** maybe more space between line numbers and code
 ** fix rainbow-delimiters
 ** fix time in status bar
+** figure out vim like markers
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -147,6 +149,12 @@
 (load-theme 'spolsky t)
 #+END_SRC
 * Tools
+** emacs.d
+   #+BEGIN_SRC emacs-lisp
+   (defun load-init-el ()
+     (load-file "~/.emacs.d/init.el"))
+   (global-set-key (kdb "C-c i") 'load-init-el)
+   #+END_SRC
 ** Magit
  #+BEGIN_SRC emacs-lisp
  (use-package magit)
@@ -182,8 +190,7 @@
    (global-set-key (kbd "<f2> j") 'counsel-set-variable)
    (global-set-key (kbd "C-c c") 'counsel-compile)
    (global-set-key (kbd "C-c g") 'counsel-git)
-   (global-set-key (kbd "C-c j") 'counsel-git-grep)
-   )
+   (global-set-key (kbd "C-c j") 'counsel-git-grep))
  #+END_SRC
 * Programming
 ** All
