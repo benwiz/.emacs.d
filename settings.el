@@ -142,7 +142,7 @@
 
 (defun paredit-remove-newlines ()
   "Removes extras whitespace and newlines from the current point
-to the next parenthesis."
+   to the next parenthesis."
   (interactive)
   (let ((up-to (point))
         (from (re-search-forward "[])}]")))
@@ -160,66 +160,62 @@ to the next parenthesis."
 
 ; (use-package clojure-snippets)
 
- (use-package flycheck-clj-kondo)
+(use-package flycheck-clj-kondo)
 
- (use-package clojure-mode
-  :bind (("C-c d f" . cider-code)
-         ("C-c d g" . cider-grimoire)
-         ("C-c d w" . cider-grimoire-web)
-         ("C-c d c" . clojure-cheatsheet)
-         ("C-c d d" . dash-at-point))
-  :config
-  (require 'flycheck-clj-kondo))
+(use-package clojure-mode
+ :bind (("C-c d f" . cider-code)
+        ("C-c d g" . cider-grimoire)
+        ("C-c d w" . cider-grimoire-web)
+        ("C-c d c" . clojure-cheatsheet)
+        ("C-c d d" . dash-at-point))
+ :config
+ (require 'flycheck-clj-kondo))
 
- (defun cider-send-and-evaluate-sexp ()
-   "Sends the s-expression located before the point or the active
-   region to the REPL and evaluates it. Then the Clojure buffer is
-   activated as if nothing happened."
-   (interactive)
-   (if (not (region-active-p))
-       (cider-insert-last-sexp-in-repl)
-     (cider-insert-in-repl
-      (buffer-substring (region-beginning) (region-end)) nil))
-   (cider-switch-to-repl-buffer)
-   (cider-repl-closing-return)
-   (cider-switch-to-last-clojure-buffer)
-   (message ""))
+(defun cider-send-and-evaluate-sexp ()
+  "Sends the s-expression located before the point or the active
+  region to the REPL and evaluates it. Then the Clojure buffer is
+  activated as if nothing happened."
+  (interactive)
+  (if (not (region-active-p))
+      (cider-insert-last-sexp-in-repl)
+    (cider-insert-in-repl
+     (buffer-substring (region-beginning) (region-end)) nil))
+  (cider-switch-to-repl-buffer)
+  (cider-repl-closing-return)
+  (cider-switch-to-last-clojure-buffer)
+  (message ""))
 
- (use-package cider
-   :commands (cider cider-connect cider-jack-in)
+(use-package cider
+  :commands (cider cider-connect cider-jack-in)
 
-   :init
-   (setq cider-auto-select-error-buffer t
-         cider-repl-pop-to-buffer-on-connect nil
-         cider-repl-use-clojure-font-lock t
-         cider-repl-wrap-history t
-         Cider-repl-history-size 1000
-         cider-show-error-buffer t
-         nrepl-hide-special-buffers t
-         ;; Stop error buffer from popping up while working in buffers other than the REPL:
-         nrepl-popup-stacktraces nil)
-
-   ;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-   (add-hook 'cider-mode-hook 'company-mode)
-
-   (add-hook 'cider-repl-mode-hook 'paredit-mode)
-   (add-hook 'cider-repl-mode-hook 'superword-mode)
-   (add-hook 'cider-repl-mode-hook 'company-mode)
-   (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
-
-   :bind (:map cider-mode-map
-          ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
-          ("C-c C-p"     . cider-eval-print-last-sexp))
-
-   :config
-   (use-package slamhound))
-
- (defun ha/cider-append-comment ()
-   (when (null (nth 8 (syntax-ppss)))
-     (insert " ; ")))
-
- (advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
-
-(use-package ob-clojure
   :init
-  (setq org-babel-clojure-backend 'cider))
+  (setq cider-auto-select-error-buffer t
+        cider-repl-pop-to-buffer-on-connect nil
+        cider-repl-use-clojure-font-lock t
+        cider-repl-wrap-history t
+        Cider-repl-history-size 1000
+        cider-show-error-buffer t
+        nrepl-hide-special-buffers t
+        ;; Stop error buffer from popping up while working in buffers other than the REPL:
+        nrepl-popup-stacktraces nil)
+
+  ;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  (add-hook 'cider-mode-hook 'company-mode)
+
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  (add-hook 'cider-repl-mode-hook 'superword-mode)
+  (add-hook 'cider-repl-mode-hook 'company-mode)
+  (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
+
+  :bind (:map cider-mode-map
+         ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
+         ("C-c C-p"     . cider-eval-print-last-sexp))
+
+  :config
+  (use-package slamhound))
+
+(defun ha/cider-append-comment ()
+  (when (null (nth 8 (syntax-ppss)))
+    (insert " ; ")))
+
+(advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
