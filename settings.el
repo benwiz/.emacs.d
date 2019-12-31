@@ -176,7 +176,7 @@
   :init (global-flycheck-mode))
 
 (use-package rainbow-delimiters
-  :init
+  :config
   (require 'cl-lib)
   (require 'color)
   (cl-loop
@@ -202,6 +202,18 @@
 ;; (use-package color-identifiers-mode
 ;;   :init
 ;;   (add-hook 'clojure-mode-hook 'color-identifiers-mode))
+
+(use-package fic-mode ;; FIXME
+  :init
+  (defface fic-face
+    '((((class color))
+    (:foreground "orange" :weight bold))
+    (t (:weight bold)))
+    "Face to fontify FIXME/TODO words"
+:group 'fic-mode)
+  :config
+  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???"))
+  (add-hook 'prog-mode-hook 'fic-mode))
 
 (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
 
