@@ -6,8 +6,6 @@
 *** https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org
 * To Do
 ** key bindings
-*** FIX:: reload-file ~/.emacs.d/init.el
-*** various paredit command
 *** move forward to char, delete to char (should look into emacs equivalents of common vim commands)
 *** new line above (Again look into a vim but not evil translation)
 *** new line below
@@ -19,6 +17,8 @@
 ** fix rainbow-delimiters
 ** fix time in status bar
 ** figure out vim like markers
+** persp-mode or projectile or both
+** git fringe
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -163,11 +163,30 @@
      (load-file "~/.emacs.d/init.el"))
    (global-set-key (kbd "C-c i") 'load-init-el)
    #+END_SRC
-** Magit
+** Git
  #+BEGIN_SRC emacs-lisp
  (use-package magit
    :config
    (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
+(use-package git-gutter
+  :diminish git-gutter-mode
+  :config (global-git-gutter-mode)
+  :init
+  (progn
+    (setq git-gutter:separator-sign " "
+          git-gutter:lighter " GG"))
+  :config
+  (progn
+    (set-face-background 'git-gutter:deleted "#990A1B")
+    (set-face-foreground 'git-gutter:deleted "#990A1B")
+    (set-face-background 'git-gutter:modified "#00736F")
+    (set-face-foreground 'git-gutter:modified "#00736F")
+    (set-face-background 'git-gutter:added "#546E00")
+    (set-face-foreground 'git-gutter:added "#546E00"))
+  :bind (("C-x p" . git-gutter:previous-hunk)
+         ("C-x n" . git-gutter:next-hunk)
+         ("C-x v =" . git-gutter:popup-hunk)
+         ("C-x v r" . git-gutter:revert-hunk)))
  #+END_SRC
 ** Ivy, Swiper, Counsel
  #+BEGIN_SRC emacs-lisp
