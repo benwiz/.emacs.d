@@ -117,6 +117,8 @@
 (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes")
 (load-theme 'spolsky t)
 
+(global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
+
 (defun load-init-el ()
   (load-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "C-c i") 'load-init-el)
@@ -154,6 +156,15 @@
   (global-set-key (kbd "C-c g") 'counsel-git)
   (global-set-key (kbd "C-c j") 'counsel-git-grep))
 
+(use-package dumb-jump
+  :bind (("M-g o" . dumb-jump-go-other-window)
+         ("M-g j" . dumb-jump-go)
+         ("M-g b" . dumb-jump-back)
+         ("M-g i" . dumb-jump-go-prompt)
+         ("M-g x" . dumb-jump-go-prefer-external)
+         ("M-g z" . dumb-jump-go-prefer-external-other-window))
+  :config (setq dumb-jump-selector 'ivy))
+
 (use-package load-env-vars
   :init
   (load-env-vars "~/.emacs.d/emacs.env"))
@@ -164,10 +175,23 @@
   :init (global-flycheck-mode))
 
 (use-package rainbow-delimiters
-  :config
-  (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'cider-repl-mode-hook 'rainbow-delimiters-mode)
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
+  :init
+  (require 'cl-lib)
+  (require 'color)
+  (cl-loop
+     for index from 1 to rainbow-delimiters-max-face-count
+     do
+      (let ((face (intern (format "rainbow-delimiters-depth-%d-face" index))))
+        (cl-callf color-saturate-name (face-foreground face) 20)))
+  (require 'paren) ; show-paren-mismatch is defined in paren.el
+  (set-face-attribute 'rainbow-delimiters-unmatched-face nil
+    :foreground 'unspecified
+    :inherit 'show-paren-mismatch)
+
+  :hook
+  (prog-mode . rainbow-delimiters-mode)) ;; WARNING: Being so general may break something, but going to go with it anyway
+
+(use-package rainbow-blocks) ;; useful sometimes but generally don't want this on by default
 
 (use-package company
   :init (global-company-mode))
@@ -175,6 +199,8 @@
 ;; (use-package color-identifiers-mode
 ;;   :init
 ;;   (add-hook 'clojure-mode-hook 'color-identifiers-mode))
+
+(add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
 
 (defun paredit-delete-indentation (&optional arg)
   "Handle joining lines that end in a comment."
