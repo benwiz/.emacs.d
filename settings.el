@@ -107,6 +107,7 @@
 (put 'upcase-region 'disabled nil)                ; Enable upcase-region
 (set-default-coding-systems 'utf-8)               ; Default to utf-8 encodingo
 (global-display-line-numbers-mode)                ; Display line numbers
+(show-paren-mode)                                 ; Show matching parenthesis
 
 (if (eq window-system 'ns)
     (toggle-frame-maximized)
@@ -124,7 +125,9 @@
   (load-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "C-c i") 'load-init-el)
 
-(use-package magit)
+(use-package magit
+  :config
+  (setq magit-status-buffer-switch-function 'switch-to-buffer))
 
 (use-package ivy
   :config
@@ -210,9 +213,9 @@
     (:foreground "orange" :weight bold))
     (t (:weight bold)))
     "Face to fontify FIXME/TODO words"
-:group 'fic-mode)
+    :group 'fic-mode)
   :config
-  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???"))
+  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE"))
   (add-hook 'prog-mode-hook 'fic-mode))
 
 (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))

@@ -138,6 +138,7 @@
 (put 'upcase-region 'disabled nil)                ; Enable upcase-region
 (set-default-coding-systems 'utf-8)               ; Default to utf-8 encodingo
 (global-display-line-numbers-mode)                ; Display line numbers
+(show-paren-mode)                                 ; Show matching parenthesis
 
 (if (eq window-system 'ns)
     (toggle-frame-maximized)
@@ -164,7 +165,9 @@
    #+END_SRC
 ** Magit
  #+BEGIN_SRC emacs-lisp
- (use-package magit)
+ (use-package magit
+   :config
+   (setq magit-status-buffer-switch-function 'switch-to-buffer))
  #+END_SRC
 ** Ivy, Swiper, Counsel
  #+BEGIN_SRC emacs-lisp
