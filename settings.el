@@ -127,7 +127,7 @@
 
 (use-package magit
   :config
-  (setq magit-status-buffer-switch-function 'switch-to-buffer))
+  (setq magit-display-buffer-function 'switch-to-buffer))
 
 (use-package ivy
   :config
