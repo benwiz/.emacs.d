@@ -240,7 +240,9 @@
     :hook
     (prog-mode . rainbow-delimiters-mode)) ;; WARNING: Being so general may break something, but going to go with it anyway
 
-  (use-package rainbow-blocks) ;; useful sometimes but generally don't want this on by default
+  (use-package expand-region
+    :config
+    (global-set-key (kbd "C-=") 'er/expand-region))
 
   (use-package company
     :init (global-company-mode))
