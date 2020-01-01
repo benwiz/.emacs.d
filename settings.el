@@ -71,7 +71,7 @@
 (setq-default
  ad-redefinition-action 'accept                   ; Silence warnings for redefinition
  auto-window-vscroll nil                          ; Lighten vertical scroll
- confirm-kill-emacs nil ; 'yes-or-no-p                  ; Confirm before exiting Emacs
+ confirm-kill-emacs nil ; 'yes-or-no-p            ; Confirm before exiting Emacs
  cursor-in-non-selected-windows nil               ; Hide the cursor in inactive windows
  delete-by-moving-to-trash t                      ; Delete files to trash
  display-time-default-load-average nil            ; Don't display load average
@@ -109,9 +109,10 @@
 (global-display-line-numbers-mode)                ; Display line numbers
 (show-paren-mode)                                 ; Show matching parenthesis
 
-(if (eq window-system 'ns)
-    (toggle-frame-maximized)
-  (toggle-frame-fullscreen))
+;(if (eq window-system 'ns)
+;  (add-to-list 'default-frame-alist '(maximized .))
+;  (add-to-list 'default-frame-alist '(fullscreen .)))
+(set-frame-parameter nil 'fullscreen 'fullboth)
 
 (add-hook 'focus-out-hook #'garbage-collect)
 
@@ -225,7 +226,7 @@
 ;;   :init
 ;;   (add-hook 'clojure-mode-hook 'color-identifiers-mode))
 
-(use-package fic-mode ;; FIXME
+(use-package fic-mode
   :init
   (defface fic-face
     '((((class color))
@@ -236,6 +237,23 @@
   :config
   (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE"))
   (add-hook 'prog-mode-hook 'fic-mode))
+
+(use-package hideshow
+ :bind (("C-\\" . hs-toggle-hiding)
+        ("M-+" . hs-show-all)
+        ("M--" . hs-hide-all))
+ :init (add-hook #'prog-mode-hook #'hs-minor-mode)
+ :diminish hs-minor-mode
+ :config
+ ;; Add `json-mode' and `javascript-mode' to the list
+ (setq hs-special-modes-alist
+       (mapcar 'purecopy
+               '((c-mode "{" "}" "/[*/]" nil nil)
+                 (c++-mode "{" "}" "/[*/]" nil nil)
+                 (java-mode "{" "}" "/[*/]" nil nil)
+                 (js-mode "{" "}" "/[*/]" nil)
+                 (json-mode "{" "}" "/[*/]" nil)
+                 (javascript-mode  "{" "}" "/[*/]" nil)))))
 
 (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
 
@@ -266,7 +284,7 @@
 
 (use-package paredit
   :bind (("M-^" . paredit-delete-indentation)
-         ("C-^" . paredit-remove-newlines)
+         ("C-^" . paredit-remove-newlines) ;; basically clean up a multi-line sexp
          ("C-<return>" . paredit-close-parenthesis-and-newline))
   :init
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
