@@ -13,7 +13,8 @@
 *** new line below
 ** Learn how to redo
 ** paredit
-*** kill symbol `M-k`
+*** kill symbol `M-k`, current issue is I need to go to beginning of symbol but not move if already there
+*** paredit-wrap-* should wrap from beginning of current symbol, not the middle of it. Same issue as kill-symbol above.
 **** backward-sexp, kill-sexp
 ** figure out vim-like markers
 ** zap-until-char `M-S-z`
