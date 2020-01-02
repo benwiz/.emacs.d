@@ -291,6 +291,13 @@
   (add-hook 'clojure-mode-hook 'paredit-mode)
   (add-hook 'cider-repl-mode-hook 'paredit-mode))
 
+;; Like: sp-kill-sexp (to delete the whole symbol not just forward like C-M-k does)
+(defun kill-symbol ()
+  (interactive)
+  (backward-sexp)
+  (kill-sexp))
+(global-set-key (kbd "M-k") 'kill-symbol)
+
 
 
 (use-package clojure-snippets)

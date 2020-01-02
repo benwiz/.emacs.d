@@ -1,20 +1,22 @@
 * Notes
 ** Find keybinding for command: `C-h w <command-name>`
 ** Find command for keybinding: `C-h k <key-sequence>`
-** Access bookmarks `C-x r b` and create one `C-x r m`
+** Helpful commands and combos that I am stil learning
+*** Access bookmarks `C-x r b`
+*** Create bookmark `C-x r m`
+*** (Un)collapse region `C-\`
+*** zap-to-char `M-z`
 * To Do
 ** key bindings
 *** move forward to char, delete to char (should look into emacs equivalents of common vim commands)
 *** new line above (Again look into a vim but not evil translation)
 *** new line below
+** Learn how to redo
 ** paredit
-*** kill sexp
-** counsel-find-file go up a level like C-h or C-l did in spacemacs
-** remove trailing whitespace on save
-** maybe more space between line numbers and code
-** fix rainbow-delimiters
-** fix time in status bar
-** figure out vim like markers
+*** kill symbol `M-k`
+**** backward-sexp, kill-sexp
+** figure out vim-like markers
+** zap-until-char `M-S-z`
 ** collapse/expand
 ** persp-mode or projectile or both
 * OS
@@ -289,7 +291,7 @@
    :bind (("C-\\" . hs-toggle-hiding)
           ("M-+" . hs-show-all)
           ("M--" . hs-hide-all))
-   :init (add-hook #'prog-mode-hook #'hs-minor-mode) ;; FIXME hook isn't taking effect, but the bindings are being bound
+   :init (add-hook #'prog-mode-hook #'hs-minor-mode)
    :diminish hs-minor-mode
    :config
    ;; Add `json-mode' and `javascript-mode' to the list
@@ -342,6 +344,14 @@
     (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
     (add-hook 'clojure-mode-hook 'paredit-mode)
     (add-hook 'cider-repl-mode-hook 'paredit-mode))
+
+  ;; Like: sp-kill-sexp (to delete the whole symbol not just forward like C-M-k does)
+  (defun kill-symbol ()
+    (interactive)
+    (backward-sexp) ;; TODO instead of backward-sexp, need to go to beginning of current symbol or go nowhere if already there
+    (kill-sexp))
+  (global-set-key (kbd "M-k") 'kill-symbol)
+
 #+END_SRC
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
