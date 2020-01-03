@@ -120,6 +120,7 @@
 (load-theme 'spolsky t)
 
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
+(global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 
 (defun load-init-el ()
   (interactive)
@@ -131,8 +132,8 @@
    (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
 (use-package git-gutter
   :diminish git-gutter-mode
-  :config (global-git-gutter-mode)
   :init
+  (global-git-gutter-mode)
   (progn
     (setq git-gutter:separator-sign " "
           git-gutter:lighter " GG"))
@@ -294,7 +295,7 @@
 ;; Like: sp-kill-sexp (to delete the whole symbol not just forward like C-M-k does)
 (defun kill-symbol ()
   (interactive)
-  (backward-sexp)
+  (backward-sexp) ;; TODO instead of backward-sexp, need to go to beginning of current symbol or go nowhere if already there
   (kill-sexp))
 (global-set-key (kbd "M-k") 'kill-symbol)
 
@@ -365,3 +366,6 @@
     (insert " ; ")))
 
 (advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
+
+(desktop-load-default)
+(desktop-read);

@@ -6,17 +6,17 @@
 *** Create bookmark `C-x r m`
 *** (Un)collapse region `C-\`
 *** zap-to-char `M-z`
+*** paredit-recenter-on-sexp `C-c C-M-l`
+*** redo `C-g C-S-_` (i.e. `C-g` then undo)
 * To Do
 ** key bindings
 *** move forward to char, delete to char (should look into emacs equivalents of common vim commands)
 *** new line above (Again look into a vim but not evil translation)
 *** new line below
-** Learn how to redo
 ** paredit
-*** kill symbol `M-k`, current issue is I need to go to beginning of symbol but not move if already there
+*** kill symbol `M-k`, current issue is I need to go to beginning of symbol but not move if already there. Once I get this working may want to overwrite `C-M-k`
 *** paredit-wrap-* should wrap from beginning of current symbol, not the middle of it. Same issue as kill-symbol above.
-**** backward-sexp, kill-sexp
-** figure out vim-like markers
+** figure out vim-like markers (i think these are called `registers`)
 ** zap-until-char `M-S-z`
 ** collapse/expand
 ** persp-mode or projectile or both
@@ -157,6 +157,7 @@
 ** Random Bindings
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
+(global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 #+END_SRC
 ** emacs.d
    #+BEGIN_SRC emacs-lisp
@@ -172,8 +173,8 @@
    (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
 (use-package git-gutter
   :diminish git-gutter-mode
-  :config (global-git-gutter-mode)
   :init
+  (global-git-gutter-mode)
   (progn
     (setq git-gutter:separator-sign " "
           git-gutter:lighter " GG"))
@@ -425,4 +426,9 @@
       (insert " ; ")))
 
   (advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
+#+END_SRC
+* State
+#+BEGIN_SRC emacs-lisp
+(desktop-load-default)
+(desktop-read);
 #+END_SRC
