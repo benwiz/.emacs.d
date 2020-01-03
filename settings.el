@@ -122,6 +122,8 @@
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 
+(use-package htmlize)
+
 (defun load-init-el ()
   (interactive)
   (load-file "~/.emacs.d/init.el"))
@@ -162,6 +164,9 @@
   (global-set-key (kbd "C-c V") 'ivy-pop-view))
 
 (use-package swiper
+  :init
+  ;; FIXME background color
+  (set-face-attribute 'isearch nil :background "#FF9F93")
   :config
   (global-set-key (kbd "C-s") 'swiper-isearch))
 
@@ -366,6 +371,3 @@
     (insert " ; ")))
 
 (advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
-
-(desktop-load-default)
-(desktop-read);
