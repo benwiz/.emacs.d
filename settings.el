@@ -123,6 +123,23 @@
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 
 (use-package htmlize)
+(use-package wgrep)
+
+(use-package highlight-indent-guides
+;; :hook (prog-mode . highlight-indent-guides-mode) ;; I commented this out because I just want to manually toggle this
+  :config
+  (setq highlight-indent-guides-method 'character)
+  (setq highlight-indent-guides-character 9615) ; left-align vertical bar
+  (setq highlight-indent-guides-auto-character-face-perc 20))
+
+(use-package dumb-jump
+  :bind (("M-g o" . dumb-jump-go-other-window)
+         ("M-g j" . dumb-jump-go)
+         ("M-g b" . dumb-jump-back)
+         ("M-g i" . dumb-jump-go-prompt)
+         ("M-g x" . dumb-jump-go-prefer-external)
+         ("M-g z" . dumb-jump-go-prefer-external-other-window))
+  :config (setq dumb-jump-selector 'ivy))
 
 (defun load-init-el ()
   (interactive)
@@ -165,7 +182,6 @@
 
 (use-package swiper
   :init
-  ;; FIXME background color
   (set-face-attribute 'isearch nil :background "#FF9F93")
   :config
   (global-set-key (kbd "C-s") 'swiper-isearch))
@@ -185,15 +201,6 @@
   (global-set-key (kbd "C-c c") 'counsel-compile)
   (global-set-key (kbd "C-c g") 'counsel-git)
   (global-set-key (kbd "C-c j") 'counsel-git-grep))
-
-(use-package dumb-jump
-  :bind (("M-g o" . dumb-jump-go-other-window)
-         ("M-g j" . dumb-jump-go)
-         ("M-g b" . dumb-jump-back)
-         ("M-g i" . dumb-jump-go-prompt)
-         ("M-g x" . dumb-jump-go-prefer-external)
-         ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'ivy))
 
 (use-package load-env-vars
   :init

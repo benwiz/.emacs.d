@@ -20,6 +20,10 @@
 ** zap-until-char `M-S-z`
 ** collapse/expand
 ** persp-mode or projectile or both
+** Need a better way of searching recently used files or frequently used files
+*** Maybe a "favorite files" that I keep up to date
+*** Or just look into projectile
+** kill dired buffer after selection
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -162,6 +166,23 @@
 ** Random packages
 #+BEGIN_SRC emacs-lisp
 (use-package htmlize)
+(use-package wgrep)
+
+(use-package highlight-indent-guides
+;; :hook (prog-mode . highlight-indent-guides-mode) ;; I commented this out because I just want to manually toggle this
+  :config
+  (setq highlight-indent-guides-method 'character)
+  (setq highlight-indent-guides-character 9615) ; left-align vertical bar
+  (setq highlight-indent-guides-auto-character-face-perc 20))
+
+(use-package dumb-jump
+  :bind (("M-g o" . dumb-jump-go-other-window)
+         ("M-g j" . dumb-jump-go)
+         ("M-g b" . dumb-jump-back)
+         ("M-g i" . dumb-jump-go-prompt)
+         ("M-g x" . dumb-jump-go-prefer-external)
+         ("M-g z" . dumb-jump-go-prefer-external-other-window))
+  :config (setq dumb-jump-selector 'ivy))
 #+END_SRC
 ** emacs.d
    #+BEGIN_SRC emacs-lisp
@@ -230,17 +251,6 @@
      (global-set-key (kbd "C-c g") 'counsel-git)
      (global-set-key (kbd "C-c j") 'counsel-git-grep))
  #+END_SRC
-** Dumb Jump
-#+BEGIN_SRC emacs-lisp
-(use-package dumb-jump
-  :bind (("M-g o" . dumb-jump-go-other-window)
-         ("M-g j" . dumb-jump-go)
-         ("M-g b" . dumb-jump-back)
-         ("M-g i" . dumb-jump-go-prompt)
-         ("M-g x" . dumb-jump-go-prefer-external)
-         ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'ivy))
-#+END_SRC
 ** Env Vars
    #+BEGIN_SRC emacs-lisp
    (use-package load-env-vars
