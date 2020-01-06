@@ -12,19 +12,17 @@
 * To Do
 ** key bindings
 *** move forward to char, delete to char (should look into emacs equivalents of common vim commands)
-*** new line above (Again look into a vim but not evil translation)
+*** new line above
 *** new line below
 ** paredit
 *** kill symbol `M-k`, current issue is I need to go to beginning of symbol but not move if already there. Once I get this working may want to overwrite `C-M-k`
 *** paredit-wrap-* should wrap from beginning of current symbol, not the middle of it. Same issue as kill-symbol above.
 ** figure out vim-like markers (i think these are called `registers`)
 ** zap-until-char `M-S-z`
-** collapse/expand
 ** persp-mode or projectile or both
-** Need a better way of searching recently used files or frequently used files
-*** Maybe a "favorite files" that I keep up to date
-*** Or just look into projectile
+** Search to file
 ** kill dired buffer after selection
+** Improve multiple cursors
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -275,6 +273,15 @@
      :init
      (load-env-vars "~/.emacs.d/emacs.env"))
    #+END_SRC
+** Multiple Cursors
+#+BEGIN_SRC emacs-lisp
+(use-package multiple-cursors
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)
+         ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
+#+END_SRC
 * Programming
 ** All
 #+BEGIN_SRC emacs-lisp
@@ -442,7 +449,7 @@
     (setq cider-auto-select-error-buffer t
           cider-repl-pop-to-buffer-on-connect nil
           cider-repl-display-in-current-window t
-         cider-repl-use-clojure-font-lock t
+          cider-repl-use-clojure-font-lock t
           cider-repl-wrap-history t
           Cider-repl-history-size 1000
           cider-show-error-buffer t
