@@ -119,6 +119,21 @@
 (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes")
 (load-theme 'spolsky t)
 
+(use-package all-the-icons)
+(use-package doom-modeline ;; alternative is moody for a simpler option
+  ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
+  ;; https://github.com/seagle0128/doom-modeline#customize
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (setq doom-modeline-minor-modes t)
+  (setq doom-modeline-buffer-state-icon t) ;; as in, isEdited? state
+  (setq doom-modeline-buffer-encoding nil)
+  (setq doom-modeline-vcs-max-length 20)
+  ;; (setq doom-modeline-persp-name t)
+  ;; (setq doom-modeline-display-default-persp-name t)
+  (setq doom-modeline-env-version t)
+  )
+
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 
@@ -311,6 +326,16 @@
   (kill-sexp))
 (global-set-key (kbd "M-k") 'kill-symbol)
 
+;; Indent top level sexp
+(defun indent-top-sexp ()
+  (interactive)
+  ;; TODO go to beginning or end of top level sexp
+  ;; TODO select the whole sexp
+  (indent-region)
+  ;; TODO return to starting point
+  )
+;; (global-set-key (kbd "C-M-l") 'indent-top-sexp) ;; TODO use a different kbd
+
 
 
 (use-package clojure-snippets)
@@ -350,7 +375,7 @@
   (setq cider-auto-select-error-buffer t
         cider-repl-pop-to-buffer-on-connect nil
         cider-repl-display-in-current-window t
-        cider-repl-use-clojure-font-lock t
+       cider-repl-use-clojure-font-lock t
         cider-repl-wrap-history t
         Cider-repl-history-size 1000
         cider-show-error-buffer t
@@ -368,7 +393,8 @@
 
   :bind (:map cider-mode-map
          ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
-         ("C-c C-p"     . cider-eval-print-last-sexp))
+         ("C-c C-p"     . cider-eval-print-last-sexp)
+         ("C-c M-o"     . cider-repl-clear-buffer)) ;; FIXME need to remove other binding
 
   :config
   (use-package slamhound))
