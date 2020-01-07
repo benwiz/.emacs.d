@@ -127,7 +127,7 @@
   ;; https://github.com/seagle0128/doom-modeline#customize
   :hook (after-init . doom-modeline-mode)
   :config
-  (setq doom-modeline-minor-modes t)
+  (setq doom-modeline-minor-modes nil)
   (setq doom-modeline-buffer-state-icon t) ;; as in, isEdited? state
   (setq doom-modeline-buffer-encoding nil)
   (setq doom-modeline-vcs-max-length 20)
@@ -230,6 +230,17 @@
          ("C-c C-<" . mc/mark-all-like-this)
          ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
 
+(use-package projectile
+  :config
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
+(use-package counsel-projectile
+  :config
+  (counsel-projectile-mode))
+
+(setq gnus-select-method '(nntp "news.gwene.org))
+
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package flycheck
@@ -320,13 +331,15 @@
        (paredit-delete-indentation))))
 
 (use-package paredit
+  ;; TODO When killing a newline delete all whitespace until next character (maybe just bring in Smartparens kill command)
   :bind (("M-^" . paredit-delete-indentation)
          ("C-^" . paredit-remove-newlines) ;; basically clean up a multi-line sexp
          ("C-<return>" . paredit-close-parenthesis-and-newline))
   :init
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
   (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'cider-repl-mode-hook 'paredit-mode))
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  )
 
 ;; Like: sp-kill-sexp (to delete the whole symbol not just forward like C-M-k does)
 (defun kill-symbol ()
@@ -346,70 +359,3 @@
 ;; (global-set-key (kbd "C-M-l") 'indent-top-sexp) ;; TODO use a different kbd
 
 
-
-(use-package clojure-snippets)
-
-(use-package flycheck-clj-kondo)
-
-(use-package clojure-mode
- :bind (("C-c d f" . cider-code)
-        ("C-c d g" . cider-grimoire)
-        ("C-c d w" . cider-grimoire-web)
-        ("C-c d c" . clojure-cheatsheet)
-        ("C-c d d" . dash-at-point))
- :init
- (setq clojure-indent-style 'align-arguments
-       clojure-align-forms-automatically t)
- :config
- (require 'flycheck-clj-kondo))
-
-(defun cider-send-and-evaluate-sexp ()
-  "Sends the s-expression located before the point or the active
-  region to the REPL and evaluates it. Then the Clojure buffer is
-  activated as if nothing happened."
-  (interactive)
-  (if (not (region-active-p))
-      (cider-insert-last-sexp-in-repl)
-    (cider-insert-in-repl
-     (buffer-substring (region-beginning) (region-end)) nil))
-  (cider-switch-to-repl-buffer)
-  (cider-repl-closing-return)
-  (cider-switch-to-last-clojure-buffer)
-  (message ""))
-
-(use-package cider
-  :commands (cider cider-connect cider-jack-in)
-
-  :init
-  (setq cider-auto-select-error-buffer t
-        cider-repl-pop-to-buffer-on-connect nil
-        cider-repl-display-in-current-window t
-        cider-repl-use-clojure-font-lock t
-        cider-repl-wrap-history t
-        Cider-repl-history-size 1000
-        cider-show-error-buffer t
-        nrepl-hide-special-buffers t
-        ;; Stop error buffer from popping up while working in buffers other than the REPL:
-        nrepl-popup-stacktraces nil)
-
-  ;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  (add-hook 'cider-mode-hook 'company-mode)
-
-  (add-hook 'cider-repl-mode-hook 'paredit-mode)
-  (add-hook 'cider-repl-mode-hook 'superword-mode)
-  (add-hook 'cider-repl-mode-hook 'company-mode)
-  (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
-
-  :bind (:map cider-mode-map
-         ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
-         ("C-c C-p"     . cider-eval-print-last-sexp)
-         ("C-c M-o"     . cider-repl-clear-buffer)) ;; FIXME need to remove other binding
-
-  :config
-  (use-package slamhound))
-
-(defun ha/cider-append-comment ()
-  (when (null (nth 8 (syntax-ppss)))
-    (insert " ; ")))
-
-(advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)

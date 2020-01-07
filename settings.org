@@ -19,10 +19,9 @@
 *** paredit-wrap-* should wrap from beginning of current symbol, not the middle of it. Same issue as kill-symbol above.
 ** figure out vim-like markers (i think these are called `registers`)
 ** zap-until-char `M-S-z`
-** persp-mode or projectile or both
-** Search to file
 ** kill dired buffer after selection
 ** Improve multiple cursors
+** News via Gnus
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -164,7 +163,7 @@
   ;; https://github.com/seagle0128/doom-modeline#customize
   :hook (after-init . doom-modeline-mode)
   :config
-  (setq doom-modeline-minor-modes t)
+  (setq doom-modeline-minor-modes nil)
   (setq doom-modeline-buffer-state-icon t) ;; as in, isEdited? state
   (setq doom-modeline-buffer-encoding nil)
   (setq doom-modeline-vcs-max-length 20)
@@ -282,6 +281,21 @@
          ("C-c C-<" . mc/mark-all-like-this)
          ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
 #+END_SRC
+** Projectile
+#+BEGIN_SRC emacs-lisp
+(use-package projectile
+  :config
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
+(use-package counsel-projectile
+  :config
+  (counsel-projectile-mode))
+#+END_SRC
+** Gnus
+#+BEGIN_SRC emacs-lisp
+(setq gnus-select-method '(nntp "news.gwene.org))
+#+END_SRC
 * Programming
 ** All
 #+BEGIN_SRC emacs-lisp
@@ -380,13 +394,15 @@
          (paredit-delete-indentation))))
 
   (use-package paredit
+    ;; TODO When killing a newline delete all whitespace until next character (maybe just bring in Smartparens kill command)
     :bind (("M-^" . paredit-delete-indentation)
            ("C-^" . paredit-remove-newlines) ;; basically clean up a multi-line sexp
            ("C-<return>" . paredit-close-parenthesis-and-newline))
     :init
     (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
     (add-hook 'clojure-mode-hook 'paredit-mode)
-    (add-hook 'cider-repl-mode-hook 'paredit-mode))
+    (add-hook 'cider-repl-mode-hook 'paredit-mode)
+    )
 
   ;; Like: sp-kill-sexp (to delete the whole symbol not just forward like C-M-k does)
   (defun kill-symbol ()
@@ -471,11 +487,23 @@
            ("C-c M-o"     . cider-repl-clear-buffer)) ;; FIXME need to remove other binding
 
     :config
-    (use-package slamhound))
+    (use-package slamhound)
+    (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
+    (setq cider-cljs-repl-types '((nashorn "(do (require 'cljs.repl.nashorn) (cider.piggieback/cljs-repl (cljs.repl.nashorn/repl-env)))" cider-check-nashorn-requirements)
+                                (figwheel "(do (require 'figwheel-sidecar.repl-api) (figwheel-sidecar.repl-api/start-figwheel!) (figwheel-sidecar.repl-api/cljs-repl))" cider-check-figwheel-requirements)
+                                (figwheel-main cider-figwheel-main-init-form cider-check-figwheel-main-requirements)
+                                (figwheel-connected "(figwheel-sidecar.repl-api/cljs-repl)" cider-check-figwheel-requirements)
+                                (node "(do (require 'cljs.repl.node) (cider.piggieback/cljs-repl (cljs.repl.node/repl-env)))" cider-check-node-requirements)
+                                (weasel "(do (require 'weasel.repl.websocket) (cider.piggieback/cljs-repl (weasel.repl.websocket/repl-env :ip \"127.0.0.1\" :port 9001)))" cider-check-weasel-requirements)
+                                (boot "(do (require 'adzerk.boot-cljs-repl) (adzerk.boot-cljs-repl/start-repl))" cider-check-boot-requirements)
+                                (app cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements) ;; this is what is being added
+                                (shadow cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements)
+                                (shadow-select cider-shadow-select-cljs-init-form cider-check-shadow-cljs-requirements)
+                                (custom cider-custom-cljs-repl-init-form nil))))
 
   (defun ha/cider-append-comment ()
     (when (null (nth 8 (syntax-ppss)))
       (insert " ; ")))
 
   (advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
-#+END_SRC
+#+END_SR
