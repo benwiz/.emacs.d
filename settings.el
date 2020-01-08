@@ -161,6 +161,10 @@
 (use-package free-keys
   :bind ("C-h C-k" . 'free-keys))
 
+(use-package jump-char
+  :bind (("C-r" . jump-char-forward)
+         ("C-S-r" . jump-char-backward)))
+
 (defun load-init-el ()
   (interactive)
   (load-file "~/.emacs.d/init.el"))
