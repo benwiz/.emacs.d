@@ -506,4 +506,4 @@
       (insert " ; ")))
 
   (advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
-#+END_SR
+#+END_SRC
