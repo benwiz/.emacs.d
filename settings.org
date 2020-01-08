@@ -198,6 +198,9 @@
          ("M-g x" . dumb-jump-go-prefer-external)
          ("M-g z" . dumb-jump-go-prefer-external-other-window))
   :config (setq dumb-jump-selector 'ivy))
+
+(use-package free-keys
+  :bind ("C-h C-k" . 'free-keys))
 #+END_SRC
 ** emacs.d
    #+BEGIN_SRC emacs-lisp
@@ -285,7 +288,7 @@
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
   :config
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode +1))
 (use-package counsel-projectile

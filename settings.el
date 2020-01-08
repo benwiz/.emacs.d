@@ -158,6 +158,9 @@
          ("M-g z" . dumb-jump-go-prefer-external-other-window))
   :config (setq dumb-jump-selector 'ivy))
 
+(use-package free-keys
+  :bind ("C-h C-k" . 'free-keys))
+
 (defun load-init-el ()
   (interactive)
   (load-file "~/.emacs.d/init.el"))
@@ -232,7 +235,7 @@
 
 (use-package projectile
   :config
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode +1))
 (use-package counsel-projectile
