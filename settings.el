@@ -239,8 +239,6 @@
   :config
   (counsel-projectile-mode))
 
-(setq gnus-select-method '(nntp "news.gwene.org))
-
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package flycheck
@@ -359,3 +357,82 @@
 ;; (global-set-key (kbd "C-M-l") 'indent-top-sexp) ;; TODO use a different kbd
 
 
+
+(use-package clojure-snippets)
+
+(use-package flycheck-clj-kondo)
+
+(use-package clojure-mode
+ :bind (("C-c d f" . cider-code)
+        ("C-c d g" . cider-grimoire)
+        ("C-c d w" . cider-grimoire-web)
+        ("C-c d c" . clojure-cheatsheet)
+        ("C-c d d" . dash-at-point))
+ :init
+ (setq clojure-indent-style 'align-arguments
+       clojure-align-forms-automatically t)
+ :config
+ (require 'flycheck-clj-kondo))
+
+(defun cider-send-and-evaluate-sexp ()
+  "Sends the s-expression located before the point or the active
+  region to the REPL and evaluates it. Then the Clojure buffer is
+  activated as if nothing happened."
+  (interactive)
+  (if (not (region-active-p))
+      (cider-insert-last-sexp-in-repl)
+    (cider-insert-in-repl
+     (buffer-substring (region-beginning) (region-end)) nil))
+  (cider-switch-to-repl-buffer)
+  (cider-repl-closing-return)
+  (cider-switch-to-last-clojure-buffer)
+  (message ""))
+
+(use-package cider
+  :commands (cider cider-connect cider-jack-in)
+
+  :init
+  (setq cider-auto-select-error-buffer t
+        cider-repl-pop-to-buffer-on-connect nil
+        cider-repl-display-in-current-window t
+        cider-repl-use-clojure-font-lock t
+        cider-repl-wrap-history t
+        Cider-repl-history-size 1000
+        cider-show-error-buffer t
+        nrepl-hide-special-buffers t
+        ;; Stop error buffer from popping up while working in buffers other than the REPL:
+        nrepl-popup-stacktraces nil)
+
+  ;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  (add-hook 'cider-mode-hook 'company-mode)
+
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  (add-hook 'cider-repl-mode-hook 'superword-mode)
+  (add-hook 'cider-repl-mode-hook 'company-mode)
+  (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
+
+  :bind (:map cider-mode-map
+         ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
+         ("C-c C-p"     . cider-eval-print-last-sexp)
+         ("C-c M-o"     . cider-repl-clear-buffer)) ;; FIXME need to remove other binding
+
+  :config
+  (use-package slamhound)
+  (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
+  (setq cider-cljs-repl-types '((nashorn "(do (require 'cljs.repl.nashorn) (cider.piggieback/cljs-repl (cljs.repl.nashorn/repl-env)))" cider-check-nashorn-requirements)
+                              (figwheel "(do (require 'figwheel-sidecar.repl-api) (figwheel-sidecar.repl-api/start-figwheel!) (figwheel-sidecar.repl-api/cljs-repl))" cider-check-figwheel-requirements)
+                              (figwheel-main cider-figwheel-main-init-form cider-check-figwheel-main-requirements)
+                              (figwheel-connected "(figwheel-sidecar.repl-api/cljs-repl)" cider-check-figwheel-requirements)
+                              (node "(do (require 'cljs.repl.node) (cider.piggieback/cljs-repl (cljs.repl.node/repl-env)))" cider-check-node-requirements)
+                              (weasel "(do (require 'weasel.repl.websocket) (cider.piggieback/cljs-repl (weasel.repl.websocket/repl-env :ip \"127.0.0.1\" :port 9001)))" cider-check-weasel-requirements)
+                              (boot "(do (require 'adzerk.boot-cljs-repl) (adzerk.boot-cljs-repl/start-repl))" cider-check-boot-requirements)
+                              (app cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements) ;; this is what is being added
+                              (shadow cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements)
+                              (shadow-select cider-shadow-select-cljs-init-form cider-check-shadow-cljs-requirements)
+                              (custom cider-custom-cljs-repl-init-form nil))))
+
+(defun ha/cider-append-comment ()
+  (when (null (nth 8 (syntax-ppss)))
+    (insert " ; ")))
+
+(advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)

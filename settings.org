@@ -292,10 +292,6 @@
   :config
   (counsel-projectile-mode))
 #+END_SRC
-** Gnus
-#+BEGIN_SRC emacs-lisp
-(setq gnus-select-method '(nntp "news.gwene.org))
-#+END_SRC
 * Programming
 ** All
 #+BEGIN_SRC emacs-lisp
