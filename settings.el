@@ -139,6 +139,13 @@
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 
+  ;; (defun zap-until-char ()
+  ;;   (interactive)
+  ;;   (set-mark-command)
+  ;;   (jump-char-forward c)
+  ;;   )
+  ;; (global-set-key (kbd "M-Z") 'zap-until-char)
+
 (use-package htmlize)
 (use-package wgrep)
 
@@ -378,6 +385,9 @@
  :init
  (setq clojure-indent-style 'align-arguments
        clojure-align-forms-automatically t)
+ (define-clojure-indent
+   (:import 0)
+   (:require 0))
  :config
  (require 'flycheck-clj-kondo))
 
