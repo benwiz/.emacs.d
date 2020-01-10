@@ -27,6 +27,7 @@
 ** clojure refactor
 ** scroll with multiple cursors
 ** minibuffer often gets stuck open
+** TODO marks are not visible in cljs anymore, idk about clj
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
