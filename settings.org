@@ -25,8 +25,8 @@
 ** when creating new clj or cljs file add ns automatically
 ** faster autocomlete
 ** clojure refactor
-** theme: less intrusive whitespace color
-** theme: different background on current line
+** scroll with multiple cursors
+** minibuffer often gets stuck open
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -307,6 +307,7 @@
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
+         ("C-M->" . mc/skip-to-next-like-this)
          ("C-<" . mc/mark-previous-like-this)
          ("C-c C-<" . mc/mark-all-like-this)
          ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
@@ -352,7 +353,12 @@
     (global-set-key (kbd "C-=") 'er/expand-region))
 
   (use-package company
-    :init (global-company-mode))
+    :init (global-company-mode)
+    :config
+    (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+    ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
+    ;; TODO consider override navigation but only if i don't like M-n and M-p https://emacs.stackexchange.com/a/17970
+    )
 
   ;; (use-package color-identifiers-mode
   ;;   :init

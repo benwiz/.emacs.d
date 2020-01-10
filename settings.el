@@ -247,6 +247,7 @@
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
+         ("C-M->" . mc/skip-to-next-like-this)
          ("C-<" . mc/mark-previous-like-this)
          ("C-c C-<" . mc/mark-all-like-this)
          ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
@@ -287,7 +288,10 @@
   (global-set-key (kbd "C-=") 'er/expand-region))
 
 (use-package company
-  :init (global-company-mode))
+  :init (global-company-mode)
+  :config
+  (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+  )
 
 ;; (use-package color-identifiers-mode
 ;;   :init
