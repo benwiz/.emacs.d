@@ -165,6 +165,8 @@
   `(hl-line ((t (:background, "#151515" :underline nil))))
   )
 (global-hl-line-mode 1)
+(modify-face 'trailing-whitespace nil "#5a708c")
+
 
 (use-package all-the-icons)
 (use-package doom-modeline ;; alternative is moody for a simpler option
