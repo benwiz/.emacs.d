@@ -13,6 +13,7 @@
 ** paredit
 *** kill symbol `M-k`, current issue is I need to go to beginning of symbol but not move if already there. Once I get this working may want to overwrite `C-M-k`
 *** paredit-wrap-* should wrap from beginning of current symbol, not the middle of it. Same issue as kill-symbol above.
+*** paredit kill needs to kill any created whitepsace
 ** zap-until-char `M-S-z`
 ** kill dired buffer after selection
 ** Improve multiple cursors
@@ -20,6 +21,8 @@
 ** More convenient shortcuts for registers
 ** Figure out how to toggle between two buffers easily
 ** raise inside string
+** start logging what I learned in org files and have them auto publish
+** when creating new clj or cljs file add ns automatically
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -173,6 +176,7 @@
 * Tools and Bindings
 ** Random Bindings
 #+BEGIN_SRC emacs-lisp
+(global-unset-key (kbd "C-z"))
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 
@@ -453,9 +457,10 @@
    :init
    (setq clojure-indent-style 'align-arguments
          clojure-align-forms-automatically t)
-   (define-clojure-indent
-     (:import 0)
-     (:require 0))
+   ;; TODO figure out this indentation
+   ;;(define-clojure-indent
+   ;;  (:import 0)
+   ;;  (:require 0))
    :config
    (require 'flycheck-clj-kondo))
 

@@ -136,6 +136,7 @@
   (setq doom-modeline-env-version t)
   )
 
+(global-unset-key (kbd "C-z"))
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 
@@ -385,9 +386,10 @@
  :init
  (setq clojure-indent-style 'align-arguments
        clojure-align-forms-automatically t)
- (define-clojure-indent
-   (:import 0)
-   (:require 0))
+ ;; TODO figure out this indentation
+ ;;(define-clojure-indent
+ ;;  (:import 0)
+ ;;  (:require 0))
  :config
  (require 'flycheck-clj-kondo))
 
