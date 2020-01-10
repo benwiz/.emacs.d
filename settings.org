@@ -23,6 +23,10 @@
 ** raise inside string
 ** start logging what I learned in org files and have them auto publish
 ** when creating new clj or cljs file add ns automatically
+** faster autocomlete
+** clojure refactor
+** theme: less intrusive whitespace color
+** theme: different background on current line
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -156,7 +160,11 @@
 * Theme and Modeline
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes")
-(load-theme 'spolsky t)
+(load-theme 'spolsky t) ;; https://github.com/owainlewis/emacs-color-themes/blob/master/themes/spolsky-theme.el
+(custom-theme-set-faces 'spolsky
+  `(hl-line ((t (:background, "#151515" :underline nil))))
+  )
+(global-hl-line-mode 1)
 
 (use-package all-the-icons)
 (use-package doom-modeline ;; alternative is moody for a simpler option

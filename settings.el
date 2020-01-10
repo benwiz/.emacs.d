@@ -119,7 +119,11 @@
 (add-hook 'focus-out-hook #'garbage-collect)
 
 (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes")
-(load-theme 'spolsky t)
+(load-theme 'spolsky t) ;; https://github.com/owainlewis/emacs-color-themes/blob/master/themes/spolsky-theme.el
+(custom-theme-set-faces 'spolsky
+  `(hl-line ((t (:background, "#151515" :underline nil))))
+  )
+(global-hl-line-mode 1)
 
 (use-package all-the-icons)
 (use-package doom-modeline ;; alternative is moody for a simpler option
