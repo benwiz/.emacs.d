@@ -160,31 +160,31 @@
 #+END_SRC
 * Theme and Modeline
 #+BEGIN_SRC emacs-lisp
-(if *is-a-mac*
-  (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
-  (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
-(load-theme 'spolsky t) ;; https://github.com/owainlewis/emacs-color-themes/blob/master/themes/spolsky-theme.el
-(custom-theme-set-faces 'spolsky
-  `(hl-line ((t (:background, "#151515" :underline nil))))
-  )
-(global-hl-line-mode 1)
-(modify-face 'trailing-whitespace nil "#5a708c")
+  (if *is-a-mac*
+    (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
+    (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
+  (load-theme 'spolsky t) ;; https://github.com/owainlewis/emacs-color-themes/blob/master/themes/spolsky-theme.el
+  (custom-theme-set-faces 'spolsky
+    `(hl-line ((t (:background, "#151515" :underline nil))))
+    )
+  (global-hl-line-mode 1)
+  (modify-face 'trailing-whitespace nil "#5a708c")
 
 
-(use-package all-the-icons)
-(use-package doom-modeline ;; alternative is moody for a simpler option
-  ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
-  ;; https://github.com/seagle0128/doom-modeline#customize
-  :hook (after-init . doom-modeline-mode)
-  :config
-  (setq doom-modeline-minor-modes nil)
-  (setq doom-modeline-buffer-state-icon t) ;; as in, isEdited? state
-  (setq doom-modeline-buffer-encoding nil)
-  (setq doom-modeline-vcs-max-length 20)
-  ;; (setq doom-modeline-persp-name t)
-  ;; (setq doom-modeline-display-default-persp-name t)
-  (setq doom-modeline-env-version t)
-  )
+  (use-package all-the-icons)
+  ;; (use-package doom-modeline ;; alternative is moody for a simpler option
+  ;;   ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
+  ;;   ;; https://github.com/seagle0128/doom-modeline#customize
+  ;;   :hook (after-init . doom-modeline-mode)
+  ;;   :config
+  ;;   (setq doom-modeline-minor-modes nil)
+  ;;   (setq doom-modeline-buffer-state-icon t) ;; as in, isEdited? state
+  ;;   (setq doom-modeline-buffer-encoding nil)
+  ;;   (setq doom-modeline-vcs-max-length 20)
+  ;;   ;; (setq doom-modeline-persp-name t)
+  ;;   ;; (setq doom-modeline-display-default-persp-name t)
+  ;;   (setq doom-modeline-env-version t)
+  ;;   )
 #+END_SRC
 * Tools and Bindings
 ** Random Bindings
@@ -308,20 +308,25 @@
 <<<<<<< HEAD
 * Org mode
 #+BEGIN_SRC emacs-lisp
-(setq org-publish-project-alist
-      '(("blog"
-          ;; Path to your org files.
-          :base-directory "~/org/"
-          :base-extension "org"
+  (setq org-publish-project-alist
+        '(("org-blog"
+            ;; Path to your org files.
+            :base-directory "/Users/benwiz/code/blog/org/"
+            ;; :base-extension "org"
 
-          ;; Path to your Jekyll project.
-          :publishing-directory "~/code/blog/"
-          :recursive t
-          :publishing-function org-publish-org-to-html
-          :headline-levels 4
-          :html-extension "html"
-          :body-only t ;; Only export section between <body> </body>
-    )))
+            ;; Path to your Jekyll project.
+            :publishing-directory "/Users/benwiz/code/blog/jekyll/"
+            ;; :recursive t
+            :publishing-function org-html-export-to-html
+            ;; :headline-levels 4
+            ;; :html-extension "html"
+            ;; :body-only t
+      )
+
+      ;; TODO: Later can have it copy everything to the _site dir which is a subrepo (kind of)
+
+      ("blog"
+        :components ("org-blog"))))
 #+END_SRC
 ** Multiple Cursors
 #+BEGIN_SRC emacs-lisp
@@ -343,7 +348,6 @@
 (use-package counsel-projectile
   :config
   (counsel-projectile-mode))
->>>>>>> 633d19edf245fe9594514d9767774fd0f2f36f51
 #+END_SRC
 * Programming
 ** All

@@ -94,10 +94,12 @@
  tab-width 4                                      ; Set width for tabs
  uniquify-buffer-name-style 'forward              ; Uniquify buffer names
  window-combination-resize t                      ; Resize windows proportionally
- x-stretch-cursor t)                              ; Stretch cursor to the glyph width
+ x-stretch-cursor t                               ; Stretch cursor to the glyph width
+ column-number-mode t
+ )
 (cd "~/")                                         ; Move to the user directory
 (delete-selection-mode 1)                         ; Replace region when inserting text
-(display-time-mode 1)                             ; Enable time in the mode-line                 ;; FIXME: Time not displaying
+(display-time-mode 1)                             ; Enable time in the mode-line
 (fringe-mode 0)                                   ; Disable fringes
 (fset 'yes-or-no-p 'y-or-n-p)                     ; Replace yes/no prompts with y/n
 (global-subword-mode 1)                           ; Iterate through CamelCase words
@@ -119,11 +121,39 @@
 (if *is-a-mac*
   (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
+(load-theme 'spolsky t) ;; https://github.com/owainlewis/emacs-color-themes/blob/master/themes/spolsky-theme.el
+(custom-theme-set-faces 'spolsky
+  `(hl-line ((t (:background, "#151515" :underline nil))))
+  )
+(global-hl-line-mode 1)
+(modify-face 'trailing-whitespace nil "#5a708c")
 
-(load-theme 'spolsky t)
 
+(use-package all-the-icons)
+;; (use-package doom-modeline ;; alternative is moody for a simpler option
+;;   ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
+;;   ;; https://github.com/seagle0128/doom-modeline#customize
+;;   :hook (after-init . doom-modeline-mode)
+;;   :config
+;;   (setq doom-modeline-minor-modes nil)
+;;   (setq doom-modeline-buffer-state-icon t) ;; as in, isEdited? state
+;;   (setq doom-modeline-buffer-encoding nil)
+;;   (setq doom-modeline-vcs-max-length 20)
+;;   ;; (setq doom-modeline-persp-name t)
+;;   ;; (setq doom-modeline-display-default-persp-name t)
+;;   (setq doom-modeline-env-version t)
+;;   )
+
+(global-unset-key (kbd "C-z"))
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
+
+  ;; (defun zap-until-char ()
+  ;;   (interactive)
+  ;;   (set-mark-command)
+  ;;   (jump-char-forward c)
+  ;;   )
+  ;; (global-set-key (kbd "M-Z") 'zap-until-char)
 
 (use-package htmlize)
 (use-package wgrep)
@@ -143,6 +173,13 @@
          ("M-g x" . dumb-jump-go-prefer-external)
          ("M-g z" . dumb-jump-go-prefer-external-other-window))
   :config (setq dumb-jump-selector 'ivy))
+
+(use-package free-keys
+  :bind ("C-h C-k" . 'free-keys))
+
+(use-package jump-char
+  :bind (("C-r" . jump-char-forward)
+         ("C-S-r" . jump-char-backward)))
 
 (defun load-init-el ()
   (interactive)
@@ -210,19 +247,41 @@
   (load-env-vars "~/.emacs.d/emacs.env"))
 
 (setq org-publish-project-alist
-      '(("blog"
+      '(("org-blog"
           ;; Path to your org files.
-          :base-directory "~/org/"
-          :base-extension "org"
+          :base-directory "/Users/benwiz/code/blog/org/"
+          ;; :base-extension "org"
 
           ;; Path to your Jekyll project.
-          :publishing-directory "~/code/blog/"
-          :recursive t
-          :publishing-function org-publish-org-to-html
-          :headline-levels 4
-          :html-extension "html"
-          :body-only t ;; Only export section between <body> </body>
-    )))
+          :publishing-directory "/Users/benwiz/code/blog/jekyll/"
+          ;; :recursive t
+          :publishing-function org-html-export-to-html
+          ;; :headline-levels 4
+          ;; :html-extension "html"
+          ;; :body-only t
+    )
+
+    ;; TODO: Later can have it copy everything to the _site dir which is a subrepo (kind of)
+
+    ("blog"
+      :components ("org-blog"))))
+
+(use-package multiple-cursors
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-M->" . mc/skip-to-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)
+         ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
+
+(use-package projectile
+  :config
+  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
+(use-package counsel-projectile
+  :config
+  (counsel-projectile-mode))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
@@ -251,7 +310,12 @@
   (global-set-key (kbd "C-=") 'er/expand-region))
 
 (use-package company
-  :init (global-company-mode))
+  :init (global-company-mode)
+  :config
+  (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+  ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
+  ;; TODO consider override navigation but only if i don't like M-n and M-p https://emacs.stackexchange.com/a/17970
+  )
 
 ;; (use-package color-identifiers-mode
 ;;   :init
@@ -314,13 +378,15 @@
        (paredit-delete-indentation))))
 
 (use-package paredit
+  ;; TODO When killing a newline delete all whitespace until next character (maybe just bring in Smartparens kill command)
   :bind (("M-^" . paredit-delete-indentation)
          ("C-^" . paredit-remove-newlines) ;; basically clean up a multi-line sexp
          ("C-<return>" . paredit-close-parenthesis-and-newline))
   :init
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
   (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'cider-repl-mode-hook 'paredit-mode))
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  )
 
 ;; Like: sp-kill-sexp (to delete the whole symbol not just forward like C-M-k does)
 (defun kill-symbol ()
@@ -328,6 +394,16 @@
   (backward-sexp) ;; TODO instead of backward-sexp, need to go to beginning of current symbol or go nowhere if already there
   (kill-sexp))
 (global-set-key (kbd "M-k") 'kill-symbol)
+
+;; Indent top level sexp
+(defun indent-top-sexp ()
+  (interactive)
+  ;; TODO go to beginning or end of top level sexp
+  ;; TODO select the whole sexp
+  (indent-region)
+  ;; TODO return to starting point
+  )
+;; (global-set-key (kbd "C-M-l") 'indent-top-sexp) ;; TODO use a different kbd
 
 
 
@@ -344,6 +420,10 @@
  :init
  (setq clojure-indent-style 'align-arguments
        clojure-align-forms-automatically t)
+ ;; TODO figure out this indentation
+ ;;(define-clojure-indent
+ ;;  (:import 0)
+ ;;  (:require 0))
  :config
  (require 'flycheck-clj-kondo))
 
@@ -386,10 +466,23 @@
 
   :bind (:map cider-mode-map
          ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
-         ("C-c C-p"     . cider-eval-print-last-sexp))
+         ("C-c C-p"     . cider-eval-print-last-sexp)
+         ("C-c M-o"     . cider-repl-clear-buffer)) ;; FIXME need to remove other binding
 
   :config
-  (use-package slamhound))
+  (use-package slamhound)
+  (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
+  (setq cider-cljs-repl-types '((nashorn "(do (require 'cljs.repl.nashorn) (cider.piggieback/cljs-repl (cljs.repl.nashorn/repl-env)))" cider-check-nashorn-requirements)
+                              (figwheel "(do (require 'figwheel-sidecar.repl-api) (figwheel-sidecar.repl-api/start-figwheel!) (figwheel-sidecar.repl-api/cljs-repl))" cider-check-figwheel-requirements)
+                              (figwheel-main cider-figwheel-main-init-form cider-check-figwheel-main-requirements)
+                              (figwheel-connected "(figwheel-sidecar.repl-api/cljs-repl)" cider-check-figwheel-requirements)
+                              (node "(do (require 'cljs.repl.node) (cider.piggieback/cljs-repl (cljs.repl.node/repl-env)))" cider-check-node-requirements)
+                              (weasel "(do (require 'weasel.repl.websocket) (cider.piggieback/cljs-repl (weasel.repl.websocket/repl-env :ip \"127.0.0.1\" :port 9001)))" cider-check-weasel-requirements)
+                              (boot "(do (require 'adzerk.boot-cljs-repl) (adzerk.boot-cljs-repl/start-repl))" cider-check-boot-requirements)
+                              (app cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements) ;; this is what is being added
+                              (shadow cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements)
+                              (shadow-select cider-shadow-select-cljs-init-form cider-check-shadow-cljs-requirements)
+                              (custom cider-custom-cljs-repl-init-form nil))))
 
 (defun ha/cider-append-comment ()
   (when (null (nth 8 (syntax-ppss)))
