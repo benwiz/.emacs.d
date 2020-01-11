@@ -27,7 +27,7 @@
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
-(when (string-equal system-type "darwin")
+(when *is-a-mac* ;; (string-equal system-type "darwin")
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 #+END_SRC
 * custom.el
@@ -154,7 +154,10 @@
 #+END_SRC
 * Theme
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes")
+(if *is-a-mac*
+  (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
+  (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
+
 (load-theme 'spolsky t)
 #+END_SRC
 * Tools and Bindings
@@ -257,6 +260,23 @@
      :init
      (load-env-vars "~/.emacs.d/emacs.env"))
    #+END_SRC
+* Org mode
+#+BEGIN_SRC emacs-lisp
+(setq org-publish-project-alist
+      '(("blog"
+          ;; Path to your org files.
+          :base-directory "~/org/"
+          :base-extension "org"
+
+          ;; Path to your Jekyll project.
+          :publishing-directory "~/code/blog/"
+          :recursive t
+          :publishing-function org-publish-org-to-html
+          :headline-levels 4
+          :html-extension "html"
+          :body-only t ;; Only export section between <body> </body>
+    )))
+#+END_SRC
 * Programming
 ** All
 #+BEGIN_SRC emacs-lisp

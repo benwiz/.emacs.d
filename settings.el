@@ -1,5 +1,5 @@
 (defconst *is-a-mac* (eq system-type 'darwin))
-(when (string-equal system-type "darwin")
+(when *is-a-mac* ;; (string-equal system-type "darwin")
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -116,7 +116,10 @@
 
 (add-hook 'focus-out-hook #'garbage-collect)
 
-(add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes")
+(if *is-a-mac*
+  (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
+  (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
+
 (load-theme 'spolsky t)
 
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
@@ -205,6 +208,21 @@
 (use-package load-env-vars
   :init
   (load-env-vars "~/.emacs.d/emacs.env"))
+
+(setq org-publish-project-alist
+      '(("blog"
+          ;; Path to your org files.
+          :base-directory "~/org/"
+          :base-extension "org"
+
+          ;; Path to your Jekyll project.
+          :publishing-directory "~/code/blog/"
+          :recursive t
+          :publishing-function org-publish-org-to-html
+          :headline-levels 4
+          :html-extension "html"
+          :body-only t ;; Only export section between <body> </body>
+    )))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
