@@ -130,19 +130,19 @@
 
 
 (use-package all-the-icons)
-;; (use-package doom-modeline ;; alternative is moody for a simpler option
-;;   ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
-;;   ;; https://github.com/seagle0128/doom-modeline#customize
-;;   :hook (after-init . doom-modeline-mode)
-;;   :config
-;;   (setq doom-modeline-minor-modes nil)
-;;   (setq doom-modeline-buffer-state-icon t) ;; as in, isEdited? state
-;;   (setq doom-modeline-buffer-encoding nil)
-;;   (setq doom-modeline-vcs-max-length 20)
-;;   ;; (setq doom-modeline-persp-name t)
-;;   ;; (setq doom-modeline-display-default-persp-name t)
-;;   (setq doom-modeline-env-version t)
-;;   )
+(use-package doom-modeline ;; alternative is moody for a simpler option
+  ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
+  ;; https://github.com/seagle0128/doom-modeline#customize
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (setq doom-modeline-minor-modes nil)
+  (setq doom-modeline-buffer-state-icon t) ;; as in, isEdited? state
+  (setq doom-modeline-buffer-encoding nil)
+  (setq doom-modeline-vcs-max-length 20)
+  ;; (setq doom-modeline-persp-name t)
+  ;; (setq doom-modeline-display-default-persp-name t)
+  (setq doom-modeline-env-version t)
+  )
 
 (global-unset-key (kbd "C-z"))
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
