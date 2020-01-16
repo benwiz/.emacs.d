@@ -249,13 +249,13 @@
 (setq org-publish-project-alist
       '(("org-blog"
           ;; Path to your org files.
-          :base-directory "/Users/benwiz/code/blog/org/"
+          :base-directory "~/code/personal/blog/org/"
           ;; :base-extension "org"
 
           ;; Path to your Jekyll project.
-          :publishing-directory "/Users/benwiz/code/blog/jekyll/"
+          :publishing-directory "~/code/personal/blog/jekyll/"
           ;; :recursive t
-          :publishing-function org-html-export-to-html
+          :publishing-function org-md-export-to-markdown ;; org-html-export-to-html
           ;; :headline-levels 4
           ;; :html-extension "html"
           ;; :body-only t
@@ -411,6 +411,12 @@
 
 (use-package flycheck-clj-kondo)
 
+(use-package clj-refactor
+  :init (add-hook 'clojure-mode-hook (lambda ()
+    (yas-minor-mode 1)
+    (clj-refactor-mode 1)
+    (cljr-add-keybindings-with-prefix "C-c C-m"))))
+
 (use-package clojure-mode
  :bind (("C-c d f" . cider-code)
         ("C-c d g" . cider-grimoire)
@@ -420,12 +426,12 @@
  :init
  (setq clojure-indent-style 'align-arguments
        clojure-align-forms-automatically t)
- ;; TODO figure out this indentation
+ :config
+ (require 'flycheck-clj-kondo)
  ;;(define-clojure-indent
  ;;  (:import 0)
  ;;  (:require 0))
- :config
- (require 'flycheck-clj-kondo))
+ )
 
 (defun cider-send-and-evaluate-sexp ()
   "Sends the s-expression located before the point or the active
