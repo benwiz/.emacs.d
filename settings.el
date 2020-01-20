@@ -123,7 +123,9 @@
   (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
 (load-theme 'spolsky t) ;; https://github.com/owainlewis/emacs-color-themes/blob/master/themes/spolsky-theme.el
 (custom-theme-set-faces 'spolsky
-  `(hl-line ((t (:background, "#151515" :underline nil))))
+  `(hl-line ((t (:background "#151515" :underline nil))))
+  `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
+  `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
   )
 (global-hl-line-mode 1)
 (modify-face 'trailing-whitespace nil "#5a708c")
@@ -180,6 +182,10 @@
 (use-package jump-char
   :bind (("C-r" . jump-char-forward)
          ("C-S-r" . jump-char-backward)))
+
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode))
 
 (defun load-init-el ()
   (interactive)
@@ -470,10 +476,12 @@
   (add-hook 'cider-repl-mode-hook 'company-mode)
   (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
 
+  (define-key cider-mode-map (kbd "C-c C-o") nil)
+
   :bind (:map cider-mode-map
          ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
          ("C-c C-p"     . cider-eval-print-last-sexp)
-         ("C-c M-o"     . cider-repl-clear-buffer)) ;; FIXME need to remove other binding
+         ("C-c C-o"     . cider-repl-clear-buffer)) ;; FIXME need to remove other binding
 
   :config
   (use-package slamhound)
