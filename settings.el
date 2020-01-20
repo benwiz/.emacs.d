@@ -294,7 +294,7 @@
 (use-package flycheck
   :init (global-flycheck-mode))
 
-(use-package rainbow-delimiters
+(use-package rainbow-delimiters ;; TODO figure out how to decrease saturation inside comments
   :config
   (require 'cl-lib)
   (require 'color)
@@ -331,12 +331,12 @@
   :init
   (defface fic-face
     '((((class color))
-    (:foreground "orange" :weight bold))
-    (t (:weight bold)))
+    (:foreground "orange" :weight bold :slant italic))
+    (t (:weight bold :slant italic)))
     "Face to fontify FIXME/TODO words"
     :group 'fic-mode)
   :config
-  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE"))
+  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???"))
   (add-hook 'prog-mode-hook 'fic-mode))
 
 (use-package hideshow
