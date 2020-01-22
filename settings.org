@@ -302,6 +302,24 @@
      (global-set-key (kbd "C-c g") 'counsel-git)
      (global-set-key (kbd "C-c j") 'counsel-git-grep))
  #+END_SRC
+** dired (look into tramp)
+  #+BEGIN_SRC emacs-lisp
+    (use-package dired
+      :ensure nil
+      :config
+      (setq dired-omit-files "^.~$")
+
+      ;; dired - reuse current buffer by pressing 'a'
+      ;; (put 'dired-find-alternate-file 'disabled nil)
+
+      ;; always delete and copy recursively
+      (setq dired-recursive-deletes 'always)
+      (setq dired-recursive-copies 'always)
+
+      (require 'dired-x)
+      (add-hook 'dired-mode-hook 'dired-omit-mode)
+      )
+  #+END_SRC
 ** Env Vars
    #+BEGIN_SRC emacs-lisp
    (use-package load-env-vars

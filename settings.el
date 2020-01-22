@@ -248,6 +248,22 @@
   (global-set-key (kbd "C-c g") 'counsel-git)
   (global-set-key (kbd "C-c j") 'counsel-git-grep))
 
+(use-package dired
+  :ensure nil
+  :config
+  (setq dired-omit-files "^.~$")
+
+  ;; dired - reuse current buffer by pressing 'a'
+  ;; (put 'dired-find-alternate-file 'disabled nil)
+
+  ;; always delete and copy recursively
+  (setq dired-recursive-deletes 'always)
+  (setq dired-recursive-copies 'always)
+
+  (require 'dired-x)
+  (add-hook 'dired-mode-hook 'dired-omit-mode)
+  )
+
 (use-package load-env-vars
   :init
   (load-env-vars "~/.emacs.d/emacs.env"))
@@ -331,7 +347,7 @@
   :init
   (defface fic-face
     '((((class color))
-    (:foreground "orange" :weight bold :slant italic)) ;; FIXME italics isn't working
+    (:foreground "orange" :weight bold :slant italic))
     (t (:weight bold :slant italic)))
     "Face to fontify FIXME/TODO words"
     :group 'fic-mode)
