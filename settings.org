@@ -397,7 +397,7 @@
     :init
     (defface fic-face
       '((((class color))
-      (:foreground "orange" :weight bold :slant italic)) ;; FIXME italics isn't working
+      (:foreground "orange" :weight bold :slant italic))
       (t (:weight bold :slant italic)))
       "Face to fontify FIXME/TODO words"
       :group 'fic-mode)

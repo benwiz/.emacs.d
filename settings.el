@@ -331,12 +331,12 @@
   :init
   (defface fic-face
     '((((class color))
-    (:foreground "orange" :weight bold :slant italic))
+    (:foreground "orange" :weight bold :slant italic)) ;; FIXME italics isn't working
     (t (:weight bold :slant italic)))
     "Face to fontify FIXME/TODO words"
     :group 'fic-mode)
   :config
-  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???"))
+  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
   (add-hook 'prog-mode-hook 'fic-mode))
 
 (use-package hideshow
