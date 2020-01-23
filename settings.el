@@ -187,14 +187,16 @@
   :config
   (global-undo-tree-mode))
 
+(use-package scratch)
+
 (defun load-init-el ()
   (interactive)
   (load-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "C-c i") 'load-init-el)
 
 (use-package magit
-   :config
-   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
+  :config
+  (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
 (use-package git-gutter
   :diminish git-gutter-mode
   :init
@@ -210,10 +212,15 @@
     (set-face-foreground 'git-gutter:modified "#00736F")
     (set-face-background 'git-gutter:added "#546E00")
     (set-face-foreground 'git-gutter:added "#546E00"))
-  :bind (("C-x p" . git-gutter:previous-hunk)
-         ("C-x n" . git-gutter:next-hunk)
-         ("C-x v =" . git-gutter:popup-hunk)
-         ("C-x v r" . git-gutter:revert-hunk)))
+   :bind (("C-x p" . git-gutter:previous-hunk)
+          ("C-x n" . git-gutter:next-hunk)
+          ("C-x v =" . git-gutter:popup-hunk)
+          ("C-x v r" . git-gutter:revert-hunk)))
+
+ (use-package git-link
+   :config
+   (global-set-key (kbd "C-c g l") 'git-link)
+   )
 
 (use-package ivy
   :config
@@ -223,6 +230,7 @@
   (setq ivy-count-format "(%d/%d) ")
   (global-set-key (kbd "C-c C-r") 'ivy-resume)
   (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+  (global-set-key (kbd "C-x C-b") 'ivy-switch-buffer)
   (global-set-key (kbd "C-c v") 'ivy-push-view)
   (global-set-key (kbd "C-c V") 'ivy-pop-view))
 
@@ -245,7 +253,7 @@
   (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
   (global-set-key (kbd "<f2> j") 'counsel-set-variable)
   (global-set-key (kbd "C-c c") 'counsel-compile)
-  (global-set-key (kbd "C-c g") 'counsel-git)
+  ;; (global-set-key (kbd "C-c g") 'counsel-git)
   (global-set-key (kbd "C-c j") 'counsel-git-grep))
 
 (use-package dired
@@ -263,6 +271,27 @@
   (require 'dired-x)
   (add-hook 'dired-mode-hook 'dired-omit-mode)
   )
+
+(use-package multiple-cursors
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-M->" . mc/skip-to-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)
+         ("C-S-<mouse-1>" . mc/add-cursor-on-click)
+         )
+  :config
+  (define-key mc/keymap (kbd "<return>") nil)
+  )
+
+(use-package projectile
+  :config
+  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
+(use-package counsel-projectile
+  :config
+  (counsel-projectile-mode))
 
 (use-package load-env-vars
   :init
@@ -287,23 +316,6 @@
 
     ("blog"
       :components ("org-blog"))))
-
-(use-package multiple-cursors
-  :bind (("C-S-c C-S-c" . mc/edit-lines)
-         ("C->" . mc/mark-next-like-this)
-         ("C-M->" . mc/skip-to-next-like-this)
-         ("C-<" . mc/mark-previous-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)
-         ("C-S-<mouse-1>" . mc/add-cursor-on-click)))
-
-(use-package projectile
-  :config
-  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode +1))
-(use-package counsel-projectile
-  :config
-  (counsel-projectile-mode))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
