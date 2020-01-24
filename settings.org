@@ -27,6 +27,8 @@
 ** scroll with multiple cursors
 ** minibuffer often gets stuck open
 ** dim parenthesis when in comment
+** organize this file
+** defer packages that probably should be deferred
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -235,6 +237,12 @@
   (global-undo-tree-mode))
 
 (use-package scratch)
+
+(use-package wttrin
+  :defer t
+  :init
+  (setq wttrin-default-cities '("New Orleans"))
+  )
 
 #+END_SRC
 ** emacs.d

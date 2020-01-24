@@ -189,6 +189,12 @@
 
 (use-package scratch)
 
+(use-package wttrin
+  :defer t
+  :init
+  (setq wttrin-default-cities '("New Orleans"))
+  )
+
 (defun load-init-el ()
   (interactive)
   (load-file "~/.emacs.d/init.el"))
