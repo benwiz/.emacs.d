@@ -27,7 +27,7 @@
 ** scroll with multiple cursors
 ** minibuffer often gets stuck open
 ** dim parenthesis when in comment
-** organize this file
+** organize this file, I'm not sold on using org mode yet, I should look up videos of emacs configs using org mode
 ** defer packages that probably should be deferred
 * OS
 #+BEGIN_SRC emacs-lisp
@@ -206,43 +206,36 @@
 #+END_SRC
 ** Random packages
 #+BEGIN_SRC emacs-lisp
-(use-package htmlize)
-(use-package wgrep)
+  (use-package htmlize)
+  (use-package wgrep)
 
-(use-package highlight-indent-guides
-;; :hook (prog-mode . highlight-indent-guides-mode) ;; I commented this out because I just want to manually toggle this
-  :config
-  (setq highlight-indent-guides-method 'character)
-  (setq highlight-indent-guides-character 9615) ; left-align vertical bar
-  (setq highlight-indent-guides-auto-character-face-perc 20))
+  (use-package highlight-indent-guides
+  ;; :hook (prog-mode . highlight-indent-guides-mode) ;; I commented this out because I just want to manually toggle this
+    :config
+    (setq highlight-indent-guides-method 'character)
+    (setq highlight-indent-guides-character 9615) ; left-align vertical bar
+    (setq highlight-indent-guides-auto-character-face-perc 20))
 
-(use-package dumb-jump
-  :bind (("M-g o" . dumb-jump-go-other-window)
-         ("M-g j" . dumb-jump-go)
-         ("M-g b" . dumb-jump-back)
-         ("M-g i" . dumb-jump-go-prompt)
-         ("M-g x" . dumb-jump-go-prefer-external)
-         ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'ivy))
+  (use-package free-keys
+    :bind ("C-h C-k" . 'free-keys))
 
-(use-package free-keys
-  :bind ("C-h C-k" . 'free-keys))
+  (use-package avy
+    :bind (("C-:" . avy-goto-char)
+           ("C-'" . avy-goto-char-timer)))
 
-(use-package jump-char
-  :bind (("C-r" . jump-char-forward)
-         ("C-S-r" . jump-char-backward)))
+  (use-package undo-tree
+    :config
+    (global-undo-tree-mode))
 
-(use-package undo-tree
-  :config
-  (global-undo-tree-mode))
+  (use-package scratch)
 
-(use-package scratch)
+  (use-package wttrin
+    :defer t
+    :init
+    (setq wttrin-default-cities '("New Orleans")))
 
-(use-package wttrin
-  :defer t
-  :init
-  (setq wttrin-default-cities '("New Orleans"))
-  )
+  (use-package ws-butler
+    :config (ws-butler-global-mode 1))
 
 #+END_SRC
 ** emacs.d

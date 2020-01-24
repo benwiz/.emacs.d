@@ -171,17 +171,15 @@
   :bind (("M-g o" . dumb-jump-go-other-window)
          ("M-g j" . dumb-jump-go)
          ("M-g b" . dumb-jump-back)
-         ("M-g i" . dumb-jump-go-prompt)
-         ("M-g x" . dumb-jump-go-prefer-external)
-         ("M-g z" . dumb-jump-go-prefer-external-other-window))
+         ("M-g i" . dumb-jump-go-prompt))
   :config (setq dumb-jump-selector 'ivy))
 
 (use-package free-keys
   :bind ("C-h C-k" . 'free-keys))
 
-(use-package jump-char
-  :bind (("C-r" . jump-char-forward)
-         ("C-S-r" . jump-char-backward)))
+(use-package avy
+  :bind (("C-:" . avy-goto-char)
+         ("C-'" . avy-goto-char-timer)))
 
 (use-package undo-tree
   :config
@@ -192,8 +190,10 @@
 (use-package wttrin
   :defer t
   :init
-  (setq wttrin-default-cities '("New Orleans"))
-  )
+  (setq wttrin-default-cities '("New Orleans")))
+
+(use-package ws-butler
+  :config (ws-butler-global-mode 1))
 
 (defun load-init-el ()
   (interactive)
