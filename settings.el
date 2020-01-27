@@ -167,13 +167,6 @@
   (setq highlight-indent-guides-character 9615) ; left-align vertical bar
   (setq highlight-indent-guides-auto-character-face-perc 20))
 
-(use-package dumb-jump
-  :bind (("M-g o" . dumb-jump-go-other-window)
-         ("M-g j" . dumb-jump-go)
-         ("M-g b" . dumb-jump-back)
-         ("M-g i" . dumb-jump-go-prompt))
-  :config (setq dumb-jump-selector 'ivy))
-
 (use-package free-keys
   :bind ("C-h C-k" . 'free-keys))
 

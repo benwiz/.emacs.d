@@ -29,6 +29,7 @@
 ** dim parenthesis when in comment
 ** organize this file, I'm not sold on using org mode yet, I should look up videos of emacs configs using org mode
 ** defer packages that probably should be deferred
+** cider-find-var should not have to do a confirmation step
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
