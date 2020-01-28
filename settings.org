@@ -376,7 +376,7 @@
   (setq spotify-player-status-stopped-text "⏹")
   (setq spotify-player-status-format "%p %t - %a")
   :config
-  (define-key spotify-mode-map (kbd "C-c .") 'spotify-command-map)) ;; FIXME not loading spotify-mode-map, maybe I need to turn on some minor mode
+  (define-key spotify-mode-map (kbd "C-c .") 'spotify-command-map)) ;; FIXME maybe not loading spotify-mode-map, maybe I need to turn on some minor mode
 #+END_SRC
 * Org mode
 #+BEGIN_SRC emacs-lisp
