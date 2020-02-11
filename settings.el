@@ -95,8 +95,8 @@
  uniquify-buffer-name-style 'forward              ; Uniquify buffer names
  window-combination-resize t                      ; Resize windows proportionally
  x-stretch-cursor t                               ; Stretch cursor to the glyph width
- column-number-mode t
- line-spacing 2
+ column-number-mode t                             ; Display column numbers
+ line-spacing 1                                   ; Add N pixel below each line
  )
 (cd "~/")                                         ; Move to the user directory
 (delete-selection-mode 1)                         ; Replace region when inserting text
@@ -238,7 +238,19 @@
   :init
   (set-face-attribute 'isearch nil :background "#FF9F93")
   :config
-  (global-set-key (kbd "C-s") 'swiper-isearch))
+  (global-set-key (kbd "M-i") 'swiper-isearch)
+  )
+
+  (defun swiper--from-isearch ()
+   "Invoke `swiper' from isearch.
+    https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da61c948a6fd/helm-swoop.el#L657-668 "
+   (interactive)
+   (let (($query (if isearch-regexp
+                     isearch-string
+                   (regexp-quote isearch-string))))
+     (isearch-exit)
+     (swiper $query)))
+  (define-key isearch-mode-map (kbd "M-i") 'swiper--from-isearch)
 
 (use-package counsel
   :config
@@ -398,6 +410,16 @@
                  (js-mode "{" "}" "/[*/]" nil)
                  (json-mode "{" "}" "/[*/]" nil)
                  (javascript-mode  "{" "}" "/[*/]" nil)))))
+
+(defun duplicate-line()
+  (interactive)
+  (move-beginning-of-line 1)
+  (kill-line)
+  (yank)
+  (open-line 1)
+  (next-line 1)
+  (yank))
+(global-set-key (kbd "C-c D") 'duplicate-line)
 
 (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
 
