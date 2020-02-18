@@ -85,7 +85,7 @@
  ns-use-srgb-colorspace nil                       ; Don't use sRGB colors
  recenter-positions '(5 top bottom)               ; Set re-centering positions
  scroll-conservatively most-positive-fixnum       ; Always scroll by one line
- scroll-margin 10                                 ; Add a margin when scrolling vertically
+ scroll-margin 5                                  ; Add a margin when scrolling vertically
  select-enable-clipboard t                        ; Merge system's and Emacs' clipboard
  sentence-end-double-space nil                    ; End a sentence after a dot and a space
  show-trailing-whitespace t                       ; Display trailing whitespaces
@@ -151,13 +151,6 @@
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 
-  ;; (defun zap-until-char ()
-  ;;   (interactive)
-  ;;   (set-mark-command)
-  ;;   (jump-char-forward c)
-  ;;   )
-  ;; (global-set-key (kbd "M-Z") 'zap-until-char)
-
 (use-package htmlize)
 (use-package wgrep)
 
@@ -189,7 +182,7 @@
 (use-package ws-butler
   :config (ws-butler-global-mode 1))
 
-;; FIXME when a word is highlighted and has the cursor the text is black
+;; FIXME when a word is highlighted and has the cursor the text is black because of the current line highlighting
 (use-package highlight-symbol
   :config
   (global-set-key (kbd "<f3>") 'highlight-symbol)
