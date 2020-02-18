@@ -32,6 +32,7 @@
 ** defer packages that probably should be deferred
 ** cider-find-var should not have to do a confirmation step
 ** add feature to spotify.el (and make pr) for liking a song
+** install itail
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -199,14 +200,6 @@
 (global-unset-key (kbd "C-z"))
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
-
-  ;; (defun zap-until-char ()
-  ;;   (interactive)
-  ;;   (set-mark-command)
-  ;;   (jump-char-forward c)
-  ;;   )
-  ;; (global-set-key (kbd "M-Z") 'zap-until-char)
-
 #+END_SRC
 ** Random packages
 #+BEGIN_SRC emacs-lisp
@@ -240,6 +233,23 @@
 
   (use-package ws-butler
     :config (ws-butler-global-mode 1))
+
+  ;; FIXME when a word is highlighted and has the cursor the text is black
+  (use-package highlight-symbol
+    :config
+    (global-set-key (kbd "<f3>") 'highlight-symbol)
+    (global-set-key (kbd "C-<f3>") 'highlight-symbol-next)
+    (global-set-key (kbd "S-<f3>") 'highlight-symbol-prev)
+    (global-set-key (kbd "M-<f3>") 'highlight-symbol-query)
+    )
+
+  ;; I think I'd prefer the below package if it were less intrusive. Maybe a very light box around each matching word.
+  ;; (use-package auto-highlight-symbol
+  ;;  :config
+  ;;  (global-auto-highlight-symbol-mode t))
+
+  (require 'misc)
+  (global-set-key (kbd "C-M-z") 'zap-up-to-char)
 
 #+END_SRC
 ** emacs.d

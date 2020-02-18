@@ -189,6 +189,23 @@
 (use-package ws-butler
   :config (ws-butler-global-mode 1))
 
+;; FIXME when a word is highlighted and has the cursor the text is black
+(use-package highlight-symbol
+  :config
+  (global-set-key (kbd "<f3>") 'highlight-symbol)
+  (global-set-key (kbd "C-<f3>") 'highlight-symbol-next)
+  (global-set-key (kbd "S-<f3>") 'highlight-symbol-prev)
+  (global-set-key (kbd "M-<f3>") 'highlight-symbol-query)
+  )
+
+;; I think I'd prefer the below package if it were less intrusive. Maybe a very light box around each matching word.
+;; (use-package auto-highlight-symbol
+;;  :config
+;;  (global-auto-highlight-symbol-mode t))
+
+(require 'misc)
+(global-set-key (kbd "C-M-z") 'zap-up-to-char)
+
 (defun load-init-el ()
   (interactive)
   (load-file "~/.emacs.d/init.el"))
@@ -238,8 +255,7 @@
   :init
   (set-face-attribute 'isearch nil :background "#FF9F93")
   :config
-  (global-set-key (kbd "M-i") 'swiper-isearch)
-  )
+  (global-set-key (kbd "M-i") 'swiper-isearch))
 
   (defun swiper--from-isearch ()
    "Invoke `swiper' from isearch.
