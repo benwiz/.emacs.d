@@ -326,20 +326,22 @@
   :init
   (load-env-vars "~/.emacs.d/emacs.env"))
 
-(use-package spotify
-  :load-path "packages/spotify.el"
-  :init
-  (setq spotify-oauth2-client-secret (getenv "SPOTIFY_CLIENT_SECRET"))
-  (setq spotify-oauth2-client-id (getenv "SPOTIFY_CLIENT_ID"))
-  (setq spotify-transport 'connect)
-  (setq spotify-player-status-truncate-length 30)
-  (setq spotify-player-status-refresh-interval 7)
-  (setq spotify-player-status-playing-text "⏵")
-  (setq spotify-player-status-paused-text "⏸")
-  (setq spotify-player-status-stopped-text "⏹")
-  (setq spotify-player-status-format "%p %t - %a ") ;; trailing space is important
-  :config
-  (define-key spotify-mode-map (kbd "C-c .") 'spotify-command-map)) ;; FIXME maybe not loading spotify-mode-map, maybe I need to turn on some minor mode
+(when (not *is-a-mac*)
+  (use-package spotify
+    :load-path "packages/spotify.el"
+    :init
+    (setq spotify-oauth2-client-secret (getenv "SPOTIFY_CLIENT_SECRET"))
+    (setq spotify-oauth2-client-id (getenv "SPOTIFY_CLIENT_ID"))
+    (setq spotify-transport 'connect)
+    (setq spotify-player-status-truncate-length 30)
+    (setq spotify-player-status-refresh-interval 7)
+    (setq spotify-player-status-playing-text "⏵")
+    (setq spotify-player-status-paused-text "⏸")
+    (setq spotify-player-status-stopped-text "⏹")
+    (setq spotify-player-status-format "%p %t - %a ") ;; trailing space is important
+    :config
+    (define-key spotify-mode-map (kbd "C-c .") 'spotify-command-map)) ;; FIXME maybe not loading spotify-mode-map, maybe I need to turn on some minor mode
+  )
 
 (setq org-publish-project-alist
       '(("org-blog"
