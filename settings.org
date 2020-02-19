@@ -252,6 +252,16 @@
   (global-set-key (kbd "C-M-z") 'zap-up-to-char)
 
 #+END_SRC
+** My Packages
+#+BEGIN_SRC emacs-lisp
+(use-package bela-mode
+  :load-path (when *is-a-mac*
+               "~/code/bela-mode.el"
+               "~/code/personal/bela-mode.el")
+  :config
+  (message "bela has loaded")
+  )
+#+END_SRC
 ** emacs.d
    #+BEGIN_SRC emacs-lisp
    (defun load-init-el ()

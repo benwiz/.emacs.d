@@ -199,6 +199,14 @@
 (require 'misc)
 (global-set-key (kbd "C-M-z") 'zap-up-to-char)
 
+(use-package bela-mode
+  :load-path (when *is-a-mac*
+               "~/code/bela-mode.el"
+               "~/code/personal/bela-mode.el")
+  :config
+  (message "bela has loaded")
+  )
+
 (defun load-init-el ()
   (interactive)
   (load-file "~/.emacs.d/init.el"))
