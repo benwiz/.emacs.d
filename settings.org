@@ -590,12 +590,19 @@
       (clj-refactor-mode 1)
       (cljr-add-keybindings-with-prefix "C-c C-m"))))
 
+  (defun insert-discard ()
+    "Insert #_ at current location."
+    (interactive)
+    (insert "#_"))
+
   (use-package clojure-mode
    :bind (("C-c d f" . cider-code)
           ("C-c d g" . cider-grimoire)
           ("C-c d w" . cider-grimoire-web)
           ("C-c d c" . clojure-cheatsheet)
-          ("C-c d d" . dash-at-point))
+          ("C-c d d" . dash-at-point)
+          ("C-c C-;" . insert-discard)
+          )
    :init
    (setq clojure-indent-style 'align-arguments
          clojure-align-forms-automatically t)
