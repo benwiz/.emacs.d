@@ -33,6 +33,7 @@
 ** cider-find-var should not have to do a confirmation step
 ** add feature to spotify.el (and make pr) for liking a song
 ** install itail
+** prepend current project to each item in "Switch to Buffer" selector
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
