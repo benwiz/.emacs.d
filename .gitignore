@@ -11,3 +11,14 @@ transient/
 .gitignore~
 recent~
 emacs.env
+*~
+#recentf#
+.clj-kondo/.cache/
+.emacs.desktop
+projectile-bookmarks.eld
+projectile.cache
+recentf
+session.*
+settings.org_archive
+url/
+#recentf#
