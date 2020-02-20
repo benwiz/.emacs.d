@@ -17,7 +17,7 @@
 *** go to beginning or end of top level form
 ** zap-until-char `M-S-z`
 ** kill dired buffer after selection
-** Improve multiple cursors
+** scroll along with multiple cursors
 ** News via Gnus
 ** More convenient shortcuts for registers
 ** Figure out how to toggle between two buffers easily
@@ -33,6 +33,7 @@
 ** cider-find-var should not have to do a confirmation step
 ** add feature to spotify.el (and make pr) for liking a song
 ** prepend current project to each item in "Switch to Buffer" selector
+** better jump-to-char-in-line, maybe just write it myself
 * OS
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
