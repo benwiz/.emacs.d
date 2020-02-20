@@ -32,7 +32,6 @@
 ** defer packages that probably should be deferred
 ** cider-find-var should not have to do a confirmation step
 ** add feature to spotify.el (and make pr) for liking a song
-** install itail
 ** prepend current project to each item in "Switch to Buffer" selector
 * OS
 #+BEGIN_SRC emacs-lisp
@@ -206,6 +205,7 @@
 #+BEGIN_SRC emacs-lisp
   (use-package htmlize)
   (use-package wgrep)
+  (use-package itail)
 
   (use-package highlight-indent-guides
   ;; :hook (prog-mode . highlight-indent-guides-mode) ;; I commented this out because I just want to manually toggle this

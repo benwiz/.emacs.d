@@ -153,6 +153,7 @@
 
 (use-package htmlize)
 (use-package wgrep)
+(use-package itail)
 
 (use-package highlight-indent-guides
 ;; :hook (prog-mode . highlight-indent-guides-mode) ;; I commented this out because I just want to manually toggle this
