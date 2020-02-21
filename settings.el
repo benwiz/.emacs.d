@@ -124,7 +124,7 @@
   (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
 (load-theme 'spolsky t) ;; https://github.com/owainlewis/emacs-color-themes/blob/master/themes/spolsky-theme.el
 (custom-theme-set-faces 'spolsky
-  `(hl-line ((t (:background "#151515" :underline nil))))
+  `(hl-line ((t (:background "#151515" ))))
   `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
   `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
   )
@@ -139,7 +139,7 @@
   :hook (after-init . doom-modeline-mode)
   :config
   (setq doom-modeline-minor-modes nil)
-  (setq doom-modeline-buffer-state-icon t) ;; as in, isEdited? state
+  (setq doom-modeline-buffer-state-icon t)
   (setq doom-modeline-buffer-encoding nil)
   (setq doom-modeline-vcs-max-length 20)
   ;; (setq doom-modeline-persp-name t)
