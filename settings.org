@@ -179,7 +179,6 @@
   (global-hl-line-mode 1)
   (modify-face 'trailing-whitespace nil "#5a708c")
 
-
   (use-package all-the-icons)
   (use-package doom-modeline ;; alternative is moody for a simpler option
     ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
@@ -657,7 +656,7 @@
     :bind (:map cider-mode-map
            ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
            ("C-c C-p"     . cider-eval-print-last-sexp)
-           ("C-c C-o"     . cider-repl-clear-buffer)) ;; FIXME need to remove other binding
+           ("C-c C-l"     . cider-repl-clear-buffer))
 
     :config
     (use-package slamhound)

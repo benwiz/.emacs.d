@@ -124,13 +124,12 @@
   (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
 (load-theme 'spolsky t) ;; https://github.com/owainlewis/emacs-color-themes/blob/master/themes/spolsky-theme.el
 (custom-theme-set-faces 'spolsky
-  `(hl-line ((t (:background "#151515" ))))
+  `(hl-line ((t (:background "#151515")))) ;; :underline nil (I think putting underline nil was causing error messages and turns out to not be necessary)
   `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
   `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
   )
 (global-hl-line-mode 1)
 (modify-face 'trailing-whitespace nil "#5a708c")
-
 
 (use-package all-the-icons)
 (use-package doom-modeline ;; alternative is moody for a simpler option
@@ -569,7 +568,7 @@
   :bind (:map cider-mode-map
          ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
          ("C-c C-p"     . cider-eval-print-last-sexp)
-         ("C-c C-o"     . cider-repl-clear-buffer)) ;; FIXME need to remove other binding
+         ("C-c C-l"     . cider-repl-clear-buffer)) ;; FIXME still not working
 
   :config
   (use-package slamhound)
