@@ -563,12 +563,11 @@
   (add-hook 'cider-repl-mode-hook 'company-mode)
   (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
 
-  (define-key cider-mode-map (kbd "C-c C-o") nil)
-
   :bind (:map cider-mode-map
          ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
-         ("C-c C-p"     . cider-eval-print-last-sexp)
-         ("C-c C-l"     . cider-repl-clear-buffer)) ;; FIXME still not working
+         ("C-c C-p"     . cider-eval-print-last-sexp))
+        (:map cider-repl-mode-map
+         ("C-c C-l"     . cider-repl-clear-buffer))
 
   :config
   (use-package slamhound)
