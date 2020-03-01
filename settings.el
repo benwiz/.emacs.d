@@ -199,9 +199,13 @@
 (require 'misc)
 (global-set-key (kbd "C-M-z") 'zap-up-to-char)
 
-(use-package bela-mode
-   :load-path "~/code/personal/bela-mode.el" ;; (if *is-a-mac* "~/code/bela-mode.el" "~/code/personal/bela-mode.el")
-   :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/" )) ;; (if *is-a-mac* "~/code/Bela/scripts/" "~/code/personal/Bela/scripts/")
+(if *is-a-mac*
+  (use-package bela-mode
+    :load-path "~/code/bela-mode.el"
+    :init (setq bela-scripts-dir "~/code/Bela/scripts/"))
+  (use-package bela-mode
+    :load-path "~/code/personal/bela-mode.el"
+    :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
 
 (defun load-init-el ()
   (interactive)

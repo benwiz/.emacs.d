@@ -254,9 +254,13 @@
 #+END_SRC
 ** My Packages
 #+BEGIN_SRC emacs-lisp
-(use-package bela-mode
-   :load-path "~/code/personal/bela-mode.el" ;; (if *is-a-mac* "~/code/bela-mode.el" "~/code/personal/bela-mode.el")
-   :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/" )) ;; (if *is-a-mac* "~/code/Bela/scripts/" "~/code/personal/Bela/scripts/")
+(if *is-a-mac*
+  (use-package bela-mode
+    :load-path "~/code/bela-mode.el"
+    :init (setq bela-scripts-dir "~/code/Bela/scripts/"))
+  (use-package bela-mode
+    :load-path "~/code/personal/bela-mode.el"
+    :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
 #+END_SRC
 ** emacs.d
    #+BEGIN_SRC emacs-lisp
