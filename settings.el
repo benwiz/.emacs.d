@@ -124,13 +124,12 @@
   (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
 (load-theme 'spolsky t) ;; https://github.com/owainlewis/emacs-color-themes/blob/master/themes/spolsky-theme.el
 (custom-theme-set-faces 'spolsky
-  `(hl-line ((t (:background "#151515" :underline nil))))
+  `(hl-line ((t (:background "#151515")))) ;; :underline nil (I think putting underline nil was causing error messages and turns out to not be necessary)
   `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
   `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
   )
 (global-hl-line-mode 1)
 (modify-face 'trailing-whitespace nil "#5a708c")
-
 
 (use-package all-the-icons)
 (use-package doom-modeline ;; alternative is moody for a simpler option
@@ -139,7 +138,7 @@
   :hook (after-init . doom-modeline-mode)
   :config
   (setq doom-modeline-minor-modes nil)
-  (setq doom-modeline-buffer-state-icon t) ;; as in, isEdited? state
+  (setq doom-modeline-buffer-state-icon t)
   (setq doom-modeline-buffer-encoding nil)
   (setq doom-modeline-vcs-max-length 20)
   ;; (setq doom-modeline-persp-name t)
@@ -153,6 +152,7 @@
 
 (use-package htmlize)
 (use-package wgrep)
+(use-package itail)
 
 (use-package highlight-indent-guides
 ;; :hook (prog-mode . highlight-indent-guides-mode) ;; I commented this out because I just want to manually toggle this
@@ -507,12 +507,19 @@
     (clj-refactor-mode 1)
     (cljr-add-keybindings-with-prefix "C-c C-m"))))
 
+(defun insert-discard ()
+  "Insert #_ at current location."
+  (interactive)
+  (insert "#_"))
+
 (use-package clojure-mode
  :bind (("C-c d f" . cider-code)
         ("C-c d g" . cider-grimoire)
         ("C-c d w" . cider-grimoire-web)
         ("C-c d c" . clojure-cheatsheet)
-        ("C-c d d" . dash-at-point))
+        ("C-c d d" . dash-at-point)
+        ("C-c C-;" . insert-discard)
+        )
  :init
  (setq clojure-indent-style 'align-arguments
        clojure-align-forms-automatically t)
@@ -560,12 +567,11 @@
   (add-hook 'cider-repl-mode-hook 'company-mode)
   (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
 
-  (define-key cider-mode-map (kbd "C-c C-o") nil)
-
   :bind (:map cider-mode-map
          ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
-         ("C-c C-p"     . cider-eval-print-last-sexp)
-         ("C-c C-o"     . cider-repl-clear-buffer)) ;; FIXME need to remove other binding
+         ("C-c C-p"     . cider-eval-print-last-sexp))
+        (:map cider-repl-mode-map
+         ("C-c C-l"     . cider-repl-clear-buffer))
 
   :config
   (use-package slamhound)

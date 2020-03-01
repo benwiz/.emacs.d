@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (misc auto-highlight-symbol highlight-symbol avy ws-butler wttrin git-link scratch dired-x dired undo-tree clj-refactor clojure-snippets auto-package-update wgrep highlight-indent-guides htmlize git-gutter diff-hl fic-mode expand-region rainbow-blocks dumb-jump load-env-vars company company-mode slamhound counsel swiper ivy rainbow-delimiters gnu-elpa-keyring-update queue-0\.2 ob-clojure cider clojure-mode flycheck-clj-kondo paredit flycheck magit use-package))))
+    (itail misc auto-highlight-symbol highlight-symbol avy ws-butler wttrin git-link scratch dired-x dired undo-tree clj-refactor clojure-snippets auto-package-update wgrep highlight-indent-guides htmlize git-gutter diff-hl fic-mode expand-region rainbow-blocks dumb-jump load-env-vars company company-mode slamhound counsel swiper ivy rainbow-delimiters gnu-elpa-keyring-update queue-0\.2 ob-clojure cider clojure-mode flycheck-clj-kondo paredit flycheck magit use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
