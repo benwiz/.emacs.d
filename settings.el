@@ -1,6 +1,7 @@
 (defconst *is-a-mac* (eq system-type 'darwin))
 (when *is-a-mac* ;; (string-equal system-type "darwin")
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
+(setq mac-command-modifier 'meta)
 
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
