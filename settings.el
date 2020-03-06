@@ -148,6 +148,9 @@
   )
 
 (global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "M-l"))
+(global-unset-key (kbd "M-u"))
+
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 
@@ -199,6 +202,9 @@
 
 (require 'misc)
 (global-set-key (kbd "C-M-z") 'zap-up-to-char)
+
+(use-package ws-butler
+  :hook (prog-mode . ws-butler-mode))
 
 (if *is-a-mac*
   (use-package bela-mode
@@ -364,7 +370,7 @@
     ("blog"
       :components ("org-blog"))))
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (use-package flycheck
   :init (global-flycheck-mode))

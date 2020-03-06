@@ -3,8 +3,10 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        cljr-raise-sexp
         cljr-slash
         clojure-sort-ns
+        company-indent-or-complete-common
         counsel-yank-pop
         dabbrev-expand
         handle-switch-frame
@@ -12,10 +14,12 @@
         ivy-switch-buffer
         kill-sexp
         paredit-backward
+        paredit-backward-up
         paredit-close-square
         paredit-doublequote
         paredit-forward
         paredit-forward-delete
+        paredit-forward-down
         paredit-forward-slurp-sexp
         paredit-newline
         paredit-open-curly
@@ -29,6 +33,7 @@
 
 (setq mc/cmds-to-run-once
       '(
+        beginning-of-buffer
         end-of-buffer
         paredit-close-parenthesis-and-newline
         paredit-kill
