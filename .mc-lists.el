@@ -3,10 +3,12 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        backward-sexp
         cljr-slash
         clojure-sort-ns
         counsel-yank-pop
         dabbrev-expand
+        forward-sexp
         handle-switch-frame
         hs-toggle-hiding
         ivy-switch-buffer
