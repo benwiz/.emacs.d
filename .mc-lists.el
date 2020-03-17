@@ -4,11 +4,13 @@
 (setq mc/cmds-to-run-for-all
       '(
         cljr-raise-sexp
+        backward-sexp
         cljr-slash
         clojure-sort-ns
         company-indent-or-complete-common
         counsel-yank-pop
         dabbrev-expand
+        forward-sexp
         handle-switch-frame
         hs-toggle-hiding
         ivy-switch-buffer

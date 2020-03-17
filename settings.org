@@ -525,6 +525,13 @@
     (yank))
   (global-set-key (kbd "C-c D") 'duplicate-line)
 
+(use-package markdown-mode
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
 #+END_SRC
 ** Bash
 #+BEGIN_SRC emacs-lisp

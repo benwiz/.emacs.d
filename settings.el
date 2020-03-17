@@ -370,80 +370,87 @@
 (use-package ws-butler
   :hook (prog-mode . ws-butler-mode))
 
-(use-package flycheck
-  :init (global-flycheck-mode))
+  (use-package flycheck
+    :init (global-flycheck-mode))
 
-(use-package rainbow-delimiters ;; TODO figure out how to decrease saturation inside comments
-  :config
-  (require 'cl-lib)
-  (require 'color)
-  (cl-loop
-     for index from 1 to rainbow-delimiters-max-face-count
-     do
-      (let ((face (intern (format "rainbow-delimiters-depth-%d-face" index))))
-        (cl-callf color-saturate-name (face-foreground face) 20)))
-  (require 'paren) ; show-paren-mismatch is defined in paren.el
-  (set-face-attribute 'rainbow-delimiters-unmatched-face nil
-    :foreground 'unspecified
-    :inherit 'show-paren-mismatch)
+  (use-package rainbow-delimiters ;; TODO figure out how to decrease saturation inside comments
+    :config
+    (require 'cl-lib)
+    (require 'color)
+    (cl-loop
+       for index from 1 to rainbow-delimiters-max-face-count
+       do
+        (let ((face (intern (format "rainbow-delimiters-depth-%d-face" index))))
+          (cl-callf color-saturate-name (face-foreground face) 20)))
+    (require 'paren) ; show-paren-mismatch is defined in paren.el
+    (set-face-attribute 'rainbow-delimiters-unmatched-face nil
+      :foreground 'unspecified
+      :inherit 'show-paren-mismatch)
 
-  :hook
-  (prog-mode . rainbow-delimiters-mode)) ;; WARNING: Being so general may break something, but going to go with it anyway
+    :hook
+    (prog-mode . rainbow-delimiters-mode)) ;; WARNING: Being so general may break something, but going to go with it anyway
 
-(use-package expand-region
-  :config
-  (global-set-key (kbd "C-=") 'er/expand-region))
+  (use-package expand-region
+    :config
+    (global-set-key (kbd "C-=") 'er/expand-region))
 
-(use-package company
-  :init (global-company-mode)
-  :config
-  (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
-  ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
-  ;; TODO consider override navigation but only if i don't like M-n and M-p https://emacs.stackexchange.com/a/17970
-  )
+  (use-package company
+    :init (global-company-mode)
+    :config
+    (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+    ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
+    ;; TODO consider override navigation but only if i don't like M-n and M-p https://emacs.stackexchange.com/a/17970
+    )
 
-;; (use-package color-identifiers-mode
-;;   :init
-;;   (add-hook 'clojure-mode-hook 'color-identifiers-mode))
+  ;; (use-package color-identifiers-mode
+  ;;   :init
+  ;;   (add-hook 'clojure-mode-hook 'color-identifiers-mode))
 
-(use-package fic-mode
-  :init
-  (defface fic-face
-    '((((class color))
-    (:foreground "orange" :weight bold :slant italic))
-    (t (:weight bold :slant italic)))
-    "Face to fontify FIXME/TODO words"
-    :group 'fic-mode)
-  :config
-  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
-  (add-hook 'prog-mode-hook 'fic-mode))
+  (use-package fic-mode
+    :init
+    (defface fic-face
+      '((((class color))
+      (:foreground "orange" :weight bold :slant italic))
+      (t (:weight bold :slant italic)))
+      "Face to fontify FIXME/TODO words"
+      :group 'fic-mode)
+    :config
+    (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
+    (add-hook 'prog-mode-hook 'fic-mode))
 
-(use-package hideshow
- :bind (("C-\\" . hs-toggle-hiding)
-        ("M-+" . hs-show-all)
-        ("M--" . hs-hide-all))
- :init (add-hook #'prog-mode-hook #'hs-minor-mode)
- :diminish hs-minor-mode
- :config
- ;; Add `json-mode' and `javascript-mode' to the list
- (setq hs-special-modes-alist
-       (mapcar 'purecopy
-               '((c-mode "{" "}" "/[*/]" nil nil)
-                 (c++-mode "{" "}" "/[*/]" nil nil)
-                 (java-mode "{" "}" "/[*/]" nil nil)
-                 (js-mode "{" "}" "/[*/]" nil)
-                 (json-mode "{" "}" "/[*/]" nil)
-                 (javascript-mode  "{" "}" "/[*/]" nil)))))
+  (use-package hideshow
+   :bind (("C-\\" . hs-toggle-hiding)
+          ("M-+" . hs-show-all)
+          ("M--" . hs-hide-all))
+   :init (add-hook #'prog-mode-hook #'hs-minor-mode)
+   :diminish hs-minor-mode
+   :config
+   ;; Add `json-mode' and `javascript-mode' to the list
+   (setq hs-special-modes-alist
+         (mapcar 'purecopy
+                 '((c-mode "{" "}" "/[*/]" nil nil)
+                   (c++-mode "{" "}" "/[*/]" nil nil)
+                   (java-mode "{" "}" "/[*/]" nil nil)
+                   (js-mode "{" "}" "/[*/]" nil)
+                   (json-mode "{" "}" "/[*/]" nil)
+                   (javascript-mode  "{" "}" "/[*/]" nil)))))
 
-(defun duplicate-line()
-  (interactive)
-  (move-beginning-of-line 1)
-  (kill-line)
-  (yank)
-  (open-line 1)
-  (next-line 1)
-  (yank))
-(global-set-key (kbd "C-c D") 'duplicate-line)
+  (defun duplicate-line()
+    (interactive)
+    (move-beginning-of-line 1)
+    (kill-line)
+    (yank)
+    (open-line 1)
+    (next-line 1)
+    (yank))
+  (global-set-key (kbd "C-c D") 'duplicate-line)
+
+(use-package markdown-mode
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
 
 (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
 
