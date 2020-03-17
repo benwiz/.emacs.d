@@ -203,9 +203,6 @@
 (require 'misc)
 (global-set-key (kbd "C-M-z") 'zap-up-to-char)
 
-(use-package ws-butler
-  :hook (prog-mode . ws-butler-mode))
-
 (if *is-a-mac*
   (use-package bela-mode
     :load-path "~/code/bela-mode.el"
@@ -370,7 +367,8 @@
     ("blog"
       :components ("org-blog"))))
 
-;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
+(use-package ws-butler
+  :hook (prog-mode . ws-butler-mode))
 
 (use-package flycheck
   :init (global-flycheck-mode))
