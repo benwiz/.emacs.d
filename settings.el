@@ -148,6 +148,9 @@
   )
 
 (global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "M-l"))
+(global-unset-key (kbd "M-u"))
+
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 
@@ -364,7 +367,8 @@
     ("blog"
       :components ("org-blog"))))
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(use-package ws-butler
+  :hook (prog-mode . ws-butler-mode))
 
   (use-package flycheck
     :init (global-flycheck-mode))
