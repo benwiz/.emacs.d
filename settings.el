@@ -505,6 +505,7 @@
 
 
 
+(add-to-list 'exec-path "/usr/local/bin/")
 (use-package clojure-snippets)
 
 (use-package flycheck-clj-kondo)
