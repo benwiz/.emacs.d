@@ -32,7 +32,9 @@
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
-;; (package-refresh-contents)
+;; Refresh package contents 5% of the time.
+(when (eq 0 (random 20))
+  (package-refresh-contents))
 
 ;; list the packages you want
 (setq package-list
@@ -368,12 +370,17 @@
       :components ("org-blog"))))
 
 (use-package ws-butler
-  :hook (prog-mode . ws-butler-mode))
+    :hook (prog-mode . ws-butler-mode))
 
   (use-package flycheck
     :init (global-flycheck-mode))
 
-  (use-package rainbow-delimiters ;; TODO figure out how to decrease saturation inside comments
+  (use-package lsp-mode
+    :commands lsp
+    :config (require 'lsp-clients))
+  (use-package lsp-ui)
+
+  (use-package rainbow-delimiters ;; TODO figure out how to decrease saturation inside clojure reader comments
     :config
     (require 'cl-lib)
     (require 'color)
@@ -508,6 +515,55 @@
 ;; (global-set-key (kbd "C-M-l") 'indent-top-sexp) ;; TODO use a different kbd
 
 
+
+(use-package js2-mode
+  :ensure t
+  :init
+  (setq js-basic-indent 2)
+  (setq-default js2-basic-indent 2
+                js2-basic-offset 2
+                js2-auto-indent-p t
+                js2-cleanup-whitespace t
+                js2-enter-indents-newline t
+                js2-indent-on-enter-key t
+                js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
+
+  (add-hook 'js2-mode-hook
+            (lambda ()
+              (push '("function" . ?ƒ) prettify-symbols-alist)
+              (flycheck-select-checker "javascript-eslint")
+              (electric-pair-mode 1)))
+
+  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+
+(use-package tern
+   :ensure t
+   :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+   :config
+     (use-package company-tern
+        :ensure t
+        :init (add-to-list 'company-backends 'company-tern)))
+
+(use-package js2-refactor
+  :ensure t
+  :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
+  :config (js2r-add-keybindings-with-prefix "C-c ."))
+
+;; Not sure what this does
+(provide 'init-javascript)
+
+(use-package toml-mode)
+
+(use-package rust-mode
+  :hook (rust-mode . lsp)
+  )
+
+;; Add keybindings for interacting with Cargo
+(use-package cargo
+  :hook (rust-mode . cargo-minor-mode))
+
+(use-package flycheck-rust
+  :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package clojure-snippets)
 
