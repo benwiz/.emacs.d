@@ -516,9 +516,9 @@
 
 
 
-(use-package js2-mode
-  :ensure t
+(use-package rjsx-mode
   :init
+  (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
   (setq js-basic-indent 2)
   (setq-default js2-basic-indent 2
                 js2-basic-offset 2
@@ -528,16 +528,15 @@
                 js2-indent-on-enter-key t
                 js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
 
-  (add-hook 'js2-mode-hook
+  (add-hook 'rjsx-mode-hook
             (lambda ()
-              (push '("function" . ?ƒ) prettify-symbols-alist)
               (flycheck-select-checker "javascript-eslint")
               (electric-pair-mode 1)))
 
   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
 
+;; Idk what this does
 (use-package tern
-   :ensure t
    :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
    :config
      (use-package company-tern
@@ -545,7 +544,6 @@
         :init (add-to-list 'company-backends 'company-tern)))
 
 (use-package js2-refactor
-  :ensure t
   :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
   :config (js2r-add-keybindings-with-prefix "C-c ."))
 
@@ -556,6 +554,10 @@
 
 (use-package rust-mode
   :hook (rust-mode . lsp)
+  :config
+  (add-hook 'rust-mode-hook
+            (lambda ()
+              (electric-pair-mode 1)))
   )
 
 ;; Add keybindings for interacting with Cargo
