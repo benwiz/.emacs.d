@@ -647,23 +647,32 @@
 #+END_SRC
 ** Rust
 #+BEGIN_SRC emacs-lisp
-(use-package toml-mode)
+  (use-package toml-mode)
 
-(use-package rust-mode
-  :hook (rust-mode . lsp)
-  :config
-  (add-hook 'rust-mode-hook
-            (lambda ()
-              (electric-pair-mode 1)))
-  )
+  (use-package rust-mode
+    :hook (rust-mode . lsp)
+    :config
+    (add-hook 'rust-mode-hook
+              (lambda ()
+                (electric-pair-mode 1)))
+    )
 
-;; Add keybindings for interacting with Cargo
-(use-package cargo
-  :hook (rust-mode . cargo-minor-mode))
+  ;; Add keybindings for interacting with Cargo
+  (use-package cargo
+    :hook (rust-mode . cargo-minor-mode)
+    :config
+    ;; (define-key cargo-minor-mode-map (kbd "C-c C-c C-r") (lambda ()
+    ;;                                                        (interactive)
+    ;;                                                        (message "hey")))
+    )
 
-(use-package flycheck-rust
-  :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  (use-package flycheck-rust
+    :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 #+END_SRC
+
+#+RESULTS:
+: t
+
 ** Clojure
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'exec-path "/usr/local/bin/")

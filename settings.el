@@ -566,7 +566,12 @@
 
 ;; Add keybindings for interacting with Cargo
 (use-package cargo
-  :hook (rust-mode . cargo-minor-mode))
+  :hook (rust-mode . cargo-minor-mode)
+  :config
+  ;; (define-key cargo-minor-mode-map (kbd "C-c C-c C-r") (lambda ()
+  ;;                                                        (interactive)
+  ;;                                                        (message "hey")))
+  )
 
 (use-package flycheck-rust
   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
