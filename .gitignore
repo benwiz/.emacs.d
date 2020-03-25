@@ -22,3 +22,4 @@ session.*
 settings.org_archive
 url/
 #recentf#
+.lsp-session-*
