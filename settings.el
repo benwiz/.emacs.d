@@ -159,6 +159,10 @@
 (use-package htmlize)
 (use-package wgrep)
 (use-package itail)
+(use-package exec-path-from-shell
+  :config
+  (when *is-a-mac*
+    (exec-path-from-shell-initialize)))
 
 (use-package highlight-indent-guides
 ;; :hook (prog-mode . highlight-indent-guides-mode) ;; I commented this out because I just want to manually toggle this
@@ -567,6 +571,7 @@
 (use-package flycheck-rust
   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
+(add-to-list 'exec-path "/usr/local/bin/")
 (use-package clojure-snippets)
 
 (use-package flycheck-clj-kondo)
@@ -623,7 +628,7 @@
         cider-repl-display-in-current-window t
         cider-repl-use-clojure-font-lock t
         cider-repl-wrap-history t
-        Cider-repl-history-size 1000
+        cider-repl-history-size 1000
         cider-show-error-buffer t
         nrepl-hide-special-buffers t
         ;; Stop error buffer from popping up while working in buffers other than the REPL:
@@ -646,6 +651,8 @@
   :config
   (use-package slamhound)
   (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
+  ;; (setq exec-path (append '("/Users/benwiz/.nvm/versions/node/v12.16.1/bin") exec-path))
+  (setq exec-path (append '("/Users/benwiz/.yarn/bin") exec-path))
   (setq cider-cljs-repl-types '((nashorn "(do (require 'cljs.repl.nashorn) (cider.piggieback/cljs-repl (cljs.repl.nashorn/repl-env)))" cider-check-nashorn-requirements)
                               (figwheel "(do (require 'figwheel-sidecar.repl-api) (figwheel-sidecar.repl-api/start-figwheel!) (figwheel-sidecar.repl-api/cljs-repl))" cider-check-figwheel-requirements)
                               (figwheel-main cider-figwheel-main-init-form cider-check-figwheel-main-requirements)
