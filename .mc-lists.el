@@ -3,8 +3,9 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-        cljr-raise-sexp
         backward-sexp
+        cargo-process-run
+        cljr-raise-sexp
         cljr-slash
         clojure-sort-ns
         company-indent-or-complete-common
