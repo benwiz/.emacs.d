@@ -10,19 +10,15 @@
 *** redo `C-g C-S-_` (i.e. `C-g` then undo)
 *** format buffer: select all `C-x h` format `C-M-\`
 * To Do
-** paredit
-*** kill symbol `M-k`, current issue is I need to go to beginning of symbol but not move if already there. Once I get this working may want to overwrite `C-M-k`
-*** paredit-wrap-* should wrap from beginning of current symbol, not the middle of it. Same issue as kill-symbol above.
-*** paredit kill needs to kill any created whitepsace
-*** go to beginning or end of top level form
-** zap-until-char `M-S-z`
-** kill dired buffer after selection
+** paredit: my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)
+** paredit: paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.
+** paredit: paredit kill needs to kill any created whitepsace
+** paredit: go to beginning or end of top level form
+** set up convenient reminder or workflow for adding blog posts
+** pomodoro timer
 ** scroll along with multiple cursors
 ** News via Gnus
 ** More convenient shortcuts for registers
-** Figure out how to toggle between two buffers easily
-** raise inside string
-** start logging what I learned in org files and have them auto publish
 ** when creating new clj or cljs file add ns automatically
 ** clojure refactor
 ** scroll with multiple cursors
@@ -455,6 +451,14 @@
 #+BEGIN_SRC emacs-lisp
   (use-package ws-butler
     :hook (prog-mode . ws-butler-mode))
+
+(use-package editorconfig
+  :config
+  (editorconfig-mode 1))
+
+(use-package pomodoro
+  :init
+  (pomodoro-add-to-mode-line))
 
   (use-package flycheck
     :init (global-flycheck-mode))

@@ -376,6 +376,14 @@
 (use-package ws-butler
     :hook (prog-mode . ws-butler-mode))
 
+(use-package editorconfig
+  :config
+  (editorconfig-mode 1))
+
+(use-package pomodoro
+  :init
+  (pomodoro-add-to-mode-line))
+
   (use-package flycheck
     :init (global-flycheck-mode))
 

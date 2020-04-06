@@ -15,7 +15,9 @@
         handle-switch-frame
         hs-toggle-hiding
         ivy-switch-buffer
+        kill-region
         kill-sexp
+        org-self-insert-command
         paredit-backward
         paredit-backward-up
         paredit-close-square
@@ -28,6 +30,7 @@
         paredit-open-curly
         paredit-open-round
         paredit-open-square
+        paredit-splice-sexp
         reposition-window
         suspend-frame
         toggle-truncate-lines
@@ -37,6 +40,8 @@
 (setq mc/cmds-to-run-once
       '(
         beginning-of-buffer
+        cider-eval-last-sexp
+        cider-load-buffer
         end-of-buffer
         paredit-close-parenthesis-and-newline
         paredit-kill
