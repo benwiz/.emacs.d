@@ -149,6 +149,13 @@
   (setq doom-modeline-env-version t)
   )
 
+(use-package pomodoro
+  :after (:all doom-modeline)
+  :config
+  ;; (call-interactively #'pomodoro-start)
+  (pomodoro-add-to-mode-line)
+  )
+
 (global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "M-l"))
 (global-unset-key (kbd "M-u"))
@@ -193,6 +200,7 @@
   :config (ws-butler-global-mode 1))
 
 ;; FIXME when a word is highlighted and has the cursor the text is black because of the current line highlighting
+;; TODO try using highlight.el instead
 (use-package highlight-symbol
   :config
   (global-set-key (kbd "<f3>") 'highlight-symbol)
@@ -208,6 +216,25 @@
 
 (require 'misc)
 (global-set-key (kbd "C-M-z") 'zap-up-to-char)
+
+(add-to-list 'load-path "/home/benwiz/.emacs/site-lisp/hangups/")
+(require 'hangups)
+(setq display-time-24hr-format t)
+(setq display-time-default-load-average nil)
+;; refresh conversation list every minute
+(add-hook 'hangups-mode-hook (lambda () (run-with-timer 120 (* 1 60) 'hangups-list-refresh)))
+;; set base display string
+(setq display-time-string-forms
+ '(" " 24-hours ":" minutes " "))
+;; add to the display-string the number of unread messages
+(setq display-time-string-forms
+  (append
+    display-time-string-forms
+    '((if (boundp 'hangups/convs-unread)
+          (propertize
+            (concat "Texts(" (int-to-string hangups/convs-unread) ")") ;; surround the number by "Texts()"
+            'font-lock-face '(:background "black" :foreground "white")))))) ;; what the font style should be
+(display-time-mode)
 
 (if *is-a-mac*
   (use-package bela-mode
@@ -376,13 +403,9 @@
 (use-package ws-butler
     :hook (prog-mode . ws-butler-mode))
 
-(use-package editorconfig
-  :config
-  (editorconfig-mode 1))
-
-(use-package pomodoro
-  :init
-  (pomodoro-add-to-mode-line))
+  (use-package editorconfig
+    :config
+    (editorconfig-mode 1))
 
   (use-package flycheck
     :init (global-flycheck-mode))
