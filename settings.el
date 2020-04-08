@@ -7,21 +7,6 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
-(defvar me/erc-nick               nil        "The ERC nick to use.")
-(defvar me/erc-password           nil        "The ERC password to use.")
-(defvar me/erc-port               nil        "The ERC port to use.")
-(defvar me/erc-server             nil        "The ERC server to use.")
-(defvar me/font-family            "Courier"  "The font to use.")
-(defvar me/font-size-default      110        "The font size to use for default text.")
-(defvar me/font-size-header-line  120        "The font size to use for the header-line.")
-(defvar me/font-size-mode-line    110        "The font size to use for the mode-line.")
-(defvar me/font-size-small        100        "The font size to use for smaller text.")
-(defvar me/font-size-title        140        "The font size to use for titles.")
-
-(let ((secret.el (expand-file-name "secret.el" user-emacs-directory)))
-  (when (file-exists-p secret.el)
-    (load secret.el)))
-
 (require 'package)
 
 (add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/") t)
@@ -149,12 +134,27 @@
   (setq doom-modeline-env-version t)
   )
 
-(use-package pomodoro
-  :after (:all doom-modeline)
-  :config
-  ;; (call-interactively #'pomodoro-start)
-  (pomodoro-add-to-mode-line)
+(defun pomodoro-add-to-mode-line* ()
+  "My version of pomodoro-add-to-mode-line"
+  (if (not (member '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
+    (setq-default mode-line-format (cons '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format)))
+  ;; For development, removing it from list is helpful
+  ;; (setq-default mode-line-format (remove '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
   )
+
+(use-package pomodoro
+  :defer t
+  :config
+  (defun pomodoro-start* ()
+    (interactive)
+    (call-interactively #'pomodoro-start)
+    (pomodoro-add-to-mode-line*))
+  (pomodoro-add-to-mode-line*)
+  )
+
+(use-package load-env-vars
+  :init
+  (load-env-vars "~/.emacs.d/emacs.env"))
 
 (global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "M-l"))
@@ -217,25 +217,6 @@
 (require 'misc)
 (global-set-key (kbd "C-M-z") 'zap-up-to-char)
 
-(add-to-list 'load-path "/home/benwiz/.emacs/site-lisp/hangups/")
-(require 'hangups)
-(setq display-time-24hr-format t)
-(setq display-time-default-load-average nil)
-;; refresh conversation list every minute
-(add-hook 'hangups-mode-hook (lambda () (run-with-timer 120 (* 1 60) 'hangups-list-refresh)))
-;; set base display string
-(setq display-time-string-forms
- '(" " 24-hours ":" minutes " "))
-;; add to the display-string the number of unread messages
-(setq display-time-string-forms
-  (append
-    display-time-string-forms
-    '((if (boundp 'hangups/convs-unread)
-          (propertize
-            (concat "Texts(" (int-to-string hangups/convs-unread) ")") ;; surround the number by "Texts()"
-            'font-lock-face '(:background "black" :foreground "white")))))) ;; what the font style should be
-(display-time-mode)
-
 (if *is-a-mac*
   (use-package bela-mode
     :load-path "~/code/bela-mode.el"
@@ -243,6 +224,23 @@
   (use-package bela-mode
     :load-path "~/code/personal/bela-mode.el"
     :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
+
+(use-package jabber
+  :after (:all load-env-vars)
+  :config
+    (setq jabber-account-list (cons (cons "bwisialowski@gmail.com" (cons (append '(:password) (getenv "GMAIL_JABBER_PASSWORD")) '())) '())
+      jabber-chat-buffer-show-avatar nil
+      jabber-vcard-avatars-retrieve nil
+      jabber-history-enabled t
+      jabber-activity-make-strings 'jabber-activity-make-strings-shorten
+      )
+    (set-face-attribute 'jabber-roster-user-online nil :foreground "cyan")
+    (set-face-attribute 'jabber-roster-user-away nil :foreground "green")
+    ;(set-face-attribute 'jabber-activity-string nil :foreground "cyan") ;; TODO need to set this programmatically, right now it's set via customization interface
+    (defun jabber ()
+     (interactive)
+     (call-interactively #'jabber-connect)
+     (switch-to-buffer "*-jabber-roster-*")))
 
 (defun load-init-el ()
   (interactive)
@@ -358,10 +356,6 @@
 (use-package counsel-projectile
   :config
   (counsel-projectile-mode))
-
-(use-package load-env-vars
-  :init
-  (load-env-vars "~/.emacs.d/emacs.env"))
 
 (when (not *is-a-mac*)
   (use-package spotify
