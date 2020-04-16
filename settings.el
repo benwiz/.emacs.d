@@ -134,21 +134,16 @@
   (setq doom-modeline-env-version t)
   )
 
-(defun pomodoro-add-to-mode-line* ()
-  "My version of pomodoro-add-to-mode-line"
-  (if (not (member '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
-    (setq-default mode-line-format (cons '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format)))
-  ;; For development, removing it from list is helpful
-  ;; (setq-default mode-line-format (remove '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
-  )
-
 (use-package pomodoro
   :defer t
   :config
-  (defun pomodoro-start* ()
-    (interactive)
-    (call-interactively #'pomodoro-start)
-    (pomodoro-add-to-mode-line*))
+  (defun pomodoro-add-to-mode-line* ()
+    "My version of pomodoro-add-to-mode-line"
+    (if (not (member '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
+      (setq-default mode-line-format (cons '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format)))
+    ;; For development, removing it from list is helpful
+    ;; (setq-default mode-line-format (remove '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
+    )
   (pomodoro-add-to-mode-line*)
   )
 
@@ -162,7 +157,12 @@
 
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
+(global-set-key (kbd "C-c o") 'other-frame)
+(global-set-key (kbd "C-M-z") 'zap-up-to-char)
 
+(require 'misc)
+(use-package restart-emacs)
+(use-package mew)
 (use-package htmlize)
 (use-package wgrep)
 (use-package itail)
@@ -172,7 +172,7 @@
     (exec-path-from-shell-initialize)))
 
 (use-package highlight-indent-guides
-;; :hook (prog-mode . highlight-indent-guides-mode) ;; I commented this out because I just want to manually toggle this
+  :hook (python-mode . highlight-indent-guides-mode)
   :config
   (setq highlight-indent-guides-method 'character)
   (setq highlight-indent-guides-character 9615) ; left-align vertical bar
@@ -191,11 +191,6 @@
 
 (use-package scratch)
 
-(use-package wttrin
-  :defer t
-  :init
-  (setq wttrin-default-cities '("New Orleans")))
-
 (use-package ws-butler
   :config (ws-butler-global-mode 1))
 
@@ -208,14 +203,6 @@
   (global-set-key (kbd "S-<f3>") 'highlight-symbol-prev)
   (global-set-key (kbd "M-<f3>") 'highlight-symbol-query)
   )
-
-;; I think I'd prefer the below package if it were less intrusive. Maybe a very light box around each matching word.
-;; (use-package auto-highlight-symbol
-;;  :config
-;;  (global-auto-highlight-symbol-mode t))
-
-(require 'misc)
-(global-set-key (kbd "C-M-z") 'zap-up-to-char)
 
 (if *is-a-mac*
   (use-package bela-mode
@@ -238,9 +225,10 @@
     (set-face-attribute 'jabber-roster-user-away nil :foreground "green")
     ;(set-face-attribute 'jabber-activity-string nil :foreground "cyan") ;; TODO need to set this programmatically, right now it's set via customization interface
     (defun jabber ()
-     (interactive)
-     (call-interactively #'jabber-connect)
-     (switch-to-buffer "*-jabber-roster-*")))
+      (interactive)
+      (call-interactively #'jabber-connect) ;; TODO it would be nice to auto select bwisialowski@gmail.com
+      (switch-to-buffer "*-jabber-roster-*"))
+    (global-set-key (kbd "<f9>") 'jabber))
 
 (defun load-init-el ()
   (interactive)
@@ -371,8 +359,12 @@
     (setq spotify-player-status-stopped-text "⏹")
     (setq spotify-player-status-format "%p %t - %a ") ;; trailing space is important
     :config
-    (define-key spotify-mode-map (kbd "C-c .") 'spotify-command-map)) ;; FIXME maybe not loading spotify-mode-map, maybe I need to turn on some minor mode
+    ;; (define-key spotify-mode-map (kbd "C-c C-s C-p") 'spotify-command-map)
+    ) ;; FIXME maybe not loading spotify-mode-map, maybe I need to turn on some minor mode
   )
+
+(require 'zone)
+(zone-when-idle 600)
 
 (setq org-publish-project-alist
       '(("org-blog"
@@ -511,9 +503,9 @@
   (interactive)
   (let ((up-to (point))
         (from (re-search-forward "[])}]")))
-     (backward-char)
-     (while (> (point) up-to)
-       (paredit-delete-indentation))))
+    (backward-char)
+    (while (> (point) up-to)
+      (paredit-delete-indentation))))
 
 (use-package paredit
   ;; TODO When killing a newline delete all whitespace until next character (maybe just bring in Smartparens kill command)

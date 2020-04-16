@@ -43,6 +43,7 @@
         cider-eval-last-sexp
         cider-load-buffer
         end-of-buffer
+        mouse-set-region
         paredit-close-parenthesis-and-newline
         paredit-kill
         swiper-isearch

@@ -3,11 +3,12 @@
 ** paredit: paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.
 ** paredit: paredit kill needs to kill any created whitepsace
 ** paredit: go to beginning or end of top level form
-** set up convenient reminder or workflow for adding blog posts
-** scroll along with multiple cursors
-** News via Gnus
-** More convenient shortcuts for registers
-** scroll with multiple cursors
+** Build a "home scren", some ideas to include are:
+*** set up convenient reminder or workflow for adding blog posts
+** multiple-cursors: scroll along with it, may be very difficult or impossible
+** gnus: set up for news
+** mews: email
+** registers: better shortcuts
 ** dim parenthesis when in comment
 ** organize this file, I'm not sold on using org mode yet, I should look up videos of emacs configs using org mode
 ** defer packages that probably should be deferred
@@ -15,65 +16,26 @@
 ** add feature to spotify.el (and make pr) for liking a song
 ** prepend current project to each item in "Switch to Buffer" selector
 ** better jump-to-char-in-line, maybe just write it myself
-* OS
+** Implement a zone program that performs game of life (the same char and color should replicated it would be interesting to see if one dominates)
+* Operating System
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
 (when *is-a-mac* ;; (string-equal system-type "darwin")
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 (setq mac-command-modifier 'meta)
 #+END_SRC
-* custom.el
+* emacs.d
 #+BEGIN_SRC emacs-lisp
-(setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
-  (load custom-file))
+   (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
+   (when (file-exists-p custom-file)
+     (load custom-file))
+
+   (defun load-init-el ()
+     (interactive)
+     (load-file "~/.emacs.d/init.el"))
+   (global-set-key (kbd "C-c i") 'load-init-el)
 #+END_SRC
-* Package Management
-#+BEGIN_SRC emacs-lisp
-(require 'package)
-
-(add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/") t)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-;;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
-(add-to-list 'load-path "~/.emacs.d/site-lisp/")
-
-;; Refresh package contents 5% of the time.
-(when (eq 0 (random 20))
-  (package-refresh-contents))
-
-;; list the packages you want
-(setq package-list
-    '(
-      use-package
-     ))
-
-;; activate all the packages
-(package-initialize)
-
-;; fetch the list of packages available
-(unless package-archive-contents
-  (package-refresh-contents))
-
-;; install the missing packages
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
-
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
-
-(use-package auto-package-update
-  :config
-  (setq auto-package-update-delete-old-versions t)
-  (setq auto-package-update-hide-results t)
-  (auto-package-update-maybe))
-
-(use-package gnu-elpa-keyring-update)
-#+END_SRC
-* Defaults and GUI
+* Default Tweaks
 #+BEGIN_SRC emacs-lisp
   (when window-system
     (blink-cursor-mode 0)                           ; Disable the cursor blinking
@@ -132,6 +94,51 @@
 
   (add-hook 'focus-out-hook #'garbage-collect)
 #+END_SRC
+* Package Management
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+
+(add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/") t)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+;;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
+(add-to-list 'load-path "~/.emacs.d/site-lisp/")
+
+;; Refresh package contents 5% of the time.
+(when (eq 0 (random 20))
+  (package-refresh-contents))
+
+;; list the packages you want
+(setq package-list
+    '(
+      use-package
+     ))
+
+;; activate all the packages
+(package-initialize)
+
+;; fetch the list of packages available
+(unless package-archive-contents
+  (package-refresh-contents))
+
+;; install the missing packages
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
+(use-package auto-package-update
+  :config
+  (setq auto-package-update-delete-old-versions t)
+  (setq auto-package-update-hide-results t)
+  (auto-package-update-maybe))
+
+(use-package gnu-elpa-keyring-update)
+#+END_SRC
 * Theme and Modeline
 #+BEGIN_SRC emacs-lisp
   (if *is-a-mac*
@@ -147,7 +154,7 @@
   (modify-face 'trailing-whitespace nil "#5a708c")
 
   (use-package all-the-icons)
-  (use-package doom-modeline ;; alternative is moody for a simpler option
+  (use-package doom-modeline
     ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
     ;; https://github.com/seagle0128/doom-modeline#customize
     :hook (after-init . doom-modeline-mode)
@@ -179,78 +186,44 @@
 #+END_SRC
 * Tools and Bindings
 ** Env Vars
-   #+BEGIN_SRC emacs-lisp
-   (use-package load-env-vars
-     :init
-     (load-env-vars "~/.emacs.d/emacs.env"))
-   #+END_SRC
-** Unbindings
 #+BEGIN_SRC emacs-lisp
-(global-unset-key (kbd "C-z"))
-(global-unset-key (kbd "M-l"))
-(global-unset-key (kbd "M-u"))
-#+END_SRC
-** Random Bindings
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
-(global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
-#+END_SRC
-** Random packages
-#+BEGIN_SRC emacs-lisp
-  (use-package htmlize)
-  (use-package wgrep)
-  (use-package itail)
-  (use-package exec-path-from-shell
-    :config
-    (when *is-a-mac*
-      (exec-path-from-shell-initialize)))
-
-  (use-package highlight-indent-guides
-  ;; :hook (prog-mode . highlight-indent-guides-mode) ;; I commented this out because I just want to manually toggle this
-    :config
-    (setq highlight-indent-guides-method 'character)
-    (setq highlight-indent-guides-character 9615) ; left-align vertical bar
-    (setq highlight-indent-guides-auto-character-face-perc 20))
-
-  (use-package free-keys
-    :bind ("C-h C-k" . 'free-keys))
-
-  (use-package avy
-    :bind (("C-:" . avy-goto-char)
-           ("C-'" . avy-goto-char-timer)))
-
-  (use-package undo-tree
-    :config
-    (global-undo-tree-mode))
-
-  (use-package scratch)
-
-  (use-package wttrin
-    :defer t
+  (use-package load-env-vars
     :init
-    (setq wttrin-default-cities '("New Orleans")))
-
-  (use-package ws-butler
-    :config (ws-butler-global-mode 1))
-
-  ;; FIXME when a word is highlighted and has the cursor the text is black because of the current line highlighting
-  ;; TODO try using highlight.el instead
-  (use-package highlight-symbol
-    :config
-    (global-set-key (kbd "<f3>") 'highlight-symbol)
-    (global-set-key (kbd "C-<f3>") 'highlight-symbol-next)
-    (global-set-key (kbd "S-<f3>") 'highlight-symbol-prev)
-    (global-set-key (kbd "M-<f3>") 'highlight-symbol-query)
-    )
-
-  ;; I think I'd prefer the below package if it were less intrusive. Maybe a very light box around each matching word.
-  ;; (use-package auto-highlight-symbol
-  ;;  :config
-  ;;  (global-auto-highlight-symbol-mode t))
-
+    (load-env-vars "~/.emacs.d/emacs.env"))
+#+END_SRC
+** Built-in Unbindings
+#+BEGIN_SRC emacs-lisp
+  (global-unset-key (kbd "C-z"))
+  (global-unset-key (kbd "M-l"))
+  (global-unset-key (kbd "M-u"))
+#+END_SRC
+** Built-in Bindings
+#+BEGIN_SRC emacs-lisp
   (require 'misc)
+  (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
+  (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
+  (global-set-key (kbd "C-c o") 'other-frame)
   (global-set-key (kbd "C-M-z") 'zap-up-to-char)
+#+END_SRC
+** Built-in Packages
+#+BEGIN_SRC emacs-lisp
+    (use-package dired
+      :ensure nil
+      :config
+      (setq dired-omit-files "^.~$")
 
+      ;; dired - reuse current buffer by pressing 'a'
+      ;; (put 'dired-find-alternate-file 'disabled nil)
+
+      ;; always delete and copy recursively
+      (setq dired-recursive-deletes 'always)
+      (setq dired-recursive-copies 'always)
+
+      (require 'dired-x)
+      (add-hook 'dired-mode-hook 'dired-omit-mode))
+
+  (require 'zone)
+  (zone-when-idle 600)
 #+END_SRC
 ** My Packages
 #+BEGIN_SRC emacs-lisp
@@ -262,63 +235,6 @@
     :load-path "~/code/personal/bela-mode.el"
     :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
 #+END_SRC
-** Chat
-#+BEGIN_SRC emacs-lisp
-  (use-package jabber
-    :after (:all load-env-vars)
-    :config
-      (setq jabber-account-list (cons (cons "bwisialowski@gmail.com" (cons (append '(:password) (getenv "GMAIL_JABBER_PASSWORD")) '())) '())
-        jabber-chat-buffer-show-avatar nil
-        jabber-vcard-avatars-retrieve nil
-        jabber-history-enabled t
-        jabber-activity-make-strings 'jabber-activity-make-strings-shorten
-        )
-      (set-face-attribute 'jabber-roster-user-online nil :foreground "cyan")
-      (set-face-attribute 'jabber-roster-user-away nil :foreground "green")
-      ;(set-face-attribute 'jabber-activity-string nil :foreground "cyan") ;; TODO need to set this programmatically, right now it's set via customization interface
-      (defun jabber ()
-       (interactive)
-       (call-interactively #'jabber-connect)
-       (switch-to-buffer "*-jabber-roster-*")))
-#+END_SRC
-** emacs.d
-   #+BEGIN_SRC emacs-lisp
-   (defun load-init-el ()
-     (interactive)
-     (load-file "~/.emacs.d/init.el"))
-   (global-set-key (kbd "C-c i") 'load-init-el)
-   #+END_SRC
-** Git
- #+BEGIN_SRC emacs-lisp
- (use-package magit
-   :config
-   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
- (use-package git-gutter
-   :diminish git-gutter-mode
-   :init
-   (global-git-gutter-mode)
-   (progn
-     (setq git-gutter:separator-sign " "
-           git-gutter:lighter " GG"))
-   :config
-   (progn
-     (set-face-background 'git-gutter:deleted "#990A1B")
-     (set-face-foreground 'git-gutter:deleted "#990A1B")
-     (set-face-background 'git-gutter:modified "#00736F")
-     (set-face-foreground 'git-gutter:modified "#00736F")
-     (set-face-background 'git-gutter:added "#546E00")
-     (set-face-foreground 'git-gutter:added "#546E00"))
-    :bind (("C-x p" . git-gutter:previous-hunk)
-           ("C-x n" . git-gutter:next-hunk)
-           ("C-x v =" . git-gutter:popup-hunk)
-           ("C-x v r" . git-gutter:revert-hunk)))
-
-  (use-package git-link
-    :config
-    (global-set-key (kbd "C-c g l") 'git-link)
-    )
-
- #+END_SRC
 ** Ivy, Swiper, Counsel
  #+BEGIN_SRC emacs-lisp
    (use-package ivy
@@ -366,51 +282,119 @@
      ;; (global-set-key (kbd "C-c g") 'counsel-git)
      (global-set-key (kbd "C-c j") 'counsel-git-grep))
  #+END_SRC
-** dired (look into tramp)
-  #+BEGIN_SRC emacs-lisp
-    (use-package dired
-      :ensure nil
-      :config
-      (setq dired-omit-files "^.~$")
+** Git
+ #+BEGIN_SRC emacs-lisp
+ (use-package magit
+   :config
+   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
 
-      ;; dired - reuse current buffer by pressing 'a'
-      ;; (put 'dired-find-alternate-file 'disabled nil)
+(use-package git-gutter
+   :diminish git-gutter-mode
+   :init
+   (global-git-gutter-mode)
+   (progn
+     (setq git-gutter:separator-sign " "
+           git-gutter:lighter " GG"))
+   :config
+   (progn
+     (set-face-background 'git-gutter:deleted "#990A1B")
+     (set-face-foreground 'git-gutter:deleted "#990A1B")
+     (set-face-background 'git-gutter:modified "#00736F")
+     (set-face-foreground 'git-gutter:modified "#00736F")
+     (set-face-background 'git-gutter:added "#546E00")
+     (set-face-foreground 'git-gutter:added "#546E00"))
+    :bind (("C-x p" . git-gutter:previous-hunk)
+           ("C-x n" . git-gutter:next-hunk)
+           ("C-x v =" . git-gutter:popup-hunk)
+           ("C-x v r" . git-gutter:revert-hunk)))
 
-      ;; always delete and copy recursively
-      (setq dired-recursive-deletes 'always)
-      (setq dired-recursive-copies 'always)
+  (use-package git-link
+    :config
+    (global-set-key (kbd "C-c g l") 'git-link)
+    )
 
-      (require 'dired-x)
-      (add-hook 'dired-mode-hook 'dired-omit-mode)
-      )
-  #+END_SRC
-** Multiple Cursors
+ #+END_SRC
+** Third party packages
 #+BEGIN_SRC emacs-lisp
-(use-package multiple-cursors
-  :bind (("C-S-c C-S-c" . mc/edit-lines)
-         ("C->" . mc/mark-next-like-this)
-         ("C-M->" . mc/skip-to-next-like-this)
-         ("C-<" . mc/mark-previous-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)
-         ("C-S-<mouse-1>" . mc/add-cursor-on-click)
-         )
-  :config
-  (define-key mc/keymap (kbd "<return>") nil)
-  )
-#+END_SRC
-** Projectile
-#+BEGIN_SRC emacs-lisp
-(use-package projectile
-  :config
-  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode +1))
-(use-package counsel-projectile
-  :config
-  (counsel-projectile-mode))
-#+END_SRC
-** Spotify
-#+BEGIN_SRC emacs-lisp
+  (use-package restart-emacs)
+  (use-package mew)
+  (use-package htmlize)
+  (use-package wgrep)
+  (use-package itail)
+  (use-package scratch)
+
+  (use-package exec-path-from-shell
+    :config
+    (when *is-a-mac*
+      (exec-path-from-shell-initialize)))
+
+  (use-package multiple-cursors
+    :bind (("C-S-c C-S-c" . mc/edit-lines)
+           ("C->" . mc/mark-next-like-this)
+           ("C-M->" . mc/skip-to-next-like-this)
+           ("C-<" . mc/mark-previous-like-this)
+           ("C-c C-<" . mc/mark-all-like-this)
+           ("C-S-<mouse-1>" . mc/add-cursor-on-click)
+           )
+    :config
+    (define-key mc/keymap (kbd "<return>") nil)
+    )
+
+  (use-package projectile
+    :config
+    (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    (projectile-mode +1))
+
+  (use-package counsel-projectile
+    :config
+    (counsel-projectile-mode))
+
+  (use-package highlight-indent-guides
+    :hook (python-mode . highlight-indent-guides-mode)
+    :config
+    (setq highlight-indent-guides-method 'character)
+    (setq highlight-indent-guides-character 9615) ; left-align vertical bar
+    (setq highlight-indent-guides-auto-character-face-perc 20))
+
+  (use-package free-keys
+    :bind ("C-h C-k" . 'free-keys))
+
+  (use-package undo-tree
+    :config
+    (global-undo-tree-mode))
+
+  (use-package ws-butler
+    :config (ws-butler-global-mode 1))
+
+  ;; FIXME when a word is highlighted and has the cursor the text is black because of the current line highlighting
+  ;; TODO try using highlight.el instead
+  (use-package highlight-symbol
+    :config
+    (global-set-key (kbd "<f3>") 'highlight-symbol)
+    (global-set-key (kbd "C-<f3>") 'highlight-symbol-next)
+    (global-set-key (kbd "S-<f3>") 'highlight-symbol-prev)
+    (global-set-key (kbd "M-<f3>") 'highlight-symbol-query))
+
+  (use-package jabber
+    :after (:all load-env-vars)
+    :config
+    (setq jabber-account-list (cons (cons "bwisialowski@gmail.com" (cons (append '(:password) (getenv "GMAIL_JABBER_PASSWORD")) '())) '())
+          jabber-chat-buffer-show-avatar nil
+          jabber-vcard-avatars-retrieve nil
+          jabber-history-enabled t
+          jabber-activity-make-strings 'jabber-activity-make-strings-shorten
+          )
+    (set-face-attribute 'jabber-roster-user-online nil :foreground "cyan")
+    (set-face-attribute 'jabber-roster-user-away nil :foreground "green")
+                                          ;(set-face-attribute 'jabber-activity-string nil :foreground "cyan") ;; TODO need to set this programmatically, right now it's set via customization interface
+    (defun jabber ()
+      (interactive)
+      (call-interactively #'jabber-connect) ;; TODO it would be nice to auto select bwisialowski@gmail.com
+      (switch-to-buffer "*-jabber-roster-*"))
+    (global-set-key (kbd "<f9>") 'jabber))
+
+
   (when (not *is-a-mac*)
     (use-package spotify
       :load-path "packages/spotify.el"
@@ -425,30 +409,31 @@
       (setq spotify-player-status-stopped-text "⏹")
       (setq spotify-player-status-format "%p %t - %a ") ;; trailing space is important
       :config
-      (define-key spotify-mode-map (kbd "C-c .") 'spotify-command-map)) ;; FIXME maybe not loading spotify-mode-map, maybe I need to turn on some minor mode
+      ;; (define-key spotify-mode-map (kbd "C-c C-s C-p") 'spotify-command-map)
+      ) ;; FIXME maybe not loading spotify-mode-map, maybe I need to turn on some minor mode
     )
 #+END_SRC
 * Org mode
 #+BEGIN_SRC emacs-lisp
   (setq org-publish-project-alist
         '(("org-blog"
-            ;; Path to your org files.
-            :base-directory "~/code/personal/blog/org/"
-            ;; :base-extension "org"
+           ;; Path to your org files.
+           :base-directory "~/code/personal/blog/org/"
+           ;; :base-extension "org"
 
-            ;; Path to your Jekyll project.
-            :publishing-directory "~/code/personal/blog/jekyll/"
-            ;; :recursive t
-            :publishing-function org-md-export-to-markdown ;; org-html-export-to-html
-            ;; :headline-levels 4
-            ;; :html-extension "html"
-            ;; :body-only t
-      )
+           ;; Path to your Jekyll project.
+           :publishing-directory "~/code/personal/blog/jekyll/"
+           ;; :recursive t
+           :publishing-function org-md-export-to-markdown ;; org-html-export-to-html
+           ;; :headline-levels 4
+           ;; :html-extension "html"
+           ;; :body-only t
+           )
 
-      ;; TODO: Later can have it copy everything to the _site dir which is a subrepo (kind of)
+          ;; TODO: Later can have it copy everything to the _site dir which is a subrepo (kind of)
 
-      ("blog"
-        :components ("org-blog"))))
+          ("blog"
+           :components ("org-blog"))))
 #+END_SRC
 * Programming
 ** All
@@ -575,9 +560,9 @@
     (interactive)
     (let ((up-to (point))
           (from (re-search-forward "[])}]")))
-       (backward-char)
-       (while (> (point) up-to)
-         (paredit-delete-indentation))))
+      (backward-char)
+      (while (> (point) up-to)
+        (paredit-delete-indentation))))
 
   (use-package paredit
     ;; TODO When killing a newline delete all whitespace until next character (maybe just bring in Smartparens kill command)
