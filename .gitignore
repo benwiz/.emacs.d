@@ -24,3 +24,8 @@ url/
 #recentf#
 .lsp-session-*
 secret.el
+/emojis/
+/hackernews/
+/jabber-avatar-cache/
+/jabber-history/
+/site-lisp/
