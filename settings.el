@@ -7,48 +7,10 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
-(require 'package)
-
-(add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/") t)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-;;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
-(add-to-list 'load-path "~/.emacs.d/site-lisp/")
-
-;; Refresh package contents 5% of the time.
-(when (eq 0 (random 20))
-  (package-refresh-contents))
-
-;; list the packages you want
-(setq package-list
-    '(
-      use-package
-     ))
-
-;; activate all the packages
-(package-initialize)
-
-;; fetch the list of packages available
-(unless package-archive-contents
-  (package-refresh-contents))
-
-;; install the missing packages
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
-
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
-
-(use-package auto-package-update
-  :config
-  (setq auto-package-update-delete-old-versions t)
-  (setq auto-package-update-hide-results t)
-  (auto-package-update-maybe))
-
-(use-package gnu-elpa-keyring-update)
+(defun load-init-el ()
+  (interactive)
+  (load-file "~/.emacs.d/init.el"))
+(global-set-key (kbd "C-c i") 'load-init-el)
 
 (when window-system
   (blink-cursor-mode 0)                           ; Disable the cursor blinking
@@ -107,6 +69,49 @@
 
 (add-hook 'focus-out-hook #'garbage-collect)
 
+(require 'package)
+
+(add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/") t)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+;;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
+(add-to-list 'load-path "~/.emacs.d/site-lisp/")
+
+;; Refresh package contents 5% of the time.
+(when (eq 0 (random 20))
+  (package-refresh-contents))
+
+;; list the packages you want
+(setq package-list
+    '(
+      use-package
+     ))
+
+;; activate all the packages
+(package-initialize)
+
+;; fetch the list of packages available
+(unless package-archive-contents
+  (package-refresh-contents))
+
+;; install the missing packages
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
+(use-package auto-package-update
+  :config
+  (setq auto-package-update-delete-old-versions t)
+  (setq auto-package-update-hide-results t)
+  (auto-package-update-maybe))
+
+(use-package gnu-elpa-keyring-update)
+
 (if *is-a-mac*
   (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
@@ -120,7 +125,7 @@
 (modify-face 'trailing-whitespace nil "#5a708c")
 
 (use-package all-the-icons)
-(use-package doom-modeline ;; alternative is moody for a simpler option
+(use-package doom-modeline
   ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
   ;; https://github.com/seagle0128/doom-modeline#customize
   :hook (after-init . doom-modeline-mode)
@@ -155,113 +160,39 @@
 (global-unset-key (kbd "M-l"))
 (global-unset-key (kbd "M-u"))
 
+(require 'misc)
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 (global-set-key (kbd "C-c o") 'other-frame)
 (global-set-key (kbd "C-M-z") 'zap-up-to-char)
 
-(require 'misc)
-(use-package restart-emacs)
-(use-package mew)
-(use-package htmlize)
-(use-package wgrep)
-(use-package itail)
-(use-package exec-path-from-shell
-  :config
-  (when *is-a-mac*
-    (exec-path-from-shell-initialize)))
+(use-package dired
+    :ensure nil
+    :config
+    (setq dired-omit-files "^.~$")
 
-(use-package highlight-indent-guides
-  :hook (python-mode . highlight-indent-guides-mode)
-  :config
-  (setq highlight-indent-guides-method 'character)
-  (setq highlight-indent-guides-character 9615) ; left-align vertical bar
-  (setq highlight-indent-guides-auto-character-face-perc 20))
+    ;; dired - reuse current buffer by pressing 'a'
+    ;; (put 'dired-find-alternate-file 'disabled nil)
 
-(use-package free-keys
-  :bind ("C-h C-k" . 'free-keys))
+    ;; always delete and copy recursively
+    (setq dired-recursive-deletes 'always)
+    (setq dired-recursive-copies 'always)
 
-(use-package avy
-  :bind (("C-:" . avy-goto-char)
-         ("C-'" . avy-goto-char-timer)))
+    (require 'dired-x)
+    (add-hook 'dired-mode-hook 'dired-omit-mode))
 
-(use-package undo-tree
-  :config
-  (global-undo-tree-mode))
-
-(use-package scratch)
-
-(use-package ws-butler
-  :config (ws-butler-global-mode 1))
-
-;; FIXME when a word is highlighted and has the cursor the text is black because of the current line highlighting
-;; TODO try using highlight.el instead
-(use-package highlight-symbol
-  :config
-  (global-set-key (kbd "<f3>") 'highlight-symbol)
-  (global-set-key (kbd "C-<f3>") 'highlight-symbol-next)
-  (global-set-key (kbd "S-<f3>") 'highlight-symbol-prev)
-  (global-set-key (kbd "M-<f3>") 'highlight-symbol-query)
-  )
+(require 'zone)
+(zone-when-idle 600)
 
 (if *is-a-mac*
   (use-package bela-mode
+    :defer t
     :load-path "~/code/bela-mode.el"
     :init (setq bela-scripts-dir "~/code/Bela/scripts/"))
   (use-package bela-mode
+    :defer t
     :load-path "~/code/personal/bela-mode.el"
     :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
-
-(use-package jabber
-  :after (:all load-env-vars)
-  :config
-    (setq jabber-account-list (cons (cons "bwisialowski@gmail.com" (cons (append '(:password) (getenv "GMAIL_JABBER_PASSWORD")) '())) '())
-      jabber-chat-buffer-show-avatar nil
-      jabber-vcard-avatars-retrieve nil
-      jabber-history-enabled t
-      jabber-activity-make-strings 'jabber-activity-make-strings-shorten
-      )
-    (set-face-attribute 'jabber-roster-user-online nil :foreground "cyan")
-    (set-face-attribute 'jabber-roster-user-away nil :foreground "green")
-    ;(set-face-attribute 'jabber-activity-string nil :foreground "cyan") ;; TODO need to set this programmatically, right now it's set via customization interface
-    (defun jabber ()
-      (interactive)
-      (call-interactively #'jabber-connect) ;; TODO it would be nice to auto select bwisialowski@gmail.com
-      (switch-to-buffer "*-jabber-roster-*"))
-    (global-set-key (kbd "<f9>") 'jabber))
-
-(defun load-init-el ()
-  (interactive)
-  (load-file "~/.emacs.d/init.el"))
-(global-set-key (kbd "C-c i") 'load-init-el)
-
-(use-package magit
-  :config
-  (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
-(use-package git-gutter
-  :diminish git-gutter-mode
-  :init
-  (global-git-gutter-mode)
-  (progn
-    (setq git-gutter:separator-sign " "
-          git-gutter:lighter " GG"))
-  :config
-  (progn
-    (set-face-background 'git-gutter:deleted "#990A1B")
-    (set-face-foreground 'git-gutter:deleted "#990A1B")
-    (set-face-background 'git-gutter:modified "#00736F")
-    (set-face-foreground 'git-gutter:modified "#00736F")
-    (set-face-background 'git-gutter:added "#546E00")
-    (set-face-foreground 'git-gutter:added "#546E00"))
-   :bind (("C-x p" . git-gutter:previous-hunk)
-          ("C-x n" . git-gutter:next-hunk)
-          ("C-x v =" . git-gutter:popup-hunk)
-          ("C-x v r" . git-gutter:revert-hunk)))
-
- (use-package git-link
-   :config
-   (global-set-key (kbd "C-c g l") 'git-link)
-   )
 
 (use-package ivy
   :config
@@ -308,21 +239,44 @@
   ;; (global-set-key (kbd "C-c g") 'counsel-git)
   (global-set-key (kbd "C-c j") 'counsel-git-grep))
 
-(use-package dired
-  :ensure nil
+(use-package magit
+   :config
+   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
+
+(use-package git-gutter
+   :diminish git-gutter-mode
+   :init
+   (global-git-gutter-mode)
+   (progn
+     (setq git-gutter:separator-sign " "
+           git-gutter:lighter " GG"))
+   :config
+   (progn
+     (set-face-background 'git-gutter:deleted "#990A1B")
+     (set-face-foreground 'git-gutter:deleted "#990A1B")
+     (set-face-background 'git-gutter:modified "#00736F")
+     (set-face-foreground 'git-gutter:modified "#00736F")
+     (set-face-background 'git-gutter:added "#546E00")
+     (set-face-foreground 'git-gutter:added "#546E00"))
+    :bind (("C-x p" . git-gutter:previous-hunk)
+           ("C-x n" . git-gutter:next-hunk)
+           ("C-x v =" . git-gutter:popup-hunk)
+           ("C-x v r" . git-gutter:revert-hunk)))
+
+  (use-package git-link
+    :config
+    (global-set-key (kbd "C-c g l") 'git-link))
+
+(use-package restart-emacs)
+(use-package htmlize)
+(use-package wgrep)
+(use-package itail)
+(use-package scratch)
+
+(use-package exec-path-from-shell
   :config
-  (setq dired-omit-files "^.~$")
-
-  ;; dired - reuse current buffer by pressing 'a'
-  ;; (put 'dired-find-alternate-file 'disabled nil)
-
-  ;; always delete and copy recursively
-  (setq dired-recursive-deletes 'always)
-  (setq dired-recursive-copies 'always)
-
-  (require 'dired-x)
-  (add-hook 'dired-mode-hook 'dired-omit-mode)
-  )
+  (when *is-a-mac*
+    (exec-path-from-shell-initialize)))
 
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
@@ -341,12 +295,62 @@
   (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode +1))
+
 (use-package counsel-projectile
   :config
   (counsel-projectile-mode))
 
+(use-package highlight-indent-guides
+  :defer t
+  :hook (python-mode . highlight-indent-guides-mode)
+  :config
+  (setq highlight-indent-guides-method 'character)
+  (setq highlight-indent-guides-character 9615) ; left-align vertical bar
+  (setq highlight-indent-guides-auto-character-face-perc 20))
+
+(use-package free-keys
+  :defer t
+  :bind ("C-h C-k" . 'free-keys))
+
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode))
+
+(use-package ws-butler
+  :config (ws-butler-global-mode 1))
+
+;; FIXME when a word is highlighted and has the cursor the text is black because of the current line highlighting
+;; TODO try using highlight.el instead
+(use-package highlight-symbol
+  :defer t
+  :config
+  (global-set-key (kbd "<f3>") 'highlight-symbol)
+  (global-set-key (kbd "C-<f3>") 'highlight-symbol-next)
+  (global-set-key (kbd "S-<f3>") 'highlight-symbol-prev)
+  (global-set-key (kbd "M-<f3>") 'highlight-symbol-query))
+
+(use-package jabber
+  :defer t
+  :after (:all load-env-vars)
+  :config
+  (setq jabber-account-list (cons (cons "bwisialowski@gmail.com" (cons (append '(:password) (getenv "GMAIL_JABBER_PASSWORD")) '())) '())
+        jabber-chat-buffer-show-avatar nil
+        jabber-vcard-avatars-retrieve nil
+        jabber-history-enabled t
+        jabber-activity-make-strings 'jabber-activity-make-strings-shorten
+        )
+  (set-face-attribute 'jabber-roster-user-online nil :foreground "cyan")
+  (set-face-attribute 'jabber-roster-user-away nil :foreground "green")
+                                        ;(set-face-attribute 'jabber-activity-string nil :foreground "cyan") ;; TODO need to set this programmatically, right now it's set via customization interface
+  (defun jabber ()
+    (interactive)
+    (call-interactively #'jabber-connect) ;; TODO it would be nice to auto select bwisialowski@gmail.com
+    (switch-to-buffer "*-jabber-roster-*"))
+  (global-set-key (kbd "<f9>") 'jabber))
+
 (when (not *is-a-mac*)
   (use-package spotify
+    :defer t
     :load-path "packages/spotify.el"
     :init
     (setq spotify-oauth2-client-secret (getenv "SPOTIFY_CLIENT_SECRET"))
@@ -363,28 +367,42 @@
     ) ;; FIXME maybe not loading spotify-mode-map, maybe I need to turn on some minor mode
   )
 
-(require 'zone)
-(zone-when-idle 600)
+(use-package elfeed
+  :defer t
+  :config
+  (setq elfeed-feeds
+        '("http://feeds.bbci.co.uk/news/world/rss.xml"
+          "https://xkcd.com/rss.xml"
+          ""))
+  ;; Entries older than 4 weeks are marked as read
+  (add-hook 'elfeed-new-entry-hook
+            (elfeed-make-tagger :before "4 weeks ago"
+                                :remove 'unread))
+  ;; Mark all as read
+  (defun elfeed-mark-all-as-read ()
+    (interactive)
+    (mark-whole-buffer)
+    (elfeed-search-untag-all-unread)))
 
 (setq org-publish-project-alist
       '(("org-blog"
-          ;; Path to your org files.
-          :base-directory "~/code/personal/blog/org/"
-          ;; :base-extension "org"
+         ;; Path to your org files.
+         :base-directory "~/code/personal/blog/org/"
+         ;; :base-extension "org"
 
-          ;; Path to your Jekyll project.
-          :publishing-directory "~/code/personal/blog/jekyll/"
-          ;; :recursive t
-          :publishing-function org-md-export-to-markdown ;; org-html-export-to-html
-          ;; :headline-levels 4
-          ;; :html-extension "html"
-          ;; :body-only t
-    )
+         ;; Path to your Jekyll project.
+         :publishing-directory "~/code/personal/blog/jekyll/"
+         ;; :recursive t
+         :publishing-function org-md-export-to-markdown ;; org-html-export-to-html
+         ;; :headline-levels 4
+         ;; :html-extension "html"
+         ;; :body-only t
+         )
 
-    ;; TODO: Later can have it copy everything to the _site dir which is a subrepo (kind of)
+        ;; TODO: Later can have it copy everything to the _site dir which is a subrepo (kind of)
 
-    ("blog"
-      :components ("org-blog"))))
+        ("blog"
+         :components ("org-blog"))))
 
 (use-package ws-butler
     :hook (prog-mode . ws-butler-mode))

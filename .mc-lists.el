@@ -17,6 +17,7 @@
         ivy-switch-buffer
         kill-region
         kill-sexp
+        mark-sexp
         org-self-insert-command
         paredit-backward
         paredit-backward-up
@@ -30,8 +31,10 @@
         paredit-open-curly
         paredit-open-round
         paredit-open-square
+        paredit-semicolon
         paredit-splice-sexp
         reposition-window
+        rjsx-delete-creates-full-tag
         suspend-frame
         toggle-truncate-lines
         zap-up-to-char

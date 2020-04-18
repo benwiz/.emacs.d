@@ -1,16 +1,13 @@
 * To Do
+** Build a "home scren", some ideas to include are:
+*** set up convenient reminder or workflow for adding blog posts
 ** paredit: my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)
 ** paredit: paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.
 ** paredit: paredit kill needs to kill any created whitepsace
 ** paredit: go to beginning or end of top level form
-** Build a "home scren", some ideas to include are:
-*** set up convenient reminder or workflow for adding blog posts
 ** multiple-cursors: scroll along with it, may be very difficult or impossible
-** gnus: set up for news
-** mews: email
 ** registers: better shortcuts
 ** dim parenthesis when in comment
-** organize this file, I'm not sold on using org mode yet, I should look up videos of emacs configs using org mode
 ** defer packages that probably should be deferred
 ** cider-find-var should not have to do a confirmation step
 ** add feature to spotify.el (and make pr) for liking a song
@@ -229,9 +226,11 @@
 #+BEGIN_SRC emacs-lisp
 (if *is-a-mac*
   (use-package bela-mode
+    :defer t
     :load-path "~/code/bela-mode.el"
     :init (setq bela-scripts-dir "~/code/Bela/scripts/"))
   (use-package bela-mode
+    :defer t
     :load-path "~/code/personal/bela-mode.el"
     :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
 #+END_SRC
@@ -310,14 +309,12 @@
 
   (use-package git-link
     :config
-    (global-set-key (kbd "C-c g l") 'git-link)
-    )
+    (global-set-key (kbd "C-c g l") 'git-link))
 
  #+END_SRC
 ** Third party packages
 #+BEGIN_SRC emacs-lisp
   (use-package restart-emacs)
-  (use-package mew)
   (use-package htmlize)
   (use-package wgrep)
   (use-package itail)
@@ -351,6 +348,7 @@
     (counsel-projectile-mode))
 
   (use-package highlight-indent-guides
+    :defer t
     :hook (python-mode . highlight-indent-guides-mode)
     :config
     (setq highlight-indent-guides-method 'character)
@@ -358,6 +356,7 @@
     (setq highlight-indent-guides-auto-character-face-perc 20))
 
   (use-package free-keys
+    :defer t
     :bind ("C-h C-k" . 'free-keys))
 
   (use-package undo-tree
@@ -370,6 +369,7 @@
   ;; FIXME when a word is highlighted and has the cursor the text is black because of the current line highlighting
   ;; TODO try using highlight.el instead
   (use-package highlight-symbol
+    :defer t
     :config
     (global-set-key (kbd "<f3>") 'highlight-symbol)
     (global-set-key (kbd "C-<f3>") 'highlight-symbol-next)
@@ -377,6 +377,7 @@
     (global-set-key (kbd "M-<f3>") 'highlight-symbol-query))
 
   (use-package jabber
+    :defer t
     :after (:all load-env-vars)
     :config
     (setq jabber-account-list (cons (cons "bwisialowski@gmail.com" (cons (append '(:password) (getenv "GMAIL_JABBER_PASSWORD")) '())) '())
@@ -394,9 +395,9 @@
       (switch-to-buffer "*-jabber-roster-*"))
     (global-set-key (kbd "<f9>") 'jabber))
 
-
   (when (not *is-a-mac*)
     (use-package spotify
+      :defer t
       :load-path "packages/spotify.el"
       :init
       (setq spotify-oauth2-client-secret (getenv "SPOTIFY_CLIENT_SECRET"))
@@ -412,6 +413,23 @@
       ;; (define-key spotify-mode-map (kbd "C-c C-s C-p") 'spotify-command-map)
       ) ;; FIXME maybe not loading spotify-mode-map, maybe I need to turn on some minor mode
     )
+
+  (use-package elfeed
+    :defer t
+    :config
+    (setq elfeed-feeds
+          '("http://feeds.bbci.co.uk/news/world/rss.xml"
+            "https://xkcd.com/rss.xml"
+            ""))
+    ;; Entries older than 4 weeks are marked as read
+    (add-hook 'elfeed-new-entry-hook
+              (elfeed-make-tagger :before "4 weeks ago"
+                                  :remove 'unread))
+    ;; Mark all as read
+    (defun elfeed-mark-all-as-read ()
+      (interactive)
+      (mark-whole-buffer)
+      (elfeed-search-untag-all-unread)))
 #+END_SRC
 * Org mode
 #+BEGIN_SRC emacs-lisp
