@@ -124,11 +124,14 @@
 ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way.
 (set-face-attribute 'hl-line nil :background "#e3ffe3")
 (set-face-attribute 'region nil :background "#F2F2F2")
+(set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
+(set-face-attribute 'font-lock-comment-face nil :slant 'italic)
 (set-face-attribute 'trailing-whitespace nil :background "#e0eeff")
 
 ;; Dark theme
 (load-theme 'spolsky t)
 (custom-theme-set-faces 'spolsky
+  `(default ((t (:foreground "#F2F2F2"))))
   `(hl-line ((t (:background "#151515" :underline nil))))
   `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
   `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
