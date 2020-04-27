@@ -115,14 +115,21 @@
 (if *is-a-mac*
   (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
+;; Light theme
+(load-theme 'mccarthy)
+(custom-theme-set-faces 'mccarthy
+  `(hl-line ((t (:background "#EFEFEF" :underline nil))))
+  `(trailing-whitepsace ((t (:foreground "#FF0000"))))
+  )
+;; Dark theme
 (load-theme 'spolsky t) ;; https://github.com/owainlewis/emacs-color-themes/blob/master/themes/spolsky-theme.el
 (custom-theme-set-faces 'spolsky
-  `(hl-line ((t (:background "#151515")))) ;; :underline nil (I think putting underline nil was causing error messages and turns out to not be necessary)
+  `(hl-line ((t (:background "#151515" :underline nil))))
   `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
   `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
   )
 (global-hl-line-mode 1)
-(modify-face 'trailing-whitespace nil "#5a708c")
+;(modify-face 'trailing-whitespace nil "#5a708c")
 
 (use-package all-the-icons)
 (use-package doom-modeline
@@ -165,6 +172,8 @@
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 (global-set-key (kbd "C-c o") 'other-frame)
 (global-set-key (kbd "C-M-z") 'zap-up-to-char)
+(global-set-key (kbd "C-c n") 'narrow-to-defun)
+(global-set-key (kbd "C-c w") 'widen)
 
 (use-package dired
     :ensure nil
@@ -319,19 +328,25 @@
 (use-package ws-butler
   :config (ws-butler-global-mode 1))
 
-;; FIXME when a word is highlighted and has the cursor the text is black because of the current line highlighting
+;; FIXME when a word is highlighted and has the cursor the text is black because of the current line highlighting.
+;; Apparantly this is not a trivial fix because they use two colliding features of emacs for the background color.
 ;; TODO try using highlight.el instead
 (use-package highlight-symbol
   :defer t
-  :config
+  :init
   (global-set-key (kbd "<f3>") 'highlight-symbol)
   (global-set-key (kbd "C-<f3>") 'highlight-symbol-next)
   (global-set-key (kbd "S-<f3>") 'highlight-symbol-prev)
   (global-set-key (kbd "M-<f3>") 'highlight-symbol-query))
 
 (use-package jabber
-  :defer t
   :after (:all load-env-vars)
+  :init
+  (defun jabber ()
+    (interactive)
+    (call-interactively #'jabber-connect) ;; TODO it would be nice to auto select bwisialowski@gmail.com
+    (switch-to-buffer "*-jabber-roster-*"))
+  (global-set-key (kbd "<f9>") 'jabber)
   :config
   (setq jabber-account-list (cons (cons "bwisialowski@gmail.com" (cons (append '(:password) (getenv "GMAIL_JABBER_PASSWORD")) '())) '())
         jabber-chat-buffer-show-avatar nil
@@ -341,12 +356,8 @@
         )
   (set-face-attribute 'jabber-roster-user-online nil :foreground "cyan")
   (set-face-attribute 'jabber-roster-user-away nil :foreground "green")
-                                        ;(set-face-attribute 'jabber-activity-string nil :foreground "cyan") ;; TODO need to set this programmatically, right now it's set via customization interface
-  (defun jabber ()
-    (interactive)
-    (call-interactively #'jabber-connect) ;; TODO it would be nice to auto select bwisialowski@gmail.com
-    (switch-to-buffer "*-jabber-roster-*"))
-  (global-set-key (kbd "<f9>") 'jabber))
+  ;; (set-face-attribute 'jabber-activity-string nil :foreground "cyan") ;; TODO need to set this programmatically, right now it's set via customization interface
+  )
 
 (when (not *is-a-mac*)
   (use-package spotify
@@ -419,22 +430,22 @@
     :config (require 'lsp-clients))
   (use-package lsp-ui)
 
-  (use-package rainbow-delimiters ;; TODO figure out how to decrease saturation inside clojure reader comments
-    :config
-    (require 'cl-lib)
-    (require 'color)
-    (cl-loop
-       for index from 1 to rainbow-delimiters-max-face-count
-       do
-        (let ((face (intern (format "rainbow-delimiters-depth-%d-face" index))))
-          (cl-callf color-saturate-name (face-foreground face) 20)))
-    (require 'paren) ; show-paren-mismatch is defined in paren.el
-    (set-face-attribute 'rainbow-delimiters-unmatched-face nil
-      :foreground 'unspecified
-      :inherit 'show-paren-mismatch)
+  ;; (use-package rainbow-delimiters ;; TODO figure out how to decrease saturation inside clojure reader comments
+  ;;   :config
+  ;;   (require 'cl-lib)
+  ;;   (require 'color)
+  ;;   (cl-loop
+  ;;      for index from 1 to rainbow-delimiters-max-face-count
+  ;;      do
+  ;;       (let ((face (intern (format "rainbow-delimiters-depth-%d-face" index))))
+  ;;         (cl-callf color-saturate-name (face-foreground face) 20)))
+  ;;   (require 'paren) ; show-paren-mismatch is defined in paren.el
+  ;;   (set-face-attribute 'rainbow-delimiters-unmatched-face nil
+  ;;     :foreground 'unspecified
+  ;;     :inherit 'show-paren-mismatch)
 
-    :hook
-    (prog-mode . rainbow-delimiters-mode)) ;; WARNING: Being so general may break something, but going to go with it anyway
+  ;;   :hook
+  ;;   (prog-mode . rainbow-delimiters-mode)) ;; WARNING: Being so general may break something, but going to go with it anyway
 
   (use-package expand-region
     :config
@@ -533,25 +544,15 @@
   :init
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
   (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'cider-repl-mode-hook 'paredit-mode)
-  )
+  (add-hook 'cider-repl-mode-hook 'paredit-mode))
 
 ;; Like: sp-kill-sexp (to delete the whole symbol not just forward like C-M-k does)
 (defun kill-symbol ()
   (interactive)
   (backward-sexp) ;; TODO instead of backward-sexp, need to go to beginning of current symbol or go nowhere if already there
   (kill-sexp))
-(global-set-key (kbd "M-k") 'kill-symbol)
 
-;; Indent top level sexp
-(defun indent-top-sexp ()
-  (interactive)
-  ;; TODO go to beginning or end of top level sexp
-  ;; TODO select the whole sexp
-  (indent-region)
-  ;; TODO return to starting point
-  )
-;; (global-set-key (kbd "C-M-l") 'indent-top-sexp) ;; TODO use a different kbd
+(global-set-key (kbd "M-k") 'kill-symbol)
 
 
 
@@ -613,7 +614,6 @@
 
 (add-to-list 'exec-path "/usr/local/bin/")
 (use-package clojure-snippets)
-
 (use-package flycheck-clj-kondo)
 
 (use-package clj-refactor
@@ -633,13 +633,14 @@
         ("C-c d w" . cider-grimoire-web)
         ("C-c d c" . clojure-cheatsheet)
         ("C-c d d" . dash-at-point)
-        ("C-c C-;" . insert-discard)
-        )
+        ("C-c C-;" . insert-discard))
  :init
  (setq clojure-indent-style 'align-arguments
        clojure-align-forms-automatically t)
  :config
+ (add-hook 'clojure-mode-hook 'paredit-mode)
  (require 'flycheck-clj-kondo)
+ ;; TODO I want {:keys []} always to have just one space between the `s` and `[`
  ;;(define-clojure-indent
  ;;  (:import 0)
  ;;  (:require 0))

@@ -48,6 +48,7 @@
         end-of-buffer
         mouse-set-region
         paredit-close-parenthesis-and-newline
+        paredit-forward-barf-sexp
         paredit-kill
         swiper-isearch
         ))

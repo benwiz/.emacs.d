@@ -1,4 +1,5 @@
 * To Do
+** Optimize Light theme (maybe don't use McCarthy) and easy toggle between dark and light
 ** Build a "home scren", some ideas to include are:
 *** set up convenient reminder or workflow for adding blog posts
 ** paredit: my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)
@@ -141,9 +142,15 @@
   (if *is-a-mac*
     (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
     (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
+  ;; Light theme
+  (load-theme 'mccarthy)
+  (custom-theme-set-faces 'mccarthy
+    `(hl-line ((t (:background "#EFEFEF" :underline nil))))
+    )
+  ;; Dark theme
   (load-theme 'spolsky t) ;; https://github.com/owainlewis/emacs-color-themes/blob/master/themes/spolsky-theme.el
   (custom-theme-set-faces 'spolsky
-    `(hl-line ((t (:background "#151515")))) ;; :underline nil (I think putting underline nil was causing error messages and turns out to not be necessary)
+    `(hl-line ((t (:background "#151515" :underline nil))))
     `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
     `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
     )
@@ -368,19 +375,25 @@
   (use-package ws-butler
     :config (ws-butler-global-mode 1))
 
-  ;; FIXME when a word is highlighted and has the cursor the text is black because of the current line highlighting
+  ;; FIXME when a word is highlighted and has the cursor the text is black because of the current line highlighting.
+  ;; Apparantly this is not a trivial fix because they use two colliding features of emacs for the background color.
   ;; TODO try using highlight.el instead
   (use-package highlight-symbol
     :defer t
-    :config
+    :init
     (global-set-key (kbd "<f3>") 'highlight-symbol)
     (global-set-key (kbd "C-<f3>") 'highlight-symbol-next)
     (global-set-key (kbd "S-<f3>") 'highlight-symbol-prev)
     (global-set-key (kbd "M-<f3>") 'highlight-symbol-query))
 
   (use-package jabber
-    :defer t
     :after (:all load-env-vars)
+    :init
+    (defun jabber ()
+      (interactive)
+      (call-interactively #'jabber-connect) ;; TODO it would be nice to auto select bwisialowski@gmail.com
+      (switch-to-buffer "*-jabber-roster-*"))
+    (global-set-key (kbd "<f9>") 'jabber)
     :config
     (setq jabber-account-list (cons (cons "bwisialowski@gmail.com" (cons (append '(:password) (getenv "GMAIL_JABBER_PASSWORD")) '())) '())
           jabber-chat-buffer-show-avatar nil
