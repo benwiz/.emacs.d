@@ -151,6 +151,8 @@
   ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way.
   (set-face-attribute 'hl-line nil :background "#e3ffe3")
   (set-face-attribute 'region nil :background "#F2F2F2")
+  (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
+  (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
   (set-face-attribute 'trailing-whitespace nil :background "#e0eeff")
 
   ;; Dark theme
