@@ -132,7 +132,7 @@
 
 ;; Dark theme
 (defun load-spolsky ()
-  "Load spolsky. Because enabling after disable wasn't working correctly."
+  "Load Spolsky."
   (load-theme 'spolsky t)
   (custom-theme-set-faces
    'spolsky
@@ -150,7 +150,7 @@
   (interactive)
   (if (member 'spolsky custom-enabled-themes)
       (disable-theme 'spolsky)
-    ;;(enable-theme 'spolsky)
+    ;;(enable-theme 'spolsky) ;; This should work (and did work) but it bugs out.
     (load-spolsky)))
 (global-unset-key (kbd "<f10>"))
 (global-set-key (kbd "<f10>") 'toggle-theme)
