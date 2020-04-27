@@ -142,20 +142,36 @@
   (if *is-a-mac*
     (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
     (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
-  ;; Light theme
-  (load-theme 'mccarthy)
-  (custom-theme-set-faces 'mccarthy
-    `(hl-line ((t (:background "#EFEFEF" :underline nil))))
-    )
+
+  ;; Underline/highlight selected line
+  (global-hl-line-mode 1)
+
+  ;; Light theme. I found nothing I liked, so I am just using the default theme.
+  ;; Disable spolsky to use it.
+  ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way.
+  (set-face-attribute 'hl-line nil :background "#e3ffe3")
+  (set-face-attribute 'region nil :background "#F2F2F2")
+  (set-face-attribute 'trailing-whitespace nil :background "#e0eeff")
+
   ;; Dark theme
-  (load-theme 'spolsky t) ;; https://github.com/owainlewis/emacs-color-themes/blob/master/themes/spolsky-theme.el
+  (load-theme 'spolsky t)
   (custom-theme-set-faces 'spolsky
     `(hl-line ((t (:background "#151515" :underline nil))))
     `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
     `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
+    `(trailing-whitespace ((t (:background "#5a708c"))))
     )
-  (global-hl-line-mode 1)
-  (modify-face 'trailing-whitespace nil "#5a708c")
+
+  ;; Toggle themes
+  (defun toggle-theme ()
+    "Toggle Spolsky theme on and off."
+    (interactive)
+    (if (member 'spolsky custom-enabled-themes)
+        (disable-theme 'spolsky)
+      (enable-theme 'spolsky)))
+  (global-unset-key (kbd "<f10>"))
+  (global-set-key (kbd "<f10>") 'toggle-theme)
+
 
   (use-package all-the-icons)
   (use-package doom-modeline

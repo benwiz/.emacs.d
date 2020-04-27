@@ -19,6 +19,7 @@
         kill-sexp
         mark-sexp
         org-self-insert-command
+        outline-show-children
         paredit-backward
         paredit-backward-up
         paredit-close-square
