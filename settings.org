@@ -461,6 +461,41 @@
       (mark-whole-buffer)
       (elfeed-search-untag-all-unread)))
 #+END_SRC
+** Dashboard
+#+BEGIN_SRC emacs-lisp
+  (use-package page-break-lines)
+  (use-package dashboard
+    ;; https://github.com/emacs-dashboard/emacs-dashboard ;
+    :ensure t
+    :init
+    ;; Banner and title and footer
+    (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard"
+          dashboard-startup-banner 2 ;; 'official, 'logo, 1, 2, 3, or a path to img
+          dashboard-center-content nil
+          dashboard-show-shortcuts t
+          dashboard-set-navigator t ;; Idk what this does, I think it isn't working
+          dashboard-set-init-info t
+          ;; dashboard-init-info "This is an init message!" ;; Customize init-info
+          dashboard-set-footer t
+          ;; dashboard-footer-messages '("Dashboard is pretty cool!") ;; Customize footer messages
+          )
+    ;; Widgets
+    (setq dashboard-items '((recents  . 5)
+                            (bookmarks . 5)
+                            (projects . 5)
+                            (agenda . 5)
+                            (registers . 5))
+          dashboard-set-heading-icons nil
+          dashboard-set-file-icons nil)
+    ;; Custom widget
+    ;; Ideas: weather, widget dedicated to each of my projects
+    (defun dashboard-insert-custom (list-size)
+      (insert "Custom text"))
+    (add-to-list 'dashboard-item-generators '(custom . dashboard-insert-custom))
+    (add-to-list 'dashboard-items '(custom) t)
+    :config
+    (dashboard-setup-startup-hook))
+#+END_SRC
 * Org mode
 #+BEGIN_SRC emacs-lisp
   (setq org-publish-project-alist
