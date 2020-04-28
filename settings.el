@@ -443,14 +443,14 @@
                           (registers . 5))
         dashboard-set-heading-icons nil
         dashboard-set-file-icons nil)
+  :config
+  (dashboard-setup-startup-hook)
   ;; Custom widget
-  ;; Ideas: weather, widget dedicated to each of my projects
+  ;; Ideas: weather, widget dedicated to each of my projects, news,
   (defun dashboard-insert-custom (list-size)
     (insert "Custom text"))
   (add-to-list 'dashboard-item-generators '(custom . dashboard-insert-custom))
-  (add-to-list 'dashboard-items '(custom) t)
-  :config
-  (dashboard-setup-startup-hook))
+  (add-to-list 'dashboard-items '(custom) t))
 
 (setq org-publish-project-alist
       '(("org-blog"
