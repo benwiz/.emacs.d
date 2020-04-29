@@ -255,6 +255,61 @@
     :config
     (global-set-key (kbd "C-c g l") 'git-link))
 
+;; TODO do not start anything in this section if in Gnome
+
+(use-package exwm
+  :config
+  (require 'exwm-config)
+  (exwm-config-default)
+
+  (defun fhd/exwm-input-line-mode ()
+    "Set exwm window to line-mode and show mode line"
+    (call-interactively #'exwm-input-grab-keyboard)
+    ;; (exwm-layout-show-mode-line)
+    )
+
+  (defun fhd/exwm-input-char-mode ()
+    "Set exwm window to char-mode and hide mode line"
+    (call-interactively #'exwm-input-release-keyboard)
+    ;; (exwm-layout-hide-mode-line)
+    )
+
+  (defun fhd/exwm-input-toggle-mode ()
+    "Toggle between line- and char-mode"
+    (interactive)
+    (with-current-buffer (window-buffer)
+      (when (eq major-mode 'exwm-mode)
+        (if (equal (second (second mode-line-process)) "line")
+            (progn
+              (fhd/exwm-input-char-mode)
+              (message "Input mode on"))
+          (progn
+            (fhd/exwm-input-line-mode)
+            (message "Line mode on"))))))
+
+  (defun fhd/toggle-exwm-input-line-mode-passthrough ()
+    "Toggle line mode pass through. Really probably dont' need to toggle this much. Keep in first form."
+    (interactive)
+    (if exwm-input-line-mode-passthrough
+        (progn
+          (setq exwm-input-line-mode-passthrough nil)
+          (message "App receives all the keys now (with some simulation)"))
+      (progn
+        (setq exwm-input-line-mode-passthrough t)
+        (message "emacs receives all the keys now")))
+    (force-mode-line-update))
+
+  (exwm-input-set-key (kbd "s-w") 'fhd/exwm-input-toggle-mode)
+  ;; (exwm-input-set-key (kbd "s-p") 'fhd/toggle-exwm-input-line-mode-passthrough)
+
+  )
+
+;; TODO I think I can (should) delete the "wm" buffer
+(defun wm-xmodmap()
+  (call-process "xmodmap" nil (get-buffer-create "wm") nil
+                (expand-file-name "~/.config/xmodmap")))
+(wm-xmodmap)
+
 (use-package restart-emacs)
 (use-package htmlize)
 (use-package wgrep)
@@ -446,7 +501,7 @@
   :config
   (dashboard-setup-startup-hook)
   ;; Custom widget
-  ;; Ideas: weather, widget dedicated to each of my projects, news,
+  ;; Ideas: weather, widget dedicated to each of my projects, news
   (defun dashboard-insert-custom (list-size)
     (insert "Custom text"))
   (add-to-list 'dashboard-item-generators '(custom . dashboard-insert-custom))
@@ -633,12 +688,12 @@
   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
 
 ;; Idk what this does
-(use-package tern
-   :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-   :config
-     (use-package company-tern
-        :ensure t
-        :init (add-to-list 'company-backends 'company-tern)))
+;; (use-package tern
+;;    :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+;;    :config
+;;      (use-package company-tern
+;;         :ensure t
+;;         :init (add-to-list 'company-backends 'company-tern)))
 
 (use-package js2-refactor
   :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
@@ -742,7 +797,7 @@
 
   :bind (:map cider-mode-map
          ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
-         ("C-c C-p"     . cider-eval-print-last-sexp))
+         ("C-c C-p"     . cider-pprint-eval-last-sexp-to-comment))
         (:map cider-repl-mode-map
          ("C-c C-l"     . cider-repl-clear-buffer))
 

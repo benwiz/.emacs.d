@@ -295,6 +295,65 @@
     (global-set-key (kbd "C-c g l") 'git-link))
 
  #+END_SRC
+** EXWM
+#+BEGIN_SRC emacs-lisp
+  ;; TODO do not start anything in this section if in Gnome
+
+  (use-package exwm
+    :config
+    (require 'exwm-config)
+    (exwm-config-default)
+
+    ;; TODO what I really need to do is simulation keymaps for every application (mainly firefox)
+
+    (defun fhd/exwm-input-line-mode ()
+      "Set exwm window to line-mode and show mode line"
+      (call-interactively #'exwm-input-grab-keyboard)
+      ;; (exwm-layout-show-mode-line)
+      )
+
+    (defun fhd/exwm-input-char-mode ()
+      "Set exwm window to char-mode and hide mode line"
+      (call-interactively #'exwm-input-release-keyboard)
+      ;; (exwm-layout-hide-mode-line)
+      )
+
+    (defun fhd/exwm-input-toggle-mode ()
+      "Toggle between line- and char-mode"
+      (interactive)
+      (with-current-buffer (window-buffer)
+        (when (eq major-mode 'exwm-mode)
+          (if (equal (second (second mode-line-process)) "line")
+              (progn
+                (fhd/exwm-input-char-mode)
+                (message "Input mode on"))
+            (progn
+              (fhd/exwm-input-line-mode)
+              (message "Line mode on"))))))
+
+    (defun fhd/toggle-exwm-input-line-mode-passthrough ()
+      "Toggle line mode pass through. Really probably dont' need to toggle this much. Keep in first form."
+      (interactive)
+      (if exwm-input-line-mode-passthrough
+          (progn
+            (setq exwm-input-line-mode-passthrough nil)
+            (message "App receives all the keys now (with some simulation)"))
+        (progn
+          (setq exwm-input-line-mode-passthrough t)
+          (message "emacs receives all the keys now")))
+      (force-mode-line-update))
+
+    (exwm-input-set-key (kbd "s-w") 'fhd/exwm-input-toggle-mode) ;; NOTE some keybindings just don't work (like s-i or s-p)
+    ;; (exwm-input-set-key (kbd "s-p") 'fhd/toggle-exwm-input-line-mode-passthrough) ;; but s-p does work here
+
+    )
+
+  ;; TODO I think I can (should) delete the "wm" buffer
+  (defun wm-xmodmap()
+    (call-process "xmodmap" nil (get-buffer-create "wm") nil
+                  (expand-file-name "~/.config/xmodmap")))
+  (wm-xmodmap)
+#+END_SRC
 ** External Packages
 #+BEGIN_SRC emacs-lisp
   (use-package restart-emacs)
@@ -672,39 +731,39 @@
 #+END_SRC
 ** JavaScript
 #+BEGIN_SRC emacs-lisp
-(use-package rjsx-mode
-  :init
-  (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
-  (setq js-basic-indent 2)
-  (setq-default js2-basic-indent 2
-                js2-basic-offset 2
-                js2-auto-indent-p t
-                js2-cleanup-whitespace t
-                js2-enter-indents-newline t
-                js2-indent-on-enter-key t
-                js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
+  (use-package rjsx-mode
+    :init
+    (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+    (setq js-basic-indent 2)
+    (setq-default js2-basic-indent 2
+                  js2-basic-offset 2
+                  js2-auto-indent-p t
+                  js2-cleanup-whitespace t
+                  js2-enter-indents-newline t
+                  js2-indent-on-enter-key t
+                  js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
 
-  (add-hook 'rjsx-mode-hook
-            (lambda ()
-              (flycheck-select-checker "javascript-eslint")
-              (electric-pair-mode 1)))
+    (add-hook 'rjsx-mode-hook
+              (lambda ()
+                (flycheck-select-checker "javascript-eslint")
+                (electric-pair-mode 1)))
 
-  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+    (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
 
-;; Idk what this does
-(use-package tern
-   :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-   :config
-     (use-package company-tern
-        :ensure t
-        :init (add-to-list 'company-backends 'company-tern)))
+  ;; Idk what this does
+  ;; (use-package tern
+  ;;    :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+  ;;    :config
+  ;;      (use-package company-tern
+  ;;         :ensure t
+  ;;         :init (add-to-list 'company-backends 'company-tern)))
 
-(use-package js2-refactor
-  :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
-  :config (js2r-add-keybindings-with-prefix "C-c ."))
+  (use-package js2-refactor
+    :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
+    :config (js2r-add-keybindings-with-prefix "C-c ."))
 
-;; Not sure what this does
-(provide 'init-javascript)
+  ;; Not sure what this does
+  (provide 'init-javascript)
 
 #+END_SRC
 ** Rust
@@ -810,7 +869,7 @@
 
     :bind (:map cider-mode-map
            ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
-           ("C-c C-p"     . cider-eval-print-last-sexp))
+           ("C-c C-p"     . cider-pprint-eval-last-sexp-to-comment))
           (:map cider-repl-mode-map
            ("C-c C-l"     . cider-repl-clear-buffer))
 
