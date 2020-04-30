@@ -188,17 +188,19 @@
   :init
   (load-env-vars "~/.emacs.d/emacs.env"))
 
+(require 'misc)
+
 (global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "M-l"))
 (global-unset-key (kbd "M-u"))
 
-(require 'misc)
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 (global-set-key (kbd "C-c o") 'other-frame)
 (global-set-key (kbd "C-M-z") 'zap-up-to-char)
 (global-set-key (kbd "C-c n") 'narrow-to-defun)
 (global-set-key (kbd "C-c w") 'widen)
+(global-set-key (kbd "C-l") 'recenter)
 (use-package dired
   :ensure nil
   :config
@@ -226,6 +228,8 @@
     :defer t
     :load-path "~/code/personal/bela-mode.el"
     :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
+(use-package redshift
+  :load-path "~/code/emacs-redshift")
 
 (use-package magit
    :config
@@ -262,6 +266,19 @@
   (require 'exwm-config)
   (exwm-config-default)
 
+  ;; TODO what I really need to do is simulation keymaps for every application (mainly firefox)
+  ;; (setq exwm-input-simulation-keys
+  ;;   '(([?\C-b] . [left])
+  ;;     ([?\C-f] . [right])
+  ;;     ([?\C-p] . [up])
+  ;;     ([?\C-n] . [down])
+  ;;     ([?\C-a] . [home])
+  ;;     ([?\C-e] . [end])
+  ;;     ([?\M-v] . [prior])
+  ;;     ([?\C-v] . [next])
+  ;;     ([?\C-d] . [delete])
+  ;;     ([?\C-k] . [S-end delete])))
+
   (defun fhd/exwm-input-line-mode ()
     "Set exwm window to line-mode and show mode line"
     (call-interactively #'exwm-input-grab-keyboard)
@@ -297,10 +314,12 @@
       (progn
         (setq exwm-input-line-mode-passthrough t)
         (message "emacs receives all the keys now")))
-    (force-mode-line-update))
+    ;; Enable this to update modeline if I add a flag for passthrough, otherwise don't need to force update modeline
+    ;; (force-mode-line-update)
+    )
 
-  (exwm-input-set-key (kbd "s-w") 'fhd/exwm-input-toggle-mode)
-  ;; (exwm-input-set-key (kbd "s-p") 'fhd/toggle-exwm-input-line-mode-passthrough)
+  (exwm-input-set-key (kbd "s-w") 'fhd/exwm-input-toggle-mode) ;; NOTE some keybindings just don't work (like s-i or s-p)
+  ;; (exwm-input-set-key (kbd "s-p") 'fhd/toggle-exwm-input-line-mode-passthrough) ;; but s-p does work here
 
   )
 
@@ -387,6 +406,46 @@
 (use-package counsel-projectile
   :config
   (counsel-projectile-mode))
+
+(use-package term
+  :config
+  ;; NOTE: After changing the following regexp, call `term-mode' in the term
+  ;; buffer for this expression to be effective; because the term buffers
+  ;; make a local copy of this var each time a new term buffer is opened or
+  ;; `term-mode' is called again.
+  (setq term-prompt-regexp ".*:.*>.*? "))
+
+(use-package multi-term
+  :defer t
+  :config
+  (setq term-bind-key-alist
+        '(("C-c C-c" . term-interrupt-subjob)            ; default
+          ("C-c C-e" . term-send-esc)                    ; default
+          ;; ("C-c C-j" . term-line-mode) ;; TODO can I use the same command as EXWM?
+          ;; ("C-c C-k" . term-char-mode) ;; TODO can I use the same command as EXWM?
+          ("C-a"     . term-send-raw) ; term-bol
+          ("C-b"     . term-send-left)
+          ("C-f"     . term-send-right)
+          ("C-p"     . previous-line)                    ; default
+          ("C-n"     . next-line)                        ; default
+          ("C-s"     . isearch-forward)                  ; default
+          ("C-r"     . isearch-backward)                 ; default
+          ("C-m"     . term-send-return)                 ; default
+          ("C-y"     . term-paste)                       ; default
+          ("M-f"     . term-send-forward-word)           ; default
+          ("M-b"     . term-send-backward-word)          ; default
+          ("M-o"     . term-send-backspace)              ; default
+          ("M-p"     . term-send-up)                     ; default
+          ("M-n"     . term-send-down)                   ; default
+          ;; ("M-M"     . term-send-forward-kill-word)   ; default
+          ("M-d"     . term-send-forward-kill-word)
+          ;; ("M-N"     . term-send-backward-kill-word)  ; default
+          ("M-DEL"   . term-send-backward-kill-word)
+          ("M-r"     . term-send-reverse-search-history) ; default
+          ("M-,"     . term-send-raw)                    ; default
+          ("M-."     . comint-dynamic-complete)))        ; default
+
+  (setq multi-term-buffer-name "term"))
 
 (use-package highlight-indent-guides
   :defer t
