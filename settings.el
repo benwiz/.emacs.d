@@ -119,15 +119,14 @@
 ;; Underline/highlight selected line
 (global-hl-line-mode 1)
 
-;; Light theme. I found nothing I liked, so I am just using the default theme.
-;; Disable spolsky to use it.
-;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way.
+;; Light theme. I like the defaul theme more than any other light theme I found.
+;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.
 (set-face-attribute 'hl-line nil :background "#e3ffe3")
 (set-face-attribute 'region nil :background "#EAEAEA")
 (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-;; (set-face-attribute 'font-lock-constant-face nil)
-;; (set-face-attribute 'font-lock-type-face nil)
+(set-face-attribute 'font-lock-constant-face nil :foreground "#255814") ;; Forest Green is default; DarkGreen is good; hex is darker forest green
+(set-face-attribute 'font-lock-type-face nil :foreground "#007070") ;; DarkCyan (#008b8b) is default, hex is darker version
 (set-face-attribute 'trailing-whitespace nil :background "#e0eeff")
 
 ;; Dark theme
@@ -535,6 +534,9 @@
     (mark-whole-buffer)
     (elfeed-search-untag-all-unread)))
 
+(use-package restclient
+  :mode ("\\.http\\'" . restclient-mode))
+
 (use-package page-break-lines)
 (use-package dashboard
   ;; https://github.com/emacs-dashboard/emacs-dashboard ;
@@ -822,10 +824,10 @@
   (add-hook 'go-mode-hook 'highlight-word-hook)
   (add-to-list 'load-path (concat (getenv "GOPATH")
                                   "/src/github.com/golang/lint/misc/emacs"))
-  (require 'golint)
-  (add-hook 'go-mode-hook 'my-go-mode-hook)
-  (add-hook 'go-mode-hook 'go-doc)
-  (add-hook 'go-mode-hook 'setup-go-mode-compile)
+  ;; (require 'golint)
+  ;; (add-hook 'go-mode-hook 'my-go-mode-hook)
+  ;; (add-hook 'go-mode-hook 'go-doc)
+  ;; (add-hook 'go-mode-hook 'setup-go-mode-compile)
 
   (require 'go-guru)
   (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
