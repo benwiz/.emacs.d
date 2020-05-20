@@ -4,6 +4,7 @@
 (setq mc/cmds-to-run-for-all
       '(
         backward-sexp
+        backward-up-list
         cargo-process-run
         cljr-raise-sexp
         cljr-slash
@@ -46,6 +47,7 @@
         beginning-of-buffer
         cider-eval-last-sexp
         cider-load-buffer
+        counsel-find-file
         end-of-buffer
         mouse-set-region
         paredit-close-parenthesis-and-newline

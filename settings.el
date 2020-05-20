@@ -48,7 +48,7 @@
  column-number-mode t                             ; Display column numbers
  line-spacing 1                                   ; Add N pixel below each line
  )
-(cd "~/")                                         ; Move to the user directory
+(cd "~/code/")                                    ; Move to the user directory
 (delete-selection-mode 1)                         ; Replace region when inserting text
 (display-time-mode 1)                             ; Enable time in the mode-line
 (fringe-mode 0)                                   ; Disable fringes
@@ -65,9 +65,10 @@
 ;(if (eq window-system 'ns)
 ;  (add-to-list 'default-frame-alist '(maximized .))
 ;  (add-to-list 'default-frame-alist '(fullscreen .)))
-(set-frame-parameter nil 'fullscreen 'fullboth)
+;; (set-frame-parameter nil 'fullscreen 'fullboth)
 
 (add-hook 'focus-out-hook #'garbage-collect)
+(display-battery-mode 1)
 
 (require 'package)
 
@@ -126,7 +127,7 @@
 (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
 (set-face-attribute 'font-lock-constant-face nil :foreground "#255814") ;; Forest Green is default; DarkGreen is good; hex is darker forest green
-(set-face-attribute 'font-lock-type-face nil :foreground "#007070") ;; DarkCyan (#008b8b) is default, hex is darker version
+(set-face-attribute 'font-lock-type-face nil :foreground "#006060") ;; DarkCyan (#008b8b) is default, hex is darker version
 (set-face-attribute 'trailing-whitespace nil :background "#e0eeff")
 
 ;; Dark theme
@@ -192,6 +193,7 @@
 (global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "M-l"))
 (global-unset-key (kbd "M-u"))
+(global-unset-key (kbd "C-i"))
 
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
@@ -231,104 +233,122 @@
   :load-path "~/code/emacs-redshift")
 
 (use-package magit
-   :config
-   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
-
-(use-package git-gutter
-   :diminish git-gutter-mode
-   :init
-   (global-git-gutter-mode)
-   (progn
-     (setq git-gutter:separator-sign " "
-           git-gutter:lighter " GG"))
-   :config
-   (progn
-     (set-face-background 'git-gutter:deleted "#990A1B")
-     (set-face-foreground 'git-gutter:deleted "#990A1B")
-     (set-face-background 'git-gutter:modified "#00736F")
-     (set-face-foreground 'git-gutter:modified "#00736F")
-     (set-face-background 'git-gutter:added "#546E00")
-     (set-face-foreground 'git-gutter:added "#546E00"))
-    :bind (("C-x p" . git-gutter:previous-hunk)
-           ("C-x n" . git-gutter:next-hunk)
-           ("C-x v =" . git-gutter:popup-hunk)
-           ("C-x v r" . git-gutter:revert-hunk)))
-
-  (use-package git-link
-    :config
-    (global-set-key (kbd "C-c g l") 'git-link))
-
-;; TODO do not start anything in this section if in Gnome
-
-(use-package exwm
   :config
-  (require 'exwm-config)
-  (exwm-config-default)
-
-  ;; TODO what I really need to do is simulation keymaps for every application (mainly firefox)
-  ;; (setq exwm-input-simulation-keys
-  ;;   '(([?\C-b] . [left])
-  ;;     ([?\C-f] . [right])
-  ;;     ([?\C-p] . [up])
-  ;;     ([?\C-n] . [down])
-  ;;     ([?\C-a] . [home])
-  ;;     ([?\C-e] . [end])
-  ;;     ([?\M-v] . [prior])
-  ;;     ([?\C-v] . [next])
-  ;;     ([?\C-d] . [delete])
-  ;;     ([?\C-k] . [S-end delete])))
-
-  (defun fhd/exwm-input-line-mode ()
-    "Set exwm window to line-mode and show mode line"
-    (call-interactively #'exwm-input-grab-keyboard)
-    ;; (exwm-layout-show-mode-line)
-    )
-
-  (defun fhd/exwm-input-char-mode ()
-    "Set exwm window to char-mode and hide mode line"
-    (call-interactively #'exwm-input-release-keyboard)
-    ;; (exwm-layout-hide-mode-line)
-    )
-
-  (defun fhd/exwm-input-toggle-mode ()
-    "Toggle between line- and char-mode"
-    (interactive)
-    (with-current-buffer (window-buffer)
-      (when (eq major-mode 'exwm-mode)
-        (if (equal (second (second mode-line-process)) "line")
-            (progn
-              (fhd/exwm-input-char-mode)
-              (message "Input mode on"))
-          (progn
-            (fhd/exwm-input-line-mode)
-            (message "Line mode on"))))))
-
-  (defun fhd/toggle-exwm-input-line-mode-passthrough ()
-    "Toggle line mode pass through. Really probably dont' need to toggle this much. Keep in first form."
-    (interactive)
-    (if exwm-input-line-mode-passthrough
-        (progn
-          (setq exwm-input-line-mode-passthrough nil)
-          (message "App receives all the keys now (with some simulation)"))
-      (progn
-        (setq exwm-input-line-mode-passthrough t)
-        (message "emacs receives all the keys now")))
-    ;; Enable this to update modeline if I add a flag for passthrough, otherwise don't need to force update modeline
-    ;; (force-mode-line-update)
-    )
-
-  (exwm-input-set-key (kbd "s-w") 'fhd/exwm-input-toggle-mode) ;; NOTE some keybindings just don't work (like s-i or s-p)
-  ;; (exwm-input-set-key (kbd "s-p") 'fhd/toggle-exwm-input-line-mode-passthrough) ;; but s-p does work here
-
-  ;; close wm buffer
-  ;; (kill-buffer "wm")
+  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   )
 
-;; TODO I think I can (should) delete the "wm" buffer
-(defun wm-xmodmap()
-  (call-process "xmodmap" nil (get-buffer-create "wm") nil
-                (expand-file-name "~/.config/xmodmap")))
-(wm-xmodmap)
+(use-package git-gutter
+  :diminish git-gutter-mode
+  :init
+  (global-git-gutter-mode)
+  (progn
+    (setq git-gutter:separator-sign " "
+          git-gutter:lighter " GG"))
+  :config
+  (progn
+    (set-face-background 'git-gutter:deleted "#990A1B")
+    (set-face-foreground 'git-gutter:deleted "#990A1B")
+    (set-face-background 'git-gutter:modified "#00736F")
+    (set-face-foreground 'git-gutter:modified "#00736F")
+    (set-face-background 'git-gutter:added "#546E00")
+    (set-face-foreground 'git-gutter:added "#546E00"))
+  :bind (("C-x p" . git-gutter:previous-hunk)
+         ("C-x n" . git-gutter:next-hunk)
+         ("C-x v =" . git-gutter:popup-hunk)
+         ("C-x v r" . git-gutter:revert-hunk)))
+
+(use-package git-link
+  :config
+  (global-set-key (kbd "C-c g l") 'git-link))
+
+;; ;; TODO do not start anything in this section if in Gnome
+
+;; (use-package exwm
+;;   :defer t
+;;   :config
+;;   (require 'exwm-config)
+;;   (exwm-config-default)
+
+;;   ;; TODO what I really need to do is simulation keymaps for every application (mainly firefox)
+;;   ;; (setq exwm-input-simulation-keys
+;;   ;;   '(([?\C-b] . [left])
+;;   ;;     ([?\C-f] . [right])
+;;   ;;     ([?\C-p] . [up])
+;;   ;;     ([?\C-n] . [down])
+;;   ;;     ([?\C-a] . [home])
+;;   ;;     ([?\C-e] . [end])
+;;   ;;     ([?\M-v] . [prior])
+;;   ;;     ([?\C-v] . [next])
+;;   ;;     ([?\C-d] . [delete])
+;;   ;;     ([?\C-k] . [S-end delete])))
+
+;;   (defun fhd/exwm-input-line-mode ()
+;;     "Set exwm window to line-mode and show mode line"
+;;     (call-interactively #'exwm-input-grab-keyboard)
+;;     ;; (exwm-layout-show-mode-line)
+;;     )
+
+;;   (defun fhd/exwm-input-char-mode ()
+;;     "Set exwm window to char-mode and hide mode line"
+;;     (call-interactively #'exwm-input-release-keyboard)
+;;     ;; (exwm-layout-hide-mode-line)
+;;     )
+
+;;   (defun fhd/exwm-input-toggle-mode ()
+;;     "Toggle between line- and char-mode"
+;;     (interactive)
+;;     (with-current-buffer (window-buffer)
+;;       (when (eq major-mode 'exwm-mode)
+;;         (if (equal (second (second mode-line-process)) "line")
+;;             (progn
+;;               (fhd/exwm-input-char-mode)
+;;               (message "Input mode on"))
+;;           (progn
+;;             (fhd/exwm-input-line-mode)
+;;             (message "Line mode on"))))))
+
+;;   (defun fhd/toggle-exwm-input-line-mode-passthrough ()
+;;     "Toggle line mode pass through. Really probably dont' need to toggle this much. Keep in first form."
+;;     (interactive)
+;;     (if exwm-input-line-mode-passthrough
+;;         (progn
+;;           (setq exwm-input-line-mode-passthrough nil)
+;;           (message "App receives all the keys now (with some simulation)"))
+;;       (progn
+;;         (setq exwm-input-line-mode-passthrough t)
+;;         (message "emacs receives all the keys now")))
+;;     ;; Enable this to update modeline if I add a flag for passthrough, otherwise don't need to force update modeline
+;;     ;; (force-mode-line-update)
+;;     )
+
+;;   (exwm-input-set-key (kbd "s-w") 'fhd/exwm-input-toggle-mode) ;; NOTE some keybindings just don't work (like s-i or s-p)
+;;   ;; (exwm-input-set-key (kbd "s-p") 'fhd/toggle-exwm-input-line-mode-passthrough) ;; but s-p does work here
+
+;;   ;; close wm buffer
+;;   ;; (kill-buffer "wm")
+
+;;   (require 'exwm-randr)
+;;   (setq exwm-randr-workspace-output-plist '(0 "VGA1"))
+;;   (add-hook 'exwm-randr-screen-change-hook
+;;             (lambda ()
+;;               (start-process-shell-command
+;;                "xrandr" nil "xrandr --output VGA1 --left-of LVDS1 --auto")))
+;;   (exwm-randr-enable)
+;;   )
+
+;; ;; TODO I think I can (should) delete the "wm" buffer
+;; (defun wm-xmodmap()
+;;   (call-process "xmodmap" nil (get-buffer-create "wm") nil
+;;                 (expand-file-name "~/.config/xmodmap")))
+;; (wm-xmodmap)
+
+;; (use-package i3
+;;   :load-path "~/.emacs.d/packages/i3-emacs")
+;; (use-package i3-integration
+;;   :load-path "~/.emacs.d/packages/i3-emacs"
+;;   :config
+;;   ;; (i3-one-window-per-frame-mode-on)
+;;   )
 
 (use-package restart-emacs)
 (use-package htmlize)
@@ -396,7 +416,8 @@
   (global-set-key (kbd "<f2> j") 'counsel-set-variable)
   (global-set-key (kbd "C-c c") 'counsel-compile)
   ;; (global-set-key (kbd "C-c g") 'counsel-git)
-  (global-set-key (kbd "C-c j") 'counsel-git-grep))
+  (global-set-key (kbd "C-i") 'counsel-git-grep)
+  (global-set-key (kbd "C-c a") 'counsel-linux-app))
 
 (use-package projectile
   :config
@@ -887,6 +908,7 @@
   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (add-to-list 'exec-path "/usr/local/bin/")
+(add-to-list 'exec-path "/home/benwiz/bin/")
 (use-package clojure-snippets)
 (use-package flycheck-clj-kondo)
 
@@ -966,6 +988,7 @@
   :config
   (use-package slamhound)
   (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
+  (setq exec-path (append exec-path '("/home/benwiz/bin")))
   ;; (setq exec-path (append '("/Users/benwiz/.nvm/versions/node/v12.16.1/bin") exec-path))
   (setq exec-path (append '("/Users/benwiz/.yarn/bin") exec-path))
   (setq cider-cljs-repl-types '((nashorn "(do (require 'cljs.repl.nashorn) (cider.piggieback/cljs-repl (cljs.repl.nashorn/repl-env)))" cider-check-nashorn-requirements)
