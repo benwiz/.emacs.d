@@ -220,6 +220,9 @@
 (require 'zone)
 (zone-when-idle 600)
 
+;; No lines in DocView (actually i think it is off by default, the number is from something else)
+;; (add-hook 'doc-view-minor-mode-hook (lambda () (linum-mode 0)))
+
 (if *is-a-mac*
   (use-package bela-mode
     :defer t
@@ -710,52 +713,24 @@
 
 (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
 
-(defun paredit-delete-indentation (&optional arg)
-  "Handle joining lines that end in a comment."
-  (interactive "*P")
-  (let (comt)
-    (save-excursion
-      (move-beginning-of-line (if arg 1 0))
-      (when (skip-syntax-forward "^<" (point-at-eol))
-        (setq comt (delete-and-extract-region (point) (point-at-eol)))))
-    (delete-indentation arg)
-    (when comt
-      (save-excursion
-        (move-end-of-line 1)
-        (insert " ")
-        (insert comt)))))
-
-(defun paredit-remove-newlines ()
-  "Removes extras whitespace and newlines from the current point
-   to the next parenthesis."
-  (interactive)
-  (let ((up-to (point))
-        (from (re-search-forward "[])}]")))
-    (backward-char)
-    (while (> (point) up-to)
-      (paredit-delete-indentation))))
-
-(use-package paredit
-  ;; TODO When killing a newline delete all whitespace until next character (maybe just bring in Smartparens kill command)
-  :bind (("M-^" . paredit-delete-indentation)
-         ("C-^" . paredit-remove-newlines) ;; basically clean up a multi-line sexp
-         ("C-<return>" . paredit-close-parenthesis-and-newline))
-  :init
-  (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-  (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'cider-repl-mode-hook 'paredit-mode)
-  (add-hook 'slime-lisp-mode-hook 'paredit-mode)
-  (add-hook 'lisp-mode-hook 'paredit-mode))
-
-;; Like: sp-kill-sexp (to delete the whole symbol not just forward like C-M-k does)
-(defun kill-symbol ()
-  (interactive)
-  (backward-sexp) ;; TODO instead of backward-sexp, need to go to beginning of current symbol or go nowhere if already there
-  (kill-sexp))
-
-(global-set-key (kbd "M-k") 'kill-symbol)
 
 
+(setq load-path (append (list (expand-file-name
+                               "/usr/share/emacs/site-lisp")) load-path))
+(autoload 'LilyPond-mode "lilypond-mode" "LilyPond Editing Mode" t)
+
+(eval-after-load "LilyPond-mode-map"
+  (add-to-list 'auto-mode-alist '("\\.ly\\'" . LilyPond-mode))
+  (defun lilypond-compile ()
+    "Compile current file to PDF. The built in function
+       was using the /tmp dir and was just confusing."
+    (interactive)
+    (shell-command (concat "lilypond " (buffer-file-name))))
+  (define-key LilyPond-mode-map (kbd "C-c C-k") 'lilypond-compile)
+  (add-hook 'after-save-hook
+            (lambda ()
+              (when (eq major-mode 'LilyPond-mode)
+                (lilypond-compile)))))
 
 (use-package rjsx-mode
   :init
@@ -906,6 +881,51 @@
 
 (use-package flycheck-rust
   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+
+(defun paredit-delete-indentation (&optional arg)
+  "Handle joining lines that end in a comment."
+  (interactive "*P")
+  (let (comt)
+    (save-excursion
+      (move-beginning-of-line (if arg 1 0))
+      (when (skip-syntax-forward "^<" (point-at-eol))
+        (setq comt (delete-and-extract-region (point) (point-at-eol)))))
+    (delete-indentation arg)
+    (when comt
+      (save-excursion
+        (move-end-of-line 1)
+        (insert " ")
+        (insert comt)))))
+
+(defun paredit-remove-newlines ()
+  "Removes extras whitespace and newlines from the current point
+   to the next parenthesis."
+  (interactive)
+  (let ((up-to (point))
+        (from (re-search-forward "[])}]")))
+    (backward-char)
+    (while (> (point) up-to)
+      (paredit-delete-indentation))))
+
+(use-package paredit
+  ;; TODO When killing a newline delete all whitespace until next character (maybe just bring in Smartparens kill command)
+  :bind (("M-^" . paredit-delete-indentation)
+         ("C-^" . paredit-remove-newlines) ;; basically clean up a multi-line sexp
+         ("C-<return>" . paredit-close-parenthesis-and-newline))
+  :init
+  (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+  (add-hook 'clojure-mode-hook 'paredit-mode)
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  (add-hook 'slime-lisp-mode-hook 'paredit-mode)
+  (add-hook 'lisp-mode-hook 'paredit-mode))
+
+;; Like: sp-kill-sexp (to delete the whole symbol not just forward like C-M-k does)
+(defun kill-symbol ()
+  (interactive)
+  (backward-sexp) ;; TODO instead of backward-sexp, need to go to beginning of current symbol or go nowhere if already there
+  (kill-sexp))
+
+(global-set-key (kbd "M-k") 'kill-symbol)
 
 (use-package slime-company
   :defer)

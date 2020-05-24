@@ -259,6 +259,9 @@
 
   (require 'zone)
   (zone-when-idle 600)
+
+  ;; No lines in DocView (actually i think it is off by default, the number is from something else)
+  ;; (add-hook 'doc-view-minor-mode-hook (lambda () (linum-mode 0)))
 #+END_SRC
 ** Local Packages
 #+BEGIN_SRC emacs-lisp
@@ -777,6 +780,26 @@ disabled for now
 #+END_SRC
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
+
+#+END_SRC
+** Lilypond
+#+BEGIN_SRC emacs-lisp
+  (setq load-path (append (list (expand-file-name "/usr/share/emacs/site-lisp")) load-path))
+  (autoload 'LilyPond-mode "lilypond-mode" "LilyPond Editing Mode" t)
+
+  (eval-after-load "LilyPond-mode-map"
+    (add-to-list 'auto-mode-alist '("\\.ly\\'" . LilyPond-mode))
+    (defun lilypond-compile ()
+      "Compile current file to PDF. The built in function
+         was using the /tmp dir and was just confusing."
+      (interactive)
+      (shell-command (concat "lilypond " (buffer-file-name))))
+    (define-key LilyPond-mode-map (kbd "C-c C-k") 'lilypond-compile)
+    (add-hook 'after-save-hook
+              (lambda ()
+                (when (eq major-mode 'LilyPond-mode)
+                  (lilypond-compile)))))
+
 
 #+END_SRC
 ** JavaScript
