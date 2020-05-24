@@ -715,22 +715,22 @@
 
 
 
-(setq load-path (append (list (expand-file-name
-                               "/usr/share/emacs/site-lisp")) load-path))
-(autoload 'LilyPond-mode "lilypond-mode" "LilyPond Editing Mode" t)
+;; TODO use use-package
+(setq load-path (append (list (expand-file-name "/usr/share/emacs/site-lisp")) load-path))
+;; (load 'LilyPond-mode "lilypond-mode" "LilyPond Editing Mode" t)
+(require 'lilypond-mode)
 
-(eval-after-load "LilyPond-mode-map"
-  (add-to-list 'auto-mode-alist '("\\.ly\\'" . LilyPond-mode))
-  (defun lilypond-compile ()
-    "Compile current file to PDF. The built in function
+(add-to-list 'auto-mode-alist '("\\.ly\\'" . LilyPond-mode))
+(defun lilypond-compile ()
+  "Compile current file to PDF. The built in function
        was using the /tmp dir and was just confusing."
-    (interactive)
-    (shell-command (concat "lilypond " (buffer-file-name))))
-  (define-key LilyPond-mode-map (kbd "C-c C-k") 'lilypond-compile)
-  (add-hook 'after-save-hook
-            (lambda ()
-              (when (eq major-mode 'LilyPond-mode)
-                (lilypond-compile)))))
+  (interactive)
+  (shell-command (concat "lilypond " (buffer-file-name))))
+(define-key LilyPond-mode-map (kbd "C-c C-k") 'lilypond-compile)
+(add-hook 'after-save-hook
+          (lambda ()
+            (when (eq major-mode 'LilyPond-mode)
+              (lilypond-compile))))
 
 (use-package rjsx-mode
   :init
