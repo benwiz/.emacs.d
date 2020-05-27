@@ -723,14 +723,16 @@
 (add-to-list 'auto-mode-alist '("\\.ly\\'" . LilyPond-mode))
 (defun lilypond-compile ()
   "Compile current file to PDF. The built in function
-       was using the /tmp dir and was just confusing."
+       was using the /tmp dir and was just confusing.
+
+       Actually, just use C-c C-l LilyPond-command-lilypond."
   (interactive)
   (shell-command (concat "lilypond " (buffer-file-name))))
 (define-key LilyPond-mode-map (kbd "C-c C-k") 'lilypond-compile)
-(add-hook 'after-save-hook
-          (lambda ()
-            (when (eq major-mode 'LilyPond-mode)
-              (lilypond-compile))))
+;; (add-hook 'after-save-hook
+;;           (lambda ()
+;;             (when (eq major-mode 'LilyPond-mode)
+;;               (lilypond-compile))))
 
 (use-package rjsx-mode
   :init
