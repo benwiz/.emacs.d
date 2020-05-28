@@ -218,7 +218,7 @@
   (add-hook 'dired-mode-hook 'dired-omit-mode))
 
 (require 'zone)
-(zone-when-idle 600)
+;; (zone-when-idle 600)
 
 ;; No lines in DocView (actually i think it is off by default, the number is from something else)
 ;; (add-hook 'doc-view-minor-mode-hook (lambda () (linum-mode 0)))
