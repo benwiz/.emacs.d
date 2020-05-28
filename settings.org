@@ -274,8 +274,7 @@
       :defer t
       :load-path "~/code/personal/bela-mode.el"
       :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
-  (use-package redshift
-    :load-path "~/code/emacs-redshift")
+
 #+END_SRC
 ** Git
  #+BEGIN_SRC emacs-lisp
