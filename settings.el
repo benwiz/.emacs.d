@@ -232,8 +232,6 @@
     :defer t
     :load-path "~/code/personal/bela-mode.el"
     :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
-(use-package redshift
-  :load-path "~/code/emacs-redshift")
 
 (use-package magit
   :config
