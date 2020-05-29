@@ -674,6 +674,8 @@ disabled for now
 
           ("blog"
            :components ("org-blog"))))
+
+  (define-key org-mode-map (kbd "M-m") 'org-todo)
 #+END_SRC
 * Programming
 ** All
@@ -1022,7 +1024,7 @@ disabled for now
   (load (expand-file-name "~/quicklisp/slime-helper.el"))
   (setq inferior-lisp-program "sbcl")
   (setq slime-lisp-implementations '((sbcl ("sbcl")))
-      slime-default-lisp 'sbcl
+      slime-default-lisp 'sbclp
       slime-contribs '(slime-fancy))
   (slime-setup '(slime-fancy slime-company slime-cl-indent)))
 #+END_SRC

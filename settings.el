@@ -615,6 +615,8 @@
         ("blog"
          :components ("org-blog"))))
 
+(define-key org-mode-map (kbd "M-m") 'org-todo)
+
 (use-package ws-butler
     :hook (prog-mode . ws-butler-mode))
 
@@ -933,10 +935,10 @@
 (use-package slime
   :demand
   :config
-  (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+  (load (expand-file-name "~/quicklisp/slime-helper.el"))
   (setq inferior-lisp-program "sbcl")
   (setq slime-lisp-implementations '((sbcl ("sbcl")))
-      slime-default-lisp 'sbcl
+      slime-default-lisp 'sbclp
       slime-contribs '(slime-fancy))
   (slime-setup '(slime-fancy slime-company slime-cl-indent)))
 
