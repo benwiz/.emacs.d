@@ -3,9 +3,6 @@
 *** how to open dashboard?
 *** links to main files in each project (inc. TODO)
 *** links to applications when running in EXWM
-** EXWM
-*** Only enable when booting into EXWM
-*** Auto open certain applications like system monitor and firefox
 ** Check out winner mode https://www.emacswiki.org/emacs/WinnerMode
 ** paredit: my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)
 ** paredit: paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.
@@ -19,7 +16,6 @@
 ** add feature to spotify.el (and make pr) for liking a song
 ** prepend current project to each item in "Switch to Buffer" selector
 ** better jump-to-char-in-line, maybe just write it myself
-** Implement a zone program that performs game of life (the same char and color should replicated it would be interesting to see if one dominates)
 * Operating System
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -1015,18 +1011,24 @@ disabled for now
 #+END_SRC
 ** Common Lisp
 #+BEGIN_SRC emacs-lisp
-(use-package slime-company
-  :defer)
+  (use-package slime-company
+    :defer t)
 
-(use-package slime
-  :demand
-  :config
-  (load (expand-file-name "~/quicklisp/slime-helper.el"))
-  (setq inferior-lisp-program "sbcl")
-  (setq slime-lisp-implementations '((sbcl ("sbcl")))
-      slime-default-lisp 'sbclp
-      slime-contribs '(slime-fancy))
-  (slime-setup '(slime-fancy slime-company slime-cl-indent)))
+  ;; TODO full frame repl
+  ;; TODO switch from repl back to code with C-c C-z
+  (use-package slime
+    :defer t
+    :config
+    (load (expand-file-name "~/quicklisp/slime-helper.el"))
+    (setq inferior-lisp-program "sbcl")
+    (setq slime-lisp-implementations '((sbcl ("sbcl")))
+        slime-default-lisp 'sbclp
+        slime-contribs '(slime-fancy))
+    (slime-setup '(slime-fancy slime-company slime-cl-indent))
+    (defun slime-connect-localhost-4005 ()
+          (interactive)
+          (slime-connect "localhost" "4005"))
+    (define-key slime-mode-map (kbd "C-c C-x j j") 'slime-connect-localhost-4005))
 #+END_SRC
 ** Clojure
 #+BEGIN_SRC emacs-lisp

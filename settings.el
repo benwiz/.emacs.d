@@ -930,17 +930,22 @@
 (global-set-key (kbd "M-k") 'kill-symbol)
 
 (use-package slime-company
-  :defer)
+  :defer t)
 
 (use-package slime
-  :demand
+  :defer t
   :config
   (load (expand-file-name "~/quicklisp/slime-helper.el"))
   (setq inferior-lisp-program "sbcl")
   (setq slime-lisp-implementations '((sbcl ("sbcl")))
       slime-default-lisp 'sbclp
       slime-contribs '(slime-fancy))
-  (slime-setup '(slime-fancy slime-company slime-cl-indent)))
+  (slime-setup '(slime-fancy slime-company slime-cl-indent))
+  (defun slime-connect-localhost-4005 ()
+        (message "hey")
+        ;; (slime-connect "localhost" "4005")
+        )
+  (define-key slime-mode-map (kbd "C-c C-x j j") 'slime-connect-localhost-4005))
 
 (add-to-list 'exec-path "/usr/local/bin/")
 (add-to-list 'exec-path "/home/benwiz/bin/")
