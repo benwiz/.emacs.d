@@ -615,7 +615,7 @@
         ("blog"
          :components ("org-blog"))))
 
-(define-key org-mode-map (kbd "M-m") 'org-todo)
+(define-key org-mode-map (kbd "M-n") 'org-todo)
 
 (use-package ws-butler
     :hook (prog-mode . ws-butler-mode))
@@ -717,9 +717,7 @@
 
 ;; TODO use use-package
 (setq load-path (append (list (expand-file-name "/usr/share/emacs/site-lisp")) load-path))
-;; (load 'LilyPond-mode "lilypond-mode" "LilyPond Editing Mode" t)
 (require 'lilypond-mode)
-
 (add-to-list 'auto-mode-alist '("\\.ly\\'" . LilyPond-mode))
 (defun lilypond-compile ()
   "Compile current file to PDF. The built in function
@@ -932,6 +930,8 @@
 (use-package slime-company
   :defer t)
 
+;; TODO full frame repl
+;; TODO switch from repl back to code with C-c C-z
 (use-package slime
   :defer t
   :config
@@ -942,10 +942,10 @@
       slime-contribs '(slime-fancy))
   (slime-setup '(slime-fancy slime-company slime-cl-indent))
   (defun slime-connect-localhost-4005 ()
-        (message "hey")
-        ;; (slime-connect "localhost" "4005")
-        )
-  (define-key slime-mode-map (kbd "C-c C-x j j") 'slime-connect-localhost-4005))
+        (interactive)
+        (slime-connect "localhost" "4005"))
+  (define-key slime-mode-map (kbd "C-c C-x j j") 'slime-connect-localhost-4005)
+  (define-key slime-mode-map (kbd "C-c C-e") 'slime-eval-last-expression))
 
 (add-to-list 'exec-path "/usr/local/bin/")
 (add-to-list 'exec-path "/home/benwiz/bin/")
