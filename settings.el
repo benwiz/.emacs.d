@@ -262,91 +262,83 @@
   :config
   (global-set-key (kbd "C-c g l") 'git-link))
 
-(use-package exwm
-  :defer t
-  :config
-  (require 'exwm-config)
-  (exwm-config-default)
-
-  ;; TODO what I really need to do is simulation keymaps for every application (mainly firefox)
-  ;; (setq exwm-input-simulation-keys
-  ;;   '(([?\C-b] . [left])
-  ;;     ([?\C-f] . [right])
-  ;;     ([?\C-p] . [up])
-  ;;     ([?\C-n] . [down])
-  ;;     ([?\C-a] . [home])
-  ;;     ([?\C-e] . [end])
-  ;;     ([?\M-v] . [prior])
-  ;;     ([?\C-v] . [next])
-  ;;     ([?\C-d] . [delete])
-  ;;     ([?\C-k] . [S-end delete])))
-
-  (defun fhd/exwm-input-line-mode ()
-    "Set exwm window to line-mode and show mode line"
-    (call-interactively #'exwm-input-grab-keyboard)
-    ;; (exwm-layout-show-mode-line)
-    )
-
-  (defun fhd/exwm-input-char-mode ()
-    "Set exwm window to char-mode and hide mode line"
-    (call-interactively #'exwm-input-release-keyboard)
-    ;; (exwm-layout-hide-mode-line)
-    )
-
-  (defun fhd/exwm-input-toggle-mode ()
-    "Toggle between line- and char-mode"
-    (interactive)
-    (with-current-buffer (window-buffer)
-      (when (eq major-mode 'exwm-mode)
-        (if (equal (second (second mode-line-process)) "line")
-            (progn
-              (fhd/exwm-input-char-mode)
-              (message "Input mode on"))
-          (progn
-            (fhd/exwm-input-line-mode)
-            (message "Line mode on"))))))
-
-  (defun fhd/toggle-exwm-input-line-mode-passthrough ()
-    "Toggle line mode pass through. Really probably dont' need to toggle this much. Keep in first form."
-    (interactive)
-    (if exwm-input-line-mode-passthrough
-        (progn
-          (setq exwm-input-line-mode-passthrough nil)
-          (message "App receives all the keys now (with some simulation)"))
-      (progn
-        (setq exwm-input-line-mode-passthrough t)
-        (message "emacs receives all the keys now")))
-    ;; Enable this to update modeline if I add a flag for passthrough, otherwise don't need to force update modeline
-    ;; (force-mode-line-update)
-    )
-
-  (exwm-input-set-key (kbd "s-w") 'fhd/exwm-input-toggle-mode) ;; NOTE some keybindings just don't work (like s-i or s-p)
-  ;; (exwm-input-set-key (kbd "s-p") 'fhd/toggle-exwm-input-line-mode-passthrough) ;; but s-p does work here
-
-  ;; close wm buffer
-  ;; (kill-buffer "wm")
-
-  (require 'exwm-randr)
-  (setq exwm-randr-workspace-output-plist '(0 "VGA1"))
-  (add-hook 'exwm-randr-screen-change-hook
-            (lambda ()
-              (start-process-shell-command
-               "xrandr" nil "xrandr --output VGA1 --left-of LVDS1 --auto")))
-  (exwm-randr-enable)
-
-  ;; TODO I think I can (should) delete the "wm" buffer
-  (defun wm-xmodmap()
-    (call-process "xmodmap" nil (get-buffer-create "wm") nil
-                  (expand-file-name "~/.config/xmodmap")))
-  (wm-xmodmap)
-  )
-
-;; (use-package i3
-;;   :load-path "~/.emacs.d/packages/i3-emacs")
-;; (use-package i3-integration
-;;   :load-path "~/.emacs.d/packages/i3-emacs"
+;; (use-package exwm
+;;   :defer t
 ;;   :config
-;;   ;; (i3-one-window-per-frame-mode-on)
+;;   (require 'exwm-config)
+;;   (exwm-config-default)
+
+;;   ;; TODO what I really need to do is simulation keymaps for every application (mainly firefox)
+;;   ;; (setq exwm-input-simulation-keys
+;;   ;;   '(([?\C-b] . [left])
+;;   ;;     ([?\C-f] . [right])
+;;   ;;     ([?\C-p] . [up])
+;;   ;;     ([?\C-n] . [down])
+;;   ;;     ([?\C-a] . [home])
+;;   ;;     ([?\C-e] . [end])
+;;   ;;     ([?\M-v] . [prior])
+;;   ;;     ([?\C-v] . [next])
+;;   ;;     ([?\C-d] . [delete])
+;;   ;;     ([?\C-k] . [S-end delete])))
+
+;;   (defun fhd/exwm-input-line-mode ()
+;;     "Set exwm window to line-mode and show mode line"
+;;     (call-interactively #'exwm-input-grab-keyboard)
+;;     ;; (exwm-layout-show-mode-line)
+;;     )
+
+;;   (defun fhd/exwm-input-char-mode ()
+;;     "Set exwm window to char-mode and hide mode line"
+;;     (call-interactively #'exwm-input-release-keyboard)
+;;     ;; (exwm-layout-hide-mode-line)
+;;     )
+
+;;   (defun fhd/exwm-input-toggle-mode ()
+;;     "Toggle between line- and char-mode"
+;;     (interactive)
+;;     (with-current-buffer (window-buffer)
+;;       (when (eq major-mode 'exwm-mode)
+;;         (if (equal (second (second mode-line-process)) "line")
+;;             (progn
+;;               (fhd/exwm-input-char-mode)
+;;               (message "Input mode on"))
+;;           (progn
+;;             (fhd/exwm-input-line-mode)
+;;             (message "Line mode on"))))))
+
+;;   (defun fhd/toggle-exwm-input-line-mode-passthrough ()
+;;     "Toggle line mode pass through. Really probably dont' need to toggle this much. Keep in first form."
+;;     (interactive)
+;;     (if exwm-input-line-mode-passthrough
+;;         (progn
+;;           (setq exwm-input-line-mode-passthrough nil)
+;;           (message "App receives all the keys now (with some simulation)"))
+;;       (progn
+;;         (setq exwm-input-line-mode-passthrough t)
+;;         (message "emacs receives all the keys now")))
+;;     ;; Enable this to update modeline if I add a flag for passthrough, otherwise don't need to force update modeline
+;;     ;; (force-mode-line-update)
+;;     )
+
+;;   (exwm-input-set-key (kbd "s-w") 'fhd/exwm-input-toggle-mode) ;; NOTE some keybindings just don't work (like s-i or s-p)
+;;   ;; (exwm-input-set-key (kbd "s-p") 'fhd/toggle-exwm-input-line-mode-passthrough) ;; but s-p does work here
+
+;;   ;; close wm buffer
+;;   ;; (kill-buffer "wm")
+
+;;   (require 'exwm-randr)
+;;   (setq exwm-randr-workspace-output-plist '(0 "VGA1"))
+;;   (add-hook 'exwm-randr-screen-change-hook
+;;             (lambda ()
+;;               (start-process-shell-command
+;;                "xrandr" nil "xrandr --output VGA1 --left-of LVDS1 --auto")))
+;;   (exwm-randr-enable)
+
+;;   ;; TODO I think I can (should) delete the "wm" buffer
+;;   (defun wm-xmodmap()
+;;     (call-process "xmodmap" nil (get-buffer-create "wm") nil
+;;                   (expand-file-name "~/.config/xmodmap")))
+;;   (wm-xmodmap)
 ;;   )
 
 (use-package restart-emacs)
@@ -357,7 +349,7 @@
 
 (use-package exec-path-from-shell
   :config
-  (when *is-a-mac*
+  (when (or *is-a-mac* t)
     (exec-path-from-shell-initialize)))
 
 (use-package multiple-cursors
@@ -556,6 +548,8 @@
 
 (use-package restclient
   :mode ("\\.http\\'" . restclient-mode))
+
+(use-package dictionary)
 
 (use-package page-break-lines)
 (use-package dashboard
@@ -1030,6 +1024,7 @@
   (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
   (setq exec-path (append exec-path '("/home/benwiz/bin")))
   ;; (setq exec-path (append '("/Users/benwiz/.nvm/versions/node/v12.16.1/bin") exec-path))
+  (add-to-list 'exec-path "/home/benwiz/.nvm/versions/node/v14.4.0/bin")
   (setq exec-path (append '("/Users/benwiz/.yarn/bin") exec-path))
   (setq cider-cljs-repl-types '((nashorn "(do (require 'cljs.repl.nashorn) (cider.piggieback/cljs-repl (cljs.repl.nashorn/repl-env)))" cider-check-nashorn-requirements)
                               (figwheel "(do (require 'figwheel-sidecar.repl-api) (figwheel-sidecar.repl-api/start-figwheel!) (figwheel-sidecar.repl-api/cljs-repl))" cider-check-figwheel-requirements)

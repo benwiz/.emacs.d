@@ -399,7 +399,7 @@
 
   (use-package exec-path-from-shell
     :config
-    (when *is-a-mac*
+    (when (or *is-a-mac* t)
       (exec-path-from-shell-initialize)))
 
   (use-package multiple-cursors
