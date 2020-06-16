@@ -2,4 +2,6 @@
                                        breeze.quiescent/defcomponent]}} ;; FIXME this skip-args does not seem to be working, maybe it will if i reboot emacs
  :lint-as {hitch2.def.halting/defhalting clojure.core/defn
            breeze.quiescent/defcomponent clojure.core/defn
-           clojure.test/deftest          clojure.core/def}}
+           clojure.test/deftest          clojure.core/def
+           manifold.deferred/let-flow    clojure.core/let
+           manifold.deferred/let-flow'   clojure.core/let}}

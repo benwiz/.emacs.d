@@ -19,10 +19,12 @@
         kill-region
         kill-sexp
         mark-sexp
+        org-delete-char
         org-self-insert-command
         outline-show-children
         paredit-backward
         paredit-backward-up
+        paredit-close-round
         paredit-close-square
         paredit-doublequote
         paredit-forward
