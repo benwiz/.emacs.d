@@ -349,7 +349,7 @@
 
 (use-package exec-path-from-shell
   :config
-  (when *is-a-mac*
+  (when (or *is-a-mac* t)
     (exec-path-from-shell-initialize)))
 
 (use-package multiple-cursors
@@ -1025,6 +1025,7 @@
   (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
   (setq exec-path (append exec-path '("/home/benwiz/bin")))
   ;; (setq exec-path (append '("/Users/benwiz/.nvm/versions/node/v12.16.1/bin") exec-path))
+  (add-to-list 'exec-path "/home/benwiz/.nvm/versions/node/v14.4.0/bin")
   (setq exec-path (append '("/Users/benwiz/.yarn/bin") exec-path))
   (setq cider-cljs-repl-types '((nashorn "(do (require 'cljs.repl.nashorn) (cider.piggieback/cljs-repl (cljs.repl.nashorn/repl-env)))" cider-check-nashorn-requirements)
                               (figwheel "(do (require 'figwheel-sidecar.repl-api) (figwheel-sidecar.repl-api/start-figwheel!) (figwheel-sidecar.repl-api/cljs-repl))" cider-check-figwheel-requirements)
