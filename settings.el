@@ -68,7 +68,12 @@
 ;; (set-frame-parameter nil 'fullscreen 'fullboth)
 
 (add-hook 'focus-out-hook #'garbage-collect)
-(display-battery-mode 1)
+(display-battery-mode 0)
+
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
 
 (require 'package)
 
@@ -194,14 +199,17 @@
 (global-unset-key (kbd "M-l"))
 (global-unset-key (kbd "M-u"))
 (global-unset-key (kbd "C-i"))
+(global-unset-key (kbd "C-x C-x"))
 
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
+(global-set-key (kbd "C-x C-x") 'mode-line-other-buffer)
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 (global-set-key (kbd "C-c o") 'other-frame)
 (global-set-key (kbd "C-M-z") 'zap-up-to-char)
 (global-set-key (kbd "C-c n") 'narrow-to-defun)
 (global-set-key (kbd "C-c w") 'widen)
 (global-set-key (kbd "C-l") 'recenter)
+
 (use-package dired
   :ensure nil
   :config
@@ -229,7 +237,7 @@
     :load-path "~/code/bela-mode.el"
     :init (setq bela-scripts-dir "~/code/Bela/scripts/"))
   (use-package bela-mode
-    :defer t
+    ;; :defer t
     :load-path "~/code/personal/bela-mode.el"
     :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
 
@@ -875,6 +883,9 @@
 
 (use-package flycheck-rust
   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+
+(use-package glsl-mode
+  :defer t)
 
 (defun paredit-delete-indentation (&optional arg)
   "Handle joining lines that end in a comment."

@@ -5,6 +5,9 @@
       '(
         backward-sexp
         backward-up-list
+        c-electric-delete-forward
+        c-electric-paren
+        c-electric-star
         cargo-process-run
         cljr-raise-sexp
         cljr-slash

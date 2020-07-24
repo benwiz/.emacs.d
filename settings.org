@@ -93,7 +93,12 @@
   ;; (set-frame-parameter nil 'fullscreen 'fullboth)
 
   (add-hook 'focus-out-hook #'garbage-collect)
-  (display-battery-mode 1)
+  (display-battery-mode 0)
+
+  (setq backup-directory-alist
+        `((".*" . ,temporary-file-directory)))
+  (setq auto-save-file-name-transforms
+        `((".*" ,temporary-file-directory t)))
 #+END_SRC
 * Package Management
 #+BEGIN_SRC emacs-lisp
@@ -271,7 +276,7 @@
       :load-path "~/code/bela-mode.el"
       :init (setq bela-scripts-dir "~/code/Bela/scripts/"))
     (use-package bela-mode
-      :defer t
+      ;; :defer t
       :load-path "~/code/personal/bela-mode.el"
       :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
 
@@ -950,10 +955,11 @@
   (use-package flycheck-rust
     :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 #+END_SRC
-
-#+RESULTS:
-: t
-
+** GLSL
+#+BEGIN_SRC emacs-lisp
+(use-package glsl-mode
+  :defer t)
+#+END_SRC
 ** Lisp
 #+BEGIN_SRC emacs-lisp
   (defun paredit-delete-indentation (&optional arg)
