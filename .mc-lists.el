@@ -26,6 +26,8 @@
         org-self-insert-command
         outline-show-children
         paredit-backward
+        paredit-backward-down
+        paredit-backward-slurp-sexp
         paredit-backward-up
         paredit-close-round
         paredit-close-square
@@ -34,6 +36,7 @@
         paredit-forward-delete
         paredit-forward-down
         paredit-forward-slurp-sexp
+        paredit-forward-up
         paredit-newline
         paredit-open-curly
         paredit-open-round
@@ -54,9 +57,7 @@
         cider-load-buffer
         counsel-find-file
         end-of-buffer
+        goto-line
         mouse-set-region
-        paredit-close-parenthesis-and-newline
-        paredit-forward-barf-sexp
-        paredit-kill
         swiper-isearch
         ))
