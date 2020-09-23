@@ -164,7 +164,7 @@
   ;; Underline/highlight selected line
   (global-hl-line-mode 1)
 
-  ;; Light theme. I like the defaul theme more than any other light theme I found.
+  ;; Light theme. I like the default theme more than any other light theme I found.
   ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.
   (set-face-attribute 'hl-line nil :background "#e3ffe3")
   (set-face-attribute 'region nil :background "#EAEAEA")
@@ -181,11 +181,13 @@
     (custom-theme-set-faces
      'spolsky
      `(default ((t (:foreground "#F2F2F2"))))
-     `(hl-line ((t (:background "#151515" :underline nil))))
+     `(hl-line ((t (:background "#1E252F" :underline nil))))
      `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
      `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
      `(trailing-whitespace ((t (:background "#5a708c"))))
      ))
+
+  ;; Start in spolsky
   (load-spolsky)
 
   ;; Toggle themes
@@ -194,7 +196,7 @@
     (interactive)
     (if (member 'spolsky custom-enabled-themes)
         (disable-theme 'spolsky)
-      ;;(enable-theme 'spolsky) ;; This should work (and did work) but it bugs out.
+      ;; (enable-theme 'spolsky) ;; This should work (and did work I think) because spolsky has been loaded before
       (load-spolsky)))
   (global-unset-key (kbd "<f10>"))
   (global-set-key (kbd "<f10>") 'toggle-theme)
@@ -226,8 +228,6 @@
       )
     (pomodoro-add-to-mode-line*)
     )
-
-
 
 #+END_SRC
 * Tools and Bindings
