@@ -234,7 +234,7 @@
     )
 
 #+END_SRC
-* Tools and Bindings
+* Tools and Bindings (not text editing related)
 ** Env Vars
 #+BEGIN_SRC emacs-lisp
   (use-package load-env-vars
