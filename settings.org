@@ -102,7 +102,7 @@
   (setq auto-save-file-name-transforms
         `((".*" ,temporary-file-directory t)))
 #+END_SRC
-* Package Management
+* COMMENT Package Management
 #+BEGIN_SRC emacs-lisp
   (require 'package)
 
@@ -137,9 +137,15 @@
     (unless (package-installed-p package)
       (package-install package)))
 
+  ;; force packages to always be installed
   (require 'use-package-ensure)
   (setq use-package-always-ensure t)
 
+  ;; force packages to be deferred (use `:demand t` to override)
+  ;; does not conflict with use-pockage-always-ensure
+  (setq use-package-always-defer t)
+
+  ;; I think this keeps packages up to date assuming that melpa is up to date
   (use-package auto-package-update
     :config
     (setq auto-package-update-delete-old-versions t)
@@ -209,7 +215,6 @@
     )
 
   (use-package pomodoro
-    :defer t
     :config
     (defun pomodoro-add-to-mode-line* ()
       "My version of pomodoro-add-to-mode-line"
@@ -275,11 +280,9 @@
 #+BEGIN_SRC emacs-lisp
   (if *is-a-mac*
     (use-package bela-mode
-      :defer t
       :load-path "~/code/bela-mode.el"
       :init (setq bela-scripts-dir "~/code/Bela/scripts/"))
     (use-package bela-mode
-      ;; :defer t
       :load-path "~/code/personal/bela-mode.el"
       :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
 
@@ -320,7 +323,6 @@
 ** EXWM
 #+BEGIN_SRC emacs-lisp
   ;; (use-package exwm
-  ;;   :defer t
   ;;   :config
   ;;   (require 'exwm-config)
   ;;   (exwm-config-default)
@@ -522,7 +524,6 @@
     (setq multi-term-buffer-name "term"))
 
   (use-package highlight-indent-guides
-    :defer t
     :hook (python-mode . highlight-indent-guides-mode)
     :config
     (setq highlight-indent-guides-method 'character)
@@ -530,7 +531,6 @@
     (setq highlight-indent-guides-auto-character-face-perc 20))
 
   (use-package free-keys
-    :defer t
     :bind ("C-h C-k" . 'free-keys))
 
   (use-package undo-tree
@@ -544,7 +544,6 @@
   ;; Apparantly this is not a trivial fix because they use two colliding features of emacs for the background color.
   ;; TODO try using highlight.el instead
   (use-package highlight-symbol
-    :defer t
     :init
     (global-set-key (kbd "<f3>") 'highlight-symbol)
     (global-set-key (kbd "C-<f3>") 'highlight-symbol-next)
@@ -573,7 +572,6 @@
 
   (when (not *is-a-mac*)
     (use-package spotify
-      :defer t
       :load-path "packages/spotify.el"
       :init
       (setq spotify-oauth2-client-secret (getenv "SPOTIFY_CLIENT_SECRET"))
@@ -591,7 +589,6 @@
     )
 
   (use-package elfeed
-    :defer t
     :config
     (setq elfeed-feeds
           '("http://feeds.bbci.co.uk/news/world/rss.xml"
@@ -971,7 +968,6 @@
 ** GLSL
 #+BEGIN_SRC emacs-lisp
 (use-package glsl-mode
-  :defer t)
 #+END_SRC
 ** Lisp
 #+BEGIN_SRC emacs-lisp
@@ -1024,12 +1020,10 @@
 ** Common Lisp
 #+BEGIN_SRC emacs-lisp
   (use-package slime-company
-    :defer t)
 
   ;; TODO full frame repl
   ;; TODO switch from repl back to code with C-c C-z
   (use-package slime
-    :defer t
     :config
     (load (expand-file-name "~/quicklisp/slime-helper.el"))
     (setq inferior-lisp-program "sbcl")
