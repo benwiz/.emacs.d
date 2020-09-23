@@ -634,6 +634,7 @@
   :hook ((clojure-mode . lsp)
          (clojurec-mode . lsp)
          (clojurescript-mode . lsp)
+         (c++-mode . lsp)
          ;; (python-mode . lsp)
          ;; (javascript-mode . lsp)
          ;; (java-mode . lsp)

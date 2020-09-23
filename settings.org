@@ -22,7 +22,7 @@
 * Operating System
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
-(when *is-a-mac* ;; (string-equal system-type "darwin")
+(when *is-a-mac*
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 (setq mac-command-modifier 'meta)
 #+END_SRC
@@ -104,48 +104,49 @@
 #+END_SRC
 * Package Management
 #+BEGIN_SRC emacs-lisp
-(require 'package)
+  (require 'package)
 
-(add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/") t)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-;;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
-(add-to-list 'load-path "~/.emacs.d/site-lisp/")
+  (add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/") t)
+  (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
+  (add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+  ;;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
+  (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
-;; Refresh package contents 5% of the time.
-(when (eq 0 (random 20))
-  (package-refresh-contents))
+  ;; Ask to refresh package contents 5% of the time.
+  (when (eq 0 (random 20))
+    (when (y-or-n-p-with-timeout "Do you want to refresh melpa? " 6 nil)
+      (package-refresh-contents)))
 
-;; list the packages you want
-(setq package-list
-    '(
-      use-package
-     ))
+  ;; list the packages you want
+  (setq package-list
+      '(
+        use-package
+       ))
 
-;; activate all the packages
-(package-initialize)
+  ;; activate all the packages
+  (package-initialize)
 
-;; fetch the list of packages available
-(unless package-archive-contents
-  (package-refresh-contents))
+  ;; fetch the list of packages available
+  (unless package-archive-contents
+    (package-refresh-contents))
 
-;; install the missing packages
-(dolist (package package-list)
-  (unless (package-installed-p package)
-    (package-install package)))
+  ;; install the missing packages
+  (dolist (package package-list)
+    (unless (package-installed-p package)
+      (package-install package)))
 
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
+  (require 'use-package-ensure)
+  (setq use-package-always-ensure t)
 
-(use-package auto-package-update
-  :config
-  (setq auto-package-update-delete-old-versions t)
-  (setq auto-package-update-hide-results t)
-  (auto-package-update-maybe))
+  (use-package auto-package-update
+    :config
+    (setq auto-package-update-delete-old-versions t)
+    (setq auto-package-update-hide-results t)
+    (auto-package-update-maybe))
 
-(use-package gnu-elpa-keyring-update)
+  (use-package gnu-elpa-keyring-update)
 #+END_SRC
 * Theme and Modeline
 #+BEGIN_SRC emacs-lisp
@@ -688,35 +689,36 @@
   (use-package flycheck
     :init (global-flycheck-mode))
 
-  ;; (setq lsp-keymap-prefix "C-l")
-  ;; (use-package lsp-mode
-  ;;   :hook ((clojure-mode . lsp)
-  ;;          (clojurec-mode . lsp)
-  ;;          (clojurescript-mode . lsp)
-  ;;          ;; (python-mode . lsp)
-  ;;          ;; (javascript-mode . lsp)
-  ;;          ;; (java-mode . lsp)
-  ;;          ;; (emacs-lisp-mode . lsp)
-  ;;          ;; (c++-mode . lsp)
-  ;;          )
-  ;;   :commands lsp
-  ;;   :config
-  ;;   (setq lsp-modeline-code-actions-segments '(icon)
-  ;;         lsp-modeline-diagnostics-enable nil
-  ;;         lsp-enable-file-watchers nil
-  ;;         lsp-enable-indentation nil
-  ;;         lsp-enable-on-type-formatting nil))
-  ;; (use-package lsp-ui
-  ;;   :commands lsp-ui-mode
-  ;;   :config
-  ;;   (setq lsp-ui-doc-enable nil
-  ;;         lsp-ui-sideline-show-code-actions nil))
-  ;; (use-package lsp-ivy
-  ;;   :commands lsp-ivy-workspace-symbol
-  ;;   :config
-  ;;   (define-key lsp-command-map "i" 'lsp-ivy-workspace-symbol))
-  ;; (use-package company-lsp
-  ;;   :commands company-lsp)
+  (setq lsp-keymap-prefix "C-l")
+  (use-package lsp-mode
+    :hook ((clojure-mode . lsp)
+           (clojurec-mode . lsp)
+           (clojurescript-mode . lsp)
+           (c++-mode . lsp)
+           ;; (python-mode . lsp)
+           ;; (javascript-mode . lsp)
+           ;; (java-mode . lsp)
+           ;; (emacs-lisp-mode . lsp)
+           ;; (c++-mode . lsp)
+           )
+    :commands lsp
+    :config
+    (setq lsp-modeline-code-actions-segments '(icon)
+          lsp-modeline-diagnostics-enable nil
+          lsp-enable-file-watchers nil
+          lsp-enable-indentation nil
+          lsp-enable-on-type-formatting nil))
+  (use-package lsp-ui
+    :commands lsp-ui-mode
+    :config
+    (setq lsp-ui-doc-enable nil
+          lsp-ui-sideline-show-code-actions nil))
+  (use-package lsp-ivy
+    :commands lsp-ivy-workspace-symbol
+    :config
+    (define-key lsp-command-map "i" 'lsp-ivy-workspace-symbol))
+  (use-package company-lsp
+    :commands company-lsp)
 
   ;; NOTE modify like below to defer
   ;; (use-package lsp-mode
