@@ -102,7 +102,7 @@
   (setq auto-save-file-name-transforms
         `((".*" ,temporary-file-directory t)))
 #+END_SRC
-* COMMENT Package Management
+* Package Management
 #+BEGIN_SRC emacs-lisp
   (require 'package)
 
