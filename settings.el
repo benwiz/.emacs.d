@@ -588,6 +588,18 @@
 (use-package restclient
   :mode ("\\.http\\'" . restclient-mode))
 
+(use-package fic-mode
+  :init
+  (defface fic-face
+    '((((class color))
+       (:foreground "orange" :weight bold :slant italic))
+      (t (:weight bold :slant italic)))
+    "Face to fontify FIXME/TODO words"
+    :group 'fic-mode)
+  :config
+  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
+  (add-hook 'prog-mode-hook 'fic-mode))
+
 (use-package ws-butler
   :hook (prog-mode . ws-butler-mode)
   :config (ws-butler-global-mode 1))
@@ -601,8 +613,7 @@
 
 (setq lsp-keymap-prefix "C-l")
 (use-package lsp-mode
-  :hook ((emacs-lisp-mode . lsp)
-         (clojure-mode . lsp)
+  :hook ((clojure-mode . lsp)
          (clojurec-mode . lsp)
          (clojurescript-mode . lsp)
          (c++-mode . lsp)
@@ -617,7 +628,11 @@
         lsp-modeline-diagnostics-enable nil
         lsp-enable-file-watchers nil
         lsp-enable-indentation nil
-        lsp-enable-on-type-formatting nil))
+        lsp-enable-on-type-formatting nil
+        ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
+        gc-cons-threshold 100000000
+        read-process-output-max (* 1024 1024)
+        lsp-completion-provider :capf))
 (use-package lsp-ui
   :commands lsp-ui-mode
   :config
@@ -626,7 +641,11 @@
 (use-package lsp-ivy
   :commands lsp-ivy-workspace-symbol
   :config
-  (define-key lsp-command-map "i" 'lsp-ivy-workspace-symbol))
+  (define-key lsp-command-map "i"
+    (lambda ()
+      (interactive)
+      (setq current-prefix-arg '(4))
+      (call-interactively 'lsp-ivy-workspace-symbol))))
 (use-package company-lsp
   :commands company-lsp)
 
@@ -644,20 +663,7 @@
   :config
   (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
   ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
-  ;; TODO consider override navigation but only if i don't like M-n and M-p https://emacs.stackexchange.com/a/17970
   )
-
-(use-package fic-mode
-  :init
-  (defface fic-face
-    '((((class color))
-       (:foreground "orange" :weight bold :slant italic))
-      (t (:weight bold :slant italic)))
-    "Face to fontify FIXME/TODO words"
-    :group 'fic-mode)
-  :config
-  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
-  (add-hook 'prog-mode-hook 'fic-mode))
 
 (use-package hideshow
   :bind (("C-\\" . hs-toggle-hiding)
@@ -957,7 +963,7 @@
 (use-package clojure-mode
  :bind (("C-c d f" . cider-code)
         ("C-c d g" . cider-grimoire)
-        ("C-c d w" . cider-grimoire-web)
+        ("C-c d w" . cidler-grimoire-web)
         ("C-c d c" . clojure-cheatsheet)
         ("C-c d d" . dash-at-point)
         ("C-c C-;" . insert-discard))
