@@ -657,8 +657,7 @@
 
   (setq lsp-keymap-prefix "C-l")
   (use-package lsp-mode
-    :hook ((emacs-lisp-mode . lsp)
-           (clojure-mode . lsp)
+    :hook ((clojure-mode . lsp)
            (clojurec-mode . lsp)
            (clojurescript-mode . lsp)
            (c++-mode . lsp)
