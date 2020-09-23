@@ -129,6 +129,7 @@
   (package-initialize)
 
   ;; fetch the list of packages available
+  ;; `unless` is the same as clojure's `when-not`
   (unless package-archive-contents
     (package-refresh-contents))
 
