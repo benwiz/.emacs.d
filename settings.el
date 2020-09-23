@@ -873,7 +873,7 @@
 (use-package flycheck-rust
   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
-(use-package glsl-mode
+(use-package glsl-mode)
 
 (defun paredit-delete-indentation (&optional arg)
   "Handle joining lines that end in a comment."

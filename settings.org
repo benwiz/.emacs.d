@@ -1037,7 +1037,7 @@
   (use-package clojure-mode
    :bind (("C-c d f" . cider-code)
           ("C-c d g" . cider-grimoire)
-          ("C-c d w" . cider-grimoire-web)
+          ("C-c d w" . cidler-grimoire-web)
           ("C-c d c" . clojure-cheatsheet)
           ("C-c d d" . dash-at-point)
           ("C-c C-;" . insert-discard))
