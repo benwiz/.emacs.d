@@ -157,7 +157,7 @@
    `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
    `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
    `(trailing-whitespace ((t (:background "#5a708c"))))
-   `(lsp-face-highlight-textual ((t (:background "#5a708c"))))
+   `(lsp-face-highlight-textual ((t (:background "#353535")))) ;; "#323E30" ;; "#555" is same as selection color, the other one is half way between hl-line and trailing-whitespace
    ))
 
 ;; Start in spolsky
@@ -356,6 +356,44 @@
 ;;   (wm-xmodmap)
 ;;   )
 
+(use-package page-break-lines)
+(use-package dashboard
+  ;; https://github.com/emacs-dashboard/emacs-dashboard ;
+  :ensure t
+  :init
+  ;; Banner and title and footer
+  (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard"
+        dashboard-startup-banner 2 ;; 'official, 'logo, 1, 2, 3, or a path to img
+        dashboard-center-content nil
+        dashboard-show-shortcuts t
+        dashboard-set-navigator t ;; Idk what this does, I think it isn't working
+        dashboard-set-init-info t
+        ;; dashboard-init-info "This is an init message!" ;; Customize init-info
+        dashboard-set-footer t
+        ;; dashboard-footer-messages '("Dashboard is pretty cool!") ;; Customize footer messages
+        )
+  ;; Widgets
+  (setq dashboard-items '((recents  . 5)
+                          (bookmarks . 5)
+                          (projects . 5)
+                          (agenda . 5)
+                          (registers . 5))
+        dashboard-set-heading-icons nil
+        dashboard-set-file-icons nil)
+  :config
+  (dashboard-setup-startup-hook)
+  ;; Custom widget
+  ;; Ideas: weather, widget dedicated to each of my projects, news
+  (defun dashboard-insert-custom (list-size)
+    (insert "Custom text"))
+  (add-to-list 'dashboard-item-generators '(custom . dashboard-insert-custom))
+  (add-to-list 'dashboard-items '(custom) t)
+  (defun dashboard ()
+    "Open dashboard."
+    (interactive)
+    (switch-to-buffer "*dashboard*")
+    (dashboard-refresh-buffer)))
+
 (use-package restart-emacs)
 (use-package dictionary)
 ;; (use-package htmlize) ;; awesome package but no use at the moment
@@ -477,22 +515,12 @@
 
   (setq multi-term-buffer-name "term"))
 
-(use-package highlight-indent-guides
-  :hook (python-mode . highlight-indent-guides-mode)
-  :config
-  (setq highlight-indent-guides-method 'character)
-  (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
-  (setq highlight-indent-guides-auto-character-face-perc 20))
-
 (use-package free-keys
   :bind ("C-h C-k" . 'free-keys))
 
 (use-package undo-tree
   :config
   (global-undo-tree-mode))
-
-(use-package ws-butler
-  :config (ws-butler-global-mode 1))
 
 ;; TODO try to call (global-hl-line-mode 0) when highlight-symbol is active
 ;; TODO probably have to switch to highlight.el
@@ -560,68 +588,9 @@
 (use-package restclient
   :mode ("\\.http\\'" . restclient-mode))
 
-(use-package page-break-lines)
-(use-package dashboard
-  ;; https://github.com/emacs-dashboard/emacs-dashboard ;
-  :ensure t
-  :init
-  ;; Banner and title and footer
-  (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard"
-        dashboard-startup-banner 2 ;; 'official, 'logo, 1, 2, 3, or a path to img
-        dashboard-center-content nil
-        dashboard-show-shortcuts t
-        dashboard-set-navigator t ;; Idk what this does, I think it isn't working
-        dashboard-set-init-info t
-        ;; dashboard-init-info "This is an init message!" ;; Customize init-info
-        dashboard-set-footer t
-        ;; dashboard-footer-messages '("Dashboard is pretty cool!") ;; Customize footer messages
-        )
-  ;; Widgets
-  (setq dashboard-items '((recents  . 5)
-                          (bookmarks . 5)
-                          (projects . 5)
-                          (agenda . 5)
-                          (registers . 5))
-        dashboard-set-heading-icons nil
-        dashboard-set-file-icons nil)
-  :config
-  (dashboard-setup-startup-hook)
-  ;; Custom widget
-  ;; Ideas: weather, widget dedicated to each of my projects, news
-  (defun dashboard-insert-custom (list-size)
-    (insert "Custom text"))
-  (add-to-list 'dashboard-item-generators '(custom . dashboard-insert-custom))
-  (add-to-list 'dashboard-items '(custom) t)
-  (defun dashboard ()
-    "Open dashboard."
-    (interactive)
-    (switch-to-buffer "*dashboard*")
-    (dashboard-refresh-buffer)))
-
-(setq org-publish-project-alist
-      '(("org-blog"
-         ;; Path to your org files.
-         :base-directory "~/code/personal/blog/org/"
-         ;; :base-extension "org"
-
-         ;; Path to your Jekyll project.
-         :publishing-directory "~/code/personal/blog/jekyll/"
-         ;; :recursive t
-         :publishing-function org-md-export-to-markdown ;; org-html-export-to-html
-         ;; :headline-levels 4
-         ;; :html-extension "html"
-         ;; :body-only t
-         )
-
-        ;; TODO: Later can have it copy everything to the _site dir which is a subrepo (kind of)
-
-        ("blog"
-         :components ("org-blog"))))
-
-(define-key org-mode-map (kbd "M-n") 'org-todo)
-
 (use-package ws-butler
-  :hook (prog-mode . ws-butler-mode))
+  :hook (prog-mode . ws-butler-mode)
+  :config (ws-butler-global-mode 1))
 
 (use-package editorconfig
   :config
@@ -632,14 +601,14 @@
 
 (setq lsp-keymap-prefix "C-l")
 (use-package lsp-mode
-  :hook ((clojure-mode . lsp)
+  :hook ((emacs-lisp-mode . lsp)
+         (clojure-mode . lsp)
          (clojurec-mode . lsp)
          (clojurescript-mode . lsp)
          (c++-mode . lsp)
          ;; (python-mode . lsp)
          ;; (javascript-mode . lsp)
          ;; (java-mode . lsp)
-         ;; (emacs-lisp-mode . lsp)
          ;; (c++-mode . lsp)
          )
   :commands lsp
@@ -723,6 +692,15 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
+
+(use-package highlight-indent-guides
+    :hook (python-mode . highlight-indent-guides-mode)
+    :config
+    (setq highlight-indent-guides-method 'character)
+    (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
+    (setq highlight-indent-guides-auto-character-face-perc 20))
+
+(define-key org-mode-map (kbd "M-n") 'org-todo)
 
 (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
 
@@ -942,7 +920,7 @@
 
 (global-set-key (kbd "M-k") 'kill-symbol)
 
-(use-package slime-company
+(use-package slime-company)
 
 ;; TODO full frame repl
 ;; TODO switch from repl back to code with C-c C-z
