@@ -1,5 +1,5 @@
 (defconst *is-a-mac* (eq system-type 'darwin))
-(when *is-a-mac* ;; (string-equal system-type "darwin")
+(when *is-a-mac*
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 (setq mac-command-modifier 'meta)
 
@@ -61,6 +61,7 @@
 (set-default-coding-systems 'utf-8)               ; Default to utf-8 encodingo
 (global-display-line-numbers-mode)                ; Display line numbers
 (show-paren-mode)                                 ; Show matching parenthesis
+(desktop-save-mode 1)                             ; Save buffer and window state
 
 ;(if (eq window-system 'ns)
 ;  (add-to-list 'default-frame-alist '(maximized .))
@@ -85,9 +86,10 @@
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
-;; Refresh package contents 5% of the time.
+;; Ask to refresh package contents 5% of the time.
 (when (eq 0 (random 20))
-  (package-refresh-contents))
+  (when (y-or-n-p-with-timeout "Do you want to refresh melpa? " 6 nil)
+    (package-refresh-contents)))
 
 ;; list the packages you want
 (setq package-list
@@ -99,6 +101,7 @@
 (package-initialize)
 
 ;; fetch the list of packages available
+;; `unless` is the same as clojure's `when-not`
 (unless package-archive-contents
   (package-refresh-contents))
 
@@ -107,9 +110,17 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+;; force packages to always be installed
+;; NOTE must set `:ensure nil` if not a package.el package, like dired
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
+;; TODO figure out if this is a good idea
+;; force packages to be deferred (use `:demand t` to override)
+;; does not conflict with use-pockage-always-ensure
+;; (setq use-package-always-defer t)
+
+;; I think this keeps packages up to date assuming that melpa is up to date
 (use-package auto-package-update
   :config
   (setq auto-package-update-delete-old-versions t)
@@ -125,7 +136,7 @@
 ;; Underline/highlight selected line
 (global-hl-line-mode 1)
 
-;; Light theme. I like the defaul theme more than any other light theme I found.
+;; Light theme. I like the default theme more than any other light theme I found.
 ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.
 (set-face-attribute 'hl-line nil :background "#e3ffe3")
 (set-face-attribute 'region nil :background "#EAEAEA")
@@ -142,11 +153,14 @@
   (custom-theme-set-faces
    'spolsky
    `(default ((t (:foreground "#F2F2F2"))))
-   `(hl-line ((t (:background "#151515" :underline nil))))
+   `(hl-line ((t (:background "#1E252F" :underline nil))))
    `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
    `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
    `(trailing-whitespace ((t (:background "#5a708c"))))
+   `(lsp-face-highlight-textual ((t (:background "#5a708c"))))
    ))
+
+;; Start in spolsky
 (load-spolsky)
 
 ;; Toggle themes
@@ -155,12 +169,12 @@
   (interactive)
   (if (member 'spolsky custom-enabled-themes)
       (disable-theme 'spolsky)
-    ;;(enable-theme 'spolsky) ;; This should work (and did work) but it bugs out.
+    ;; (enable-theme 'spolsky) ;; This should work (and did work I think) because spolsky has been loaded before
     (load-spolsky)))
 (global-unset-key (kbd "<f10>"))
 (global-set-key (kbd "<f10>") 'toggle-theme)
 
-
+;; Modeline
 (use-package all-the-icons)
 (use-package doom-modeline
   ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
@@ -177,7 +191,6 @@
   )
 
 (use-package pomodoro
-  :defer t
   :config
   (defun pomodoro-add-to-mode-line* ()
     "My version of pomodoro-add-to-mode-line"
@@ -211,7 +224,7 @@
 (global-set-key (kbd "C-c l") 'recenter)
 
 (use-package dired
-  :ensure nil
+  :ensure nil ;; dired is not package.el
   :config
   (setq dired-omit-files "^.~$")
 
@@ -225,19 +238,14 @@
   (require 'dired-x)
   (add-hook 'dired-mode-hook 'dired-omit-mode))
 
-(require 'zone)
-;; (zone-when-idle 600)
-
-;; No lines in DocView (actually i think it is off by default, the number is from something else)
+;; No lines in DocView (actually i think it is off by default, the number is from something else) (pdf viewer)
 ;; (add-hook 'doc-view-minor-mode-hook (lambda () (linum-mode 0)))
 
 (if *is-a-mac*
   (use-package bela-mode
-    :defer t
     :load-path "~/code/bela-mode.el"
     :init (setq bela-scripts-dir "~/code/Bela/scripts/"))
   (use-package bela-mode
-    ;; :defer t
     :load-path "~/code/personal/bela-mode.el"
     :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
 
@@ -271,7 +279,6 @@
   (global-set-key (kbd "C-c g l") 'git-link))
 
 ;; (use-package exwm
-;;   :defer t
 ;;   :config
 ;;   (require 'exwm-config)
 ;;   (exwm-config-default)
@@ -350,15 +357,17 @@
 ;;   )
 
 (use-package restart-emacs)
-(use-package htmlize)
-(use-package wgrep)
+(use-package dictionary)
+;; (use-package htmlize) ;; awesome package but no use at the moment
+;; (use-package wgrep) ;; edit file in grep buffer
 (use-package itail)
-(use-package scratch)
+
+(use-package scratch
+  :bind (("C-c s" . scratch)))
 
 (use-package exec-path-from-shell
   :config
-  (when (or *is-a-mac* t)
-    (exec-path-from-shell-initialize)))
+  (exec-path-from-shell-initialize))
 
 (use-package multiple-cursors
   :bind (("C-S-c C-S-c" . mc/edit-lines)
@@ -369,8 +378,8 @@
          ("C-S-<mouse-1>" . mc/add-cursor-on-click)
          )
   :config
-  (define-key mc/keymap (kbd "<return>") nil)
-  )
+  ;; By default, <return> exits mc
+  (define-key mc/keymap (kbd "<return>") nil))
 
 (use-package ivy
   :config
@@ -469,15 +478,13 @@
   (setq multi-term-buffer-name "term"))
 
 (use-package highlight-indent-guides
-  :defer t
   :hook (python-mode . highlight-indent-guides-mode)
   :config
   (setq highlight-indent-guides-method 'character)
-  (setq highlight-indent-guides-character 9615) ; left-align vertical bar
+  (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
   (setq highlight-indent-guides-auto-character-face-perc 20))
 
 (use-package free-keys
-  :defer t
   :bind ("C-h C-k" . 'free-keys))
 
 (use-package undo-tree
@@ -487,77 +494,71 @@
 (use-package ws-butler
   :config (ws-butler-global-mode 1))
 
-;; FIXME when a word is highlighted and has the cursor the text is black because of the current line highlighting.
-;; Apparantly this is not a trivial fix because they use two colliding features of emacs for the background color.
-;; TODO try using highlight.el instead
-(use-package highlight-symbol
-  :defer t
-  :init
-  (global-set-key (kbd "<f3>") 'highlight-symbol)
-  (global-set-key (kbd "C-<f3>") 'highlight-symbol-next)
-  (global-set-key (kbd "S-<f3>") 'highlight-symbol-prev)
-  (global-set-key (kbd "M-<f3>") 'highlight-symbol-query))
+;; TODO try to call (global-hl-line-mode 0) when highlight-symbol is active
+;; TODO probably have to switch to highlight.el
+;; (use-package highlight-symbol
+;;   :init
+;;   (global-set-key (kbd "<f3>") 'highlight-symbol)
+;;   (global-set-key (kbd "C-<f3>") 'highlight-symbol-next)
+;;   (global-set-key (kbd "S-<f3>") 'highlight-symbol-prev)
+;;   (global-set-key (kbd "M-<f3>") 'highlight-symbol-query))
 
-(use-package jabber
-  :after (:all load-env-vars)
-  :init
-  (defun jabber ()
-    (interactive)
-    (call-interactively #'jabber-connect) ;; TODO it would be nice to auto select bwisialowski@gmail.com
-    (switch-to-buffer "*-jabber-roster-*"))
-  (global-set-key (kbd "<f9>") 'jabber)
-  :config
-  (setq jabber-account-list (cons (cons "bwisialowski@gmail.com" (cons (append '(:password) (getenv "GMAIL_JABBER_PASSWORD")) '())) '())
-        jabber-chat-buffer-show-avatar nil
-        jabber-vcard-avatars-retrieve nil
-        jabber-history-enabled t
-        jabber-activity-make-strings 'jabber-activity-make-strings-shorten
-        )
-  (set-face-attribute 'jabber-roster-user-online nil :foreground "cyan")
-  (set-face-attribute 'jabber-roster-user-away nil :foreground "green")
-  ;; (set-face-attribute 'jabber-activity-string nil :foreground "cyan") ;; TODO need to set this programmatically, right now it's set via customization interface
-  )
+;; (use-package jabber
+;;   :after (:all load-env-vars)
+;;   :init
+;;   (defun jabber ()
+;;     (interactive)
+;;     (call-interactively #'jabber-connect) ;; TODO it would be nice to auto select bwisialowski@gmail.com
+;;     (switch-to-buffer "*-jabber-roster-*"))
+;;   (global-set-key (kbd "<f9>") 'jabber)
+;;   :config
+;;   (setq jabber-account-list (cons (cons "bwisialowski@gmail.com" (cons (append '(:password) (getenv "GMAIL_JABBER_PASSWORD")) '())) '())
+;;         jabber-chat-buffer-show-avatar nil
+;;         jabber-vcard-avatars-retrieve nil
+;;         jabber-history-enabled t
+;;         jabber-activity-make-strings 'jabber-activity-make-strings-shorten
+;;         )
+;;   (set-face-attribute 'jabber-roster-user-online nil :foreground "cyan")
+;;   (set-face-attribute 'jabber-roster-user-away nil :foreground "green")
+;;   ;; (set-face-attribute 'jabber-activity-string nil :foreground "cyan") ;; TODO need to set this programmatically, right now it's set via customization interface
+;;   )
 
-(when (not *is-a-mac*)
-  (use-package spotify
-    :defer t
-    :load-path "packages/spotify.el"
-    :init
-    (setq spotify-oauth2-client-secret (getenv "SPOTIFY_CLIENT_SECRET"))
-    (setq spotify-oauth2-client-id (getenv "SPOTIFY_CLIENT_ID"))
-    (setq spotify-transport 'connect)
-    (setq spotify-player-status-truncate-length 30)
-    (setq spotify-player-status-refresh-interval 7)
-    (setq spotify-player-status-playing-text "⏵")
-    (setq spotify-player-status-paused-text "⏸")
-    (setq spotify-player-status-stopped-text "⏹")
-    (setq spotify-player-status-format "%p %t - %a ") ;; trailing space is important
-    :config
-    ;; (define-key spotify-mode-map (kbd "C-c C-s C-p") 'spotify-command-map)
-    ) ;; FIXME maybe not loading spotify-mode-map, maybe I need to turn on some minor mode
-  )
+;; (unless *is-a-mac*
+;;   (use-package spotify
+;;     :load-path "packages/spotify.el"
+;;     :init
+;;     (setq spotify-oauth2-client-secret (getenv "SPOTIFY_CLIENT_SECRET"))
+;;     (setq spotify-oauth2-client-id (getenv "SPOTIFY_CLIENT_ID"))
+;;     (setq spotify-transport 'connect)
+;;     (setq spotify-player-status-truncate-length 30)
+;;     (setq spotify-player-status-refresh-interval 7)
+;;     (setq spotify-player-status-playing-text "⏵")
+;;     (setq spotify-player-status-paused-text "⏸")
+;;     (setq spotify-player-status-stopped-text "⏹")
+;;     (setq spotify-player-status-format "%p %t - %a ") ;; trailing space is important
+;;     :config
+;;     ;; (define-key spotify-mode-map (kbd "C-c C-s C-p") 'spotify-command-map)
+;;     ) ;; FIXME maybe not loading spotify-mode-map, maybe I need to turn on some minor mode
+;;   )
 
-(use-package elfeed
-  :defer t
-  :config
-  (setq elfeed-feeds
-        '("http://feeds.bbci.co.uk/news/world/rss.xml"
-          "https://xkcd.com/rss.xml"
-          ""))
-  ;; Entries older than 4 weeks are marked as read
-  (add-hook 'elfeed-new-entry-hook
-            (elfeed-make-tagger :before "4 weeks ago"
-                                :remove 'unread))
-  ;; Mark all as read
-  (defun elfeed-mark-all-as-read ()
-    (interactive)
-    (mark-whole-buffer)
-    (elfeed-search-untag-all-unread)))
+;; (use-package elfeed
+;;   :config
+;;   (setq elfeed-feeds
+;;         '("http://feeds.bbci.co.uk/news/world/rss.xml"
+;;           "https://xkcd.com/rss.xml"
+;;           ""))
+;;   ;; Entries older than 4 weeks are marked as read
+;;   (add-hook 'elfeed-new-entry-hook
+;;             (elfeed-make-tagger :before "4 weeks ago"
+;;                                 :remove 'unread))
+;;   ;; Mark all as read
+;;   (defun elfeed-mark-all-as-read ()
+;;     (interactive)
+;;     (mark-whole-buffer)
+;;     (elfeed-search-untag-all-unread)))
 
 (use-package restclient
   :mode ("\\.http\\'" . restclient-mode))
-
-(use-package dictionary)
 
 (use-package page-break-lines)
 (use-package dashboard
@@ -895,7 +896,6 @@
   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package glsl-mode
-  :defer t)
 
 (defun paredit-delete-indentation (&optional arg)
   "Handle joining lines that end in a comment."
@@ -943,12 +943,10 @@
 (global-set-key (kbd "M-k") 'kill-symbol)
 
 (use-package slime-company
-  :defer t)
 
 ;; TODO full frame repl
 ;; TODO switch from repl back to code with C-c C-z
 (use-package slime
-  :defer t
   :config
   (load (expand-file-name "~/quicklisp/slime-helper.el"))
   (setq inferior-lisp-program "sbcl")
