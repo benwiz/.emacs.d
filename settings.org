@@ -640,6 +640,18 @@
   (use-package restclient
     :mode ("\\.http\\'" . restclient-mode))
 
+  (use-package fic-mode
+    :init
+    (defface fic-face
+      '((((class color))
+         (:foreground "orange" :weight bold :slant italic))
+        (t (:weight bold :slant italic)))
+      "Face to fontify FIXME/TODO words"
+      :group 'fic-mode)
+    :config
+    (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
+    (add-hook 'prog-mode-hook 'fic-mode))
+
 #+END_SRC
 * Programming / Text Editing
 ** All
@@ -703,20 +715,7 @@
     :config
     (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
     ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
-    ;; TODO consider override navigation but only if i don't like M-n and M-p https://emacs.stackexchange.com/a/17970
     )
-
-  (use-package fic-mode
-    :init
-    (defface fic-face
-      '((((class color))
-         (:foreground "orange" :weight bold :slant italic))
-        (t (:weight bold :slant italic)))
-      "Face to fontify FIXME/TODO words"
-      :group 'fic-mode)
-    :config
-    (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
-    (add-hook 'prog-mode-hook 'fic-mode))
 
   (use-package hideshow
     :bind (("C-\\" . hs-toggle-hiding)
