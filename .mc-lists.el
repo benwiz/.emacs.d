@@ -59,5 +59,6 @@
         end-of-buffer
         goto-line
         mouse-set-region
+        sgml-slash
         swiper-isearch
         ))
