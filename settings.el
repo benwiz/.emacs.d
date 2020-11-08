@@ -47,6 +47,7 @@
  x-stretch-cursor t                               ; Stretch cursor to the glyph width
  column-number-mode t                             ; Display column numbers
  line-spacing 1                                   ; Add N pixel below each line
+ truncate-lines t                                 ; Truncate long lines
  )
 (cd "~/code/")                                    ; Move to the user directory
 (delete-selection-mode 1)                         ; Replace region when inserting text
@@ -66,7 +67,7 @@
 ;(if (eq window-system 'ns)
 ;  (add-to-list 'default-frame-alist '(maximized .))
 ;  (add-to-list 'default-frame-alist '(fullscreen .)))
-;; (set-frame-parameter nil 'fullscreen 'fullboth)
+(set-frame-parameter nil 'fullscreen 'fullboth)
 
 (add-hook 'focus-out-hook #'garbage-collect)
 (display-battery-mode 0)
@@ -201,6 +202,8 @@
     )
   (pomodoro-add-to-mode-line*)
   )
+
+(use-package redtick)
 
 (use-package load-env-vars
   :init
@@ -611,43 +614,43 @@
 (use-package flycheck
   :init (global-flycheck-mode))
 
-(setq lsp-keymap-prefix "C-l")
-(use-package lsp-mode
-  :hook ((clojure-mode . lsp)
-         (clojurec-mode . lsp)
-         (clojurescript-mode . lsp)
-         (c++-mode . lsp)
-         ;; (python-mode . lsp)
-         ;; (javascript-mode . lsp)
-         ;; (java-mode . lsp)
-         ;; (c++-mode . lsp)
-         )
-  :commands lsp
-  :config
-  (setq lsp-modeline-code-actions-segments '(icon)
-        lsp-modeline-diagnostics-enable nil
-        lsp-enable-file-watchers nil
-        lsp-enable-indentation nil
-        lsp-enable-on-type-formatting nil
-        ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
-        gc-cons-threshold 100000000
-        read-process-output-max (* 1024 1024)
-        lsp-completion-provider :capf))
-(use-package lsp-ui
-  :commands lsp-ui-mode
-  :config
-  (setq lsp-ui-doc-enable nil
-        lsp-ui-sideline-show-code-actions nil))
-(use-package lsp-ivy
-  :commands lsp-ivy-workspace-symbol
-  :config
-  (define-key lsp-command-map "i"
-    (lambda ()
-      (interactive)
-      (setq current-prefix-arg '(4))
-      (call-interactively 'lsp-ivy-workspace-symbol))))
-(use-package company-lsp
-  :commands company-lsp)
+;; (setq lsp-keymap-prefix "C-l")
+;; (use-package lsp-mode
+;;   :hook ((clojure-mode . lsp)
+;;          (clojurec-mode . lsp)
+;;          (clojurescript-mode . lsp)
+;;          (c++-mode . lsp)
+;;          ;; (python-mode . lsp)
+;;          ;; (javascript-mode . lsp)
+;;          ;; (java-mode . lsp)
+;;          ;; (c++-mode . lsp)
+;;          )
+;;   :commands lsp
+;;   :config
+;;   (setq lsp-modeline-code-actions-segments '(icon)
+;;         lsp-modeline-diagnostics-enable nil
+;;         lsp-enable-file-watchers nil
+;;         lsp-enable-indentation nil
+;;         lsp-enable-on-type-formatting nil
+;;         ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
+;;         gc-cons-threshold 100000000
+;;         read-process-output-max (* 1024 1024)
+;;         lsp-completion-provider :capf))
+;; (use-package lsp-ui
+;;   :commands lsp-ui-mode
+;;   :config
+;;   (setq lsp-ui-doc-enable nil
+;;         lsp-ui-sideline-show-code-actions nil))
+;; (use-package lsp-ivy
+;;   :commands lsp-ivy-workspace-symbol
+;;   :config
+;;   (define-key lsp-command-map "i"
+;;     (lambda ()
+;;       (interactive)
+;;       (setq current-prefix-arg '(4))
+;;       (call-interactively 'lsp-ivy-workspace-symbol))))
+;; (use-package company-lsp
+;;   :commands company-lsp)
 
 ;; NOTE modify like below to defer
 ;; (use-package lsp-mode
@@ -711,6 +714,9 @@
 (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
 
 
+
+(use-package yaml-mode
+  :mode ("\\.yml$" . yaml-mode))
 
 ;; TODO use use-package
 (setq load-path (append (list (expand-file-name "/usr/share/emacs/site-lisp")) load-path))

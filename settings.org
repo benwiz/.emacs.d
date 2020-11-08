@@ -74,6 +74,7 @@
    x-stretch-cursor t                               ; Stretch cursor to the glyph width
    column-number-mode t                             ; Display column numbers
    line-spacing 1                                   ; Add N pixel below each line
+   truncate-lines t                                 ; Truncate long lines
    )
   (cd "~/code/")                                    ; Move to the user directory
   (delete-selection-mode 1)                         ; Replace region when inserting text
@@ -93,7 +94,7 @@
   ;(if (eq window-system 'ns)
   ;  (add-to-list 'default-frame-alist '(maximized .))
   ;  (add-to-list 'default-frame-alist '(fullscreen .)))
-  ;; (set-frame-parameter nil 'fullscreen 'fullboth)
+  (set-frame-parameter nil 'fullscreen 'fullboth)
 
   (add-hook 'focus-out-hook #'garbage-collect)
   (display-battery-mode 0)
@@ -232,6 +233,8 @@
       )
     (pomodoro-add-to-mode-line*)
     )
+
+  (use-package redtick)
 
 #+END_SRC
 * Tools and Bindings (not text editing related)
@@ -656,111 +659,111 @@
 * Programming / Text Editing
 ** All
 #+BEGIN_SRC emacs-lisp
-    (use-package ws-butler
-      :hook (prog-mode . ws-butler-mode)
-      :config (ws-butler-global-mode 1))
+  (use-package ws-butler
+    :hook (prog-mode . ws-butler-mode)
+    :config (ws-butler-global-mode 1))
 
-    (use-package editorconfig
+  (use-package editorconfig
+    :config
+    (editorconfig-mode 1))
+
+  (use-package flycheck
+    :init (global-flycheck-mode))
+
+  ;; (setq lsp-keymap-prefix "C-l")
+  ;; (use-package lsp-mode
+  ;;   :hook ((clojure-mode . lsp)
+  ;;          (clojurec-mode . lsp)
+  ;;          (clojurescript-mode . lsp)
+  ;;          (c++-mode . lsp)
+  ;;          ;; (python-mode . lsp)
+  ;;          ;; (javascript-mode . lsp)
+  ;;          ;; (java-mode . lsp)
+  ;;          ;; (c++-mode . lsp)
+  ;;          )
+  ;;   :commands lsp
+  ;;   :config
+  ;;   (setq lsp-modeline-code-actions-segments '(icon)
+  ;;         lsp-modeline-diagnostics-enable nil
+  ;;         lsp-enable-file-watchers nil
+  ;;         lsp-enable-indentation nil
+  ;;         lsp-enable-on-type-formatting nil
+  ;;         ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
+  ;;         gc-cons-threshold 100000000
+  ;;         read-process-output-max (* 1024 1024)
+  ;;         lsp-completion-provider :capf))
+  ;; (use-package lsp-ui
+  ;;   :commands lsp-ui-mode
+  ;;   :config
+  ;;   (setq lsp-ui-doc-enable nil
+  ;;         lsp-ui-sideline-show-code-actions nil))
+  ;; (use-package lsp-ivy
+  ;;   :commands lsp-ivy-workspace-symbol
+  ;;   :config
+  ;;   (define-key lsp-command-map "i"
+  ;;     (lambda ()
+  ;;       (interactive)
+  ;;       (setq current-prefix-arg '(4))
+  ;;       (call-interactively 'lsp-ivy-workspace-symbol))))
+  ;; (use-package company-lsp
+  ;;   :commands company-lsp)
+
+  ;; NOTE modify like below to defer
+  ;; (use-package lsp-mode
+  ;;     :hook (XXX-mode . lsp-deferred)
+  ;;     :commands (lsp lsp-deferred))
+
+  (use-package expand-region
+    :config
+    (global-set-key (kbd "C-=") 'er/expand-region))
+
+  (use-package company
+    :init (global-company-mode)
+    :config
+    (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+    ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
+    )
+
+  (use-package hideshow
+    :bind (("C-\\" . hs-toggle-hiding)
+           ("M-+" . hs-show-all)
+           ("M--" . hs-hide-all))
+    :init (add-hook #'prog-mode-hook #'hs-minor-mode)
+    :diminish hs-minor-mode
+    :config
+    ;; Add `json-mode' and `javascript-mode' to the list
+    (setq hs-special-modes-alist
+          (mapcar 'purecopy
+                  '((c-mode "{" "}" "/[*/]" nil nil)
+                    (c++-mode "{" "}" "/[*/]" nil nil)
+                    (java-mode "{" "}" "/[*/]" nil nil)
+                    (js-mode "{" "}" "/[*/]" nil)
+                    (json-mode "{" "}" "/[*/]" nil)
+                    (javascript-mode  "{" "}" "/[*/]" nil)))))
+
+  (defun duplicate-line()
+    (interactive)
+    (move-beginning-of-line 1)
+    (kill-line)
+    (yank)
+    (open-line 1)
+    (next-line 1)
+    (yank))
+  (global-set-key (kbd "C-c D") 'duplicate-line)
+
+  (use-package markdown-mode
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
+
+  (use-package highlight-indent-guides
+      :hook (python-mode . highlight-indent-guides-mode)
       :config
-      (editorconfig-mode 1))
-
-    (use-package flycheck
-      :init (global-flycheck-mode))
-
-    (setq lsp-keymap-prefix "C-l")
-    (use-package lsp-mode
-      :hook ((clojure-mode . lsp)
-             (clojurec-mode . lsp)
-             (clojurescript-mode . lsp)
-             (c++-mode . lsp)
-             ;; (python-mode . lsp)
-             ;; (javascript-mode . lsp)
-             ;; (java-mode . lsp)
-             ;; (c++-mode . lsp)
-             )
-      :commands lsp
-      :config
-      (setq lsp-modeline-code-actions-segments '(icon)
-            lsp-modeline-diagnostics-enable nil
-            lsp-enable-file-watchers nil
-            lsp-enable-indentation nil
-            lsp-enable-on-type-formatting nil
-            ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
-            gc-cons-threshold 100000000
-            read-process-output-max (* 1024 1024)
-            lsp-completion-provider :capf))
-    (use-package lsp-ui
-      :commands lsp-ui-mode
-      :config
-      (setq lsp-ui-doc-enable nil
-            lsp-ui-sideline-show-code-actions nil))
-    (use-package lsp-ivy
-      :commands lsp-ivy-workspace-symbol
-      :config
-      (define-key lsp-command-map "i"
-        (lambda ()
-          (interactive)
-          (setq current-prefix-arg '(4))
-          (call-interactively 'lsp-ivy-workspace-symbol))))
-    (use-package company-lsp
-      :commands company-lsp)
-
-    ;; NOTE modify like below to defer
-    ;; (use-package lsp-mode
-    ;;     :hook (XXX-mode . lsp-deferred)
-    ;;     :commands (lsp lsp-deferred))
-
-    (use-package expand-region
-      :config
-      (global-set-key (kbd "C-=") 'er/expand-region))
-
-    (use-package company
-      :init (global-company-mode)
-      :config
-      (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
-      ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
-      )
-
-    (use-package hideshow
-      :bind (("C-\\" . hs-toggle-hiding)
-             ("M-+" . hs-show-all)
-             ("M--" . hs-hide-all))
-      :init (add-hook #'prog-mode-hook #'hs-minor-mode)
-      :diminish hs-minor-mode
-      :config
-      ;; Add `json-mode' and `javascript-mode' to the list
-      (setq hs-special-modes-alist
-            (mapcar 'purecopy
-                    '((c-mode "{" "}" "/[*/]" nil nil)
-                      (c++-mode "{" "}" "/[*/]" nil nil)
-                      (java-mode "{" "}" "/[*/]" nil nil)
-                      (js-mode "{" "}" "/[*/]" nil)
-                      (json-mode "{" "}" "/[*/]" nil)
-                      (javascript-mode  "{" "}" "/[*/]" nil)))))
-
-    (defun duplicate-line()
-      (interactive)
-      (move-beginning-of-line 1)
-      (kill-line)
-      (yank)
-      (open-line 1)
-      (next-line 1)
-      (yank))
-    (global-set-key (kbd "C-c D") 'duplicate-line)
-
-    (use-package markdown-mode
-      :commands (markdown-mode gfm-mode)
-      :mode (("README\\.md\\'" . gfm-mode)
-             ("\\.md\\'" . markdown-mode)
-             ("\\.markdown\\'" . markdown-mode))
-      :init (setq markdown-command "multimarkdown"))
-
-    (use-package highlight-indent-guides
-        :hook (python-mode . highlight-indent-guides-mode)
-        :config
-        (setq highlight-indent-guides-method 'character)
-        (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
-        (setq highlight-indent-guides-auto-character-face-perc 20))
+      (setq highlight-indent-guides-method 'character)
+      (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
+      (setq highlight-indent-guides-auto-character-face-perc 20))
 #+END_SRC
 ** Org mode
  #+BEGIN_SRC emacs-lisp
@@ -773,6 +776,11 @@
 ** Emacs Lisp
 #+BEGIN_SRC emacs-lisp
 
+#+END_SRC
+** Yaml
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+  :mode ("\\.yml$" . yaml-mode))
 #+END_SRC
 ** Lilypond
 #+BEGIN_SRC emacs-lisp
@@ -829,6 +837,9 @@
   ;; Not sure what this does
   (provide 'init-javascript)
 
+  (use-package typescript-mode
+    :mode (("\\.ts\\'" . typescript-mode)
+           ("\\.tsx\\'" . typescript-mode)))
 #+END_SRC
 ** Go
 #+BEGIN_SRC emacs-lisp

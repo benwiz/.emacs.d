@@ -22,6 +22,7 @@
         kill-region
         kill-sexp
         mark-sexp
+        move-to-window-line-top-bottom
         org-delete-char
         org-self-insert-command
         outline-show-children
@@ -31,12 +32,14 @@
         paredit-backward-up
         paredit-close-round
         paredit-close-square
+        paredit-delete-indentation
         paredit-doublequote
         paredit-forward
         paredit-forward-delete
         paredit-forward-down
         paredit-forward-slurp-sexp
         paredit-forward-up
+        paredit-kill
         paredit-newline
         paredit-open-curly
         paredit-open-round
