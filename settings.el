@@ -769,6 +769,10 @@
 ;; Not sure what this does
 (provide 'init-javascript)
 
+(use-package typescript-mode
+  :mode (("\\.ts\\'" . typescript-mode)
+         ("\\.tsx\\'" . typescript-mode)))
+
 (use-package go-projectile
   :init)
 

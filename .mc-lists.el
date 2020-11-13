@@ -9,6 +9,7 @@
         c-electric-paren
         c-electric-star
         cargo-process-run
+        cider-eval-last-sexp-and-replace
         cljr-raise-sexp
         cljr-slash
         clojure-sort-ns
@@ -51,17 +52,15 @@
         suspend-frame
         toggle-truncate-lines
         zap-up-to-char
+        cider-eval-last-sexp
         ))
 
 (setq mc/cmds-to-run-once
       '(
         beginning-of-buffer
-        cider-eval-last-sexp
         cider-load-buffer
         counsel-find-file
         end-of-buffer
         goto-line
-        mouse-set-region
-        sgml-slash
         swiper-isearch
         ))
