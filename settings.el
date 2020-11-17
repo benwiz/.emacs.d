@@ -159,6 +159,7 @@
    `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
    `(trailing-whitespace ((t (:background "#5a708c"))))
    `(lsp-face-highlight-textual ((t (:background "#353535")))) ;; "#323E30" ;; "#555" is same as selection color, the other one is half way between hl-line and trailing-whitespace
+   `(org-level-4 ((t (:foreground "#EEEEBF"))))
    ))
 
 ;; Start in spolsky
@@ -965,6 +966,10 @@
     (clj-refactor-mode 1)
     (cljr-add-keybindings-with-prefix "C-c C-m"))))
 
+(use-package anakondo
+  :ensure t
+  :commands anakondo-minor-mode)
+
 (defun insert-discard ()
   "Insert #_ at current location."
   (interactive)
@@ -982,6 +987,9 @@
        clojure-align-forms-automatically t)
  :config
  (add-hook 'clojure-mode-hook 'paredit-mode)
+ (add-hook 'clojure-mode-hook #'anakondo-minor-mode)
+ (add-hook 'clojurescript-mode-hook #'anakondo-minor-mode)
+ (add-hook 'clojurec-mode-hook #'anakondo-minor-mode)
  (require 'flycheck-clj-kondo)
  ;; TODO I want {:keys []} always to have just one space between the `s` and `[`
  ;;(define-clojure-indent

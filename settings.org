@@ -1047,6 +1047,10 @@
       (clj-refactor-mode 1)
       (cljr-add-keybindings-with-prefix "C-c C-m"))))
 
+  ;; (use-package anakondo
+  ;;   :ensure t
+  ;;   :commands anakondo-minor-mode)
+
   (defun insert-discard ()
     "Insert #_ at current location."
     (interactive)
@@ -1064,17 +1068,16 @@
          clojure-align-forms-automatically t)
    :config
    (add-hook 'clojure-mode-hook 'paredit-mode)
+   ;; (add-hook 'clojure-mode-hook #'anakondo-minor-mode)
+   ;; (add-hook 'clojurescript-mode-hook #'anakondo-minor-mode)
+   ;; (add-hook 'clojurec-mode-hook #'anakondo-minor-mode)
    (require 'flycheck-clj-kondo)
-   ;; TODO I want {:keys []} always to have just one space between the `s` and `[`
-   ;;(define-clojure-indent
-   ;;  (:import 0)
-   ;;  (:require 0))
    )
 
   (defun cider-send-and-evaluate-sexp ()
-    "Sends the s-expression located before the point or the active
-    region to the REPL and evaluates it. Then the Clojure buffer is
-    activated as if nothing happened."
+    "Sends the sexp located before the point or
+  the active region to the REPL and evaluates it.
+  Then the Clojure buffer is activated as if nothing happened."
     (interactive)
     (if (not (region-active-p))
         (cider-insert-last-sexp-in-repl)
@@ -1116,7 +1119,6 @@
            ("C-c C-l"     . cider-repl-clear-buffer))
 
     :config
-    (use-package slamhound)
     (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
     (setq exec-path (append exec-path '("/home/benwiz/bin")))
     ;; (setq exec-path (append '("/Users/benwiz/.nvm/versions/node/v12.16.1/bin") exec-path))
