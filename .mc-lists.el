@@ -9,6 +9,7 @@
         c-electric-paren
         c-electric-star
         cargo-process-run
+        cider-eval-last-sexp
         cider-eval-last-sexp-and-replace
         cljr-raise-sexp
         cljr-slash
@@ -24,6 +25,7 @@
         kill-sexp
         mark-sexp
         move-to-window-line-top-bottom
+        org-cycle
         org-delete-char
         org-self-insert-command
         outline-show-children
@@ -52,7 +54,6 @@
         suspend-frame
         toggle-truncate-lines
         zap-up-to-char
-        cider-eval-last-sexp
         ))
 
 (setq mc/cmds-to-run-once
