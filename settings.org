@@ -1,24 +1,21 @@
 * To Do
 ** continue setting up lsp-mode and turn on lsp-ui and lsp-ivy
-** may want to revert from defer to ensure
 ** Continue setting up dashboard
 *** how to open dashboard?
-*** links to main files in each project (inc. TODO)
-*** links to applications when running in EXWM
-** Check out winner mode https://www.emacswiki.org/emacs/WinnerMode
+*** links to main files in each project
 ** paredit: my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)
 ** paredit: paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.
 ** paredit: paredit kill needs to kill any created whitepsace
-** paredit: go to beginning or end of top level form
-** multiple-cursors: scroll along with it, may be very difficult or impossible
+** paredit: go to beginning or end of top level form (maybe, C-M-S-u)
 ** registers: better shortcuts
 ** dim parenthesis when in comment
-** defer packages that probably should be deferred
 ** cider-find-var should not have to do a confirmation step
 ** add feature to spotify.el (and make pr) for liking a song
 ** prepend current project to each item in "Switch to Buffer" selector
 ** better jump-to-char-in-line, maybe just write it myself
 ** install a dictionary in emacs
+** Ideas for later
+*** If I ever start using many windows: use winner mode https://www.emacswiki.org/emacs/WinnerMode
 * Operating System
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -463,21 +460,48 @@
     :config
     (exec-path-from-shell-initialize))
 
+  (defun mc-mark-next-like-this-then-cycle-forward (arg)
+    "Mark next like this then cycle forward, take interactive ARG."
+    (interactive "p")
+    (call-interactively 'mc/mark-next-like-this)
+    (call-interactively 'mc/cycle-forward))
+
+  (defun mc-skip-to-next-like-this-then-cycle-forward (arg)
+    "Skip to next like this then cycle forward, take interactive ARG."
+    (interactive "p")
+    (call-interactively 'mc/cycle-backward)
+    (call-interactively 'mc/skip-to-next-like-this)
+    (call-interactively 'mc/cycle-forward))
+
+  (defun mc-mark-previous-like-this-then-cycle-backward (arg)
+    "Mark previous like this then cycle backward take interactive ARG."
+    (interactive "p")
+    (call-interactively 'mc/mark-previous-like-this)
+    (call-interactively 'mc/cycle-backward))
+
+  (defun mc-skip-to-previous-like-this-then-cycle-backward (arg)
+    "Skip to previous like this then cycle backward take interactive ARG."
+    (interactive "p")
+    (call-interactively 'mc/cycle-forward)
+    (call-interactively 'mc/skip-to-previous-like-this)
+    (call-interactively 'mc/cycle-backward))
+
   (use-package multiple-cursors
-    :bind (("C-S-c C-S-c" . mc/edit-lines)
-           ("C->" . mc/mark-next-like-this)
-           ("C-M->" . mc/skip-to-next-like-this)
-           ("C-<" . mc/mark-previous-like-this)
-           ("C-c C-<" . mc/mark-all-like-this)
+    :bind (("C->" . mc-mark-next-like-this-then-cycle-forward)
+           ("C-M->" . mc-skip-to-next-like-this-then-cycle-forward)
+           ("C-<" . mc-mark-previous-like-this-then-cycle-backward)
+           ("C-M-<" . mc-skip-to-previous-like-this-then-cycle-backward)
+           ("C-c C->" . mc/mark-all-like-this)
            ("C-S-<mouse-1>" . mc/add-cursor-on-click)
            )
     :config
-    ;; By default, <return> exits mc
+    ;; By default, <return> exits mc ;; TODO FIXME
     (define-key mc/keymap (kbd "<return>") nil))
 
   (use-package ivy
     :config
     (ivy-mode 1)
+    (require 'mc-hide-unmatched-lines-mode)
     (setq ivy-use-virtual-buffers t)
     (setq enable-recursive-minibuffers t)
     (setq ivy-count-format "(%d/%d) ")
@@ -671,43 +695,43 @@
   (use-package flycheck
     :init (global-flycheck-mode))
 
-  ;; (setq lsp-keymap-prefix "C-l")
-  ;; (use-package lsp-mode
-  ;;   :hook ((clojure-mode . lsp)
-  ;;          (clojurec-mode . lsp)
-  ;;          (clojurescript-mode . lsp)
-  ;;          (c++-mode . lsp)
-  ;;          ;; (python-mode . lsp)
-  ;;          ;; (javascript-mode . lsp)
-  ;;          ;; (java-mode . lsp)
-  ;;          ;; (c++-mode . lsp)
-  ;;          )
-  ;;   :commands lsp
-  ;;   :config
-  ;;   (setq lsp-modeline-code-actions-segments '(icon)
-  ;;         lsp-modeline-diagnostics-enable nil
-  ;;         lsp-enable-file-watchers nil
-  ;;         lsp-enable-indentation nil
-  ;;         lsp-enable-on-type-formatting nil
-  ;;         ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
-  ;;         gc-cons-threshold 100000000
-  ;;         read-process-output-max (* 1024 1024)
-  ;;         lsp-completion-provider :capf))
-  ;; (use-package lsp-ui
-  ;;   :commands lsp-ui-mode
-  ;;   :config
-  ;;   (setq lsp-ui-doc-enable nil
-  ;;         lsp-ui-sideline-show-code-actions nil))
-  ;; (use-package lsp-ivy
-  ;;   :commands lsp-ivy-workspace-symbol
-  ;;   :config
-  ;;   (define-key lsp-command-map "i"
-  ;;     (lambda ()
-  ;;       (interactive)
-  ;;       (setq current-prefix-arg '(4))
-  ;;       (call-interactively 'lsp-ivy-workspace-symbol))))
-  ;; (use-package company-lsp
-  ;;   :commands company-lsp)
+  (setq lsp-keymap-prefix "C-l")
+  (use-package lsp-mode
+    ;; :hook ((clojure-mode . lsp)
+    ;;        (clojurec-mode . lsp)
+    ;;        (clojurescript-mode . lsp)
+    ;;        (c++-mode . lsp)
+    ;;        ;; (python-mode . lsp)
+    ;;        ;; (javascript-mode . lsp)
+    ;;        ;; (java-mode . lsp)
+    ;;        ;; (c++-mode . lsp)
+    ;;        )
+    ;; :commands lsp
+    :config
+    (setq lsp-modeline-code-actions-segments '(icon)
+          lsp-modeline-diagnostics-enable nil
+          lsp-enable-file-watchers nil
+          lsp-enable-indentation nil
+          lsp-enable-on-type-formatting nil
+          ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
+          gc-cons-threshold 100000000
+          read-process-output-max (* 1024 1024)
+          lsp-completion-provider :capf))
+  (use-package lsp-ui
+    :commands lsp-ui-mode
+    :config
+    (setq lsp-ui-doc-enable nil
+          lsp-ui-sideline-show-code-actions nil))
+  (use-package lsp-ivy
+    :commands lsp-ivy-workspace-symbol
+    :config
+    (define-key lsp-command-map "i"
+      (lambda ()
+        (interactive)
+        (setq current-prefix-arg '(4))
+        (call-interactively 'lsp-ivy-workspace-symbol))))
+  (use-package company-lsp
+    :commands company-lsp)
 
   ;; NOTE modify like below to defer
   ;; (use-package lsp-mode

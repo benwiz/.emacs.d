@@ -426,6 +426,7 @@
 (use-package ivy
   :config
   (ivy-mode 1)
+  (require 'mc-hide-unmatched-lines-mode)
   (setq ivy-use-virtual-buffers t)
   (setq enable-recursive-minibuffers t)
   (setq ivy-count-format "(%d/%d) ")
@@ -615,43 +616,43 @@
 (use-package flycheck
   :init (global-flycheck-mode))
 
-;; (setq lsp-keymap-prefix "C-l")
-;; (use-package lsp-mode
-;;   :hook ((clojure-mode . lsp)
-;;          (clojurec-mode . lsp)
-;;          (clojurescript-mode . lsp)
-;;          (c++-mode . lsp)
-;;          ;; (python-mode . lsp)
-;;          ;; (javascript-mode . lsp)
-;;          ;; (java-mode . lsp)
-;;          ;; (c++-mode . lsp)
-;;          )
-;;   :commands lsp
-;;   :config
-;;   (setq lsp-modeline-code-actions-segments '(icon)
-;;         lsp-modeline-diagnostics-enable nil
-;;         lsp-enable-file-watchers nil
-;;         lsp-enable-indentation nil
-;;         lsp-enable-on-type-formatting nil
-;;         ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
-;;         gc-cons-threshold 100000000
-;;         read-process-output-max (* 1024 1024)
-;;         lsp-completion-provider :capf))
-;; (use-package lsp-ui
-;;   :commands lsp-ui-mode
-;;   :config
-;;   (setq lsp-ui-doc-enable nil
-;;         lsp-ui-sideline-show-code-actions nil))
-;; (use-package lsp-ivy
-;;   :commands lsp-ivy-workspace-symbol
-;;   :config
-;;   (define-key lsp-command-map "i"
-;;     (lambda ()
-;;       (interactive)
-;;       (setq current-prefix-arg '(4))
-;;       (call-interactively 'lsp-ivy-workspace-symbol))))
-;; (use-package company-lsp
-;;   :commands company-lsp)
+(setq lsp-keymap-prefix "C-l")
+(use-package lsp-mode
+  ;; :hook ((clojure-mode . lsp)
+  ;;        (clojurec-mode . lsp)
+  ;;        (clojurescript-mode . lsp)
+  ;;        (c++-mode . lsp)
+  ;;        ;; (python-mode . lsp)
+  ;;        ;; (javascript-mode . lsp)
+  ;;        ;; (java-mode . lsp)
+  ;;        ;; (c++-mode . lsp)
+  ;;        )
+  ;; :commands lsp
+  :config
+  (setq lsp-modeline-code-actions-segments '(icon)
+        lsp-modeline-diagnostics-enable nil
+        lsp-enable-file-watchers nil
+        lsp-enable-indentation nil
+        lsp-enable-on-type-formatting nil
+        ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
+        gc-cons-threshold 100000000
+        read-process-output-max (* 1024 1024)
+        lsp-completion-provider :capf))
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-doc-enable nil
+        lsp-ui-sideline-show-code-actions nil))
+(use-package lsp-ivy
+  :commands lsp-ivy-workspace-symbol
+  :config
+  (define-key lsp-command-map "i"
+    (lambda ()
+      (interactive)
+      (setq current-prefix-arg '(4))
+      (call-interactively 'lsp-ivy-workspace-symbol))))
+(use-package company-lsp
+  :commands company-lsp)
 
 ;; NOTE modify like below to defer
 ;; (use-package lsp-mode
@@ -966,9 +967,9 @@
     (clj-refactor-mode 1)
     (cljr-add-keybindings-with-prefix "C-c C-m"))))
 
-(use-package anakondo
-  :ensure t
-  :commands anakondo-minor-mode)
+;; (use-package anakondo
+;;   :ensure t
+;;   :commands anakondo-minor-mode)
 
 (defun insert-discard ()
   "Insert #_ at current location."
@@ -987,20 +988,16 @@
        clojure-align-forms-automatically t)
  :config
  (add-hook 'clojure-mode-hook 'paredit-mode)
- (add-hook 'clojure-mode-hook #'anakondo-minor-mode)
- (add-hook 'clojurescript-mode-hook #'anakondo-minor-mode)
- (add-hook 'clojurec-mode-hook #'anakondo-minor-mode)
+ ;; (add-hook 'clojure-mode-hook #'anakondo-minor-mode)
+ ;; (add-hook 'clojurescript-mode-hook #'anakondo-minor-mode)
+ ;; (add-hook 'clojurec-mode-hook #'anakondo-minor-mode)
  (require 'flycheck-clj-kondo)
- ;; TODO I want {:keys []} always to have just one space between the `s` and `[`
- ;;(define-clojure-indent
- ;;  (:import 0)
- ;;  (:require 0))
  )
 
 (defun cider-send-and-evaluate-sexp ()
-  "Sends the s-expression located before the point or the active
-  region to the REPL and evaluates it. Then the Clojure buffer is
-  activated as if nothing happened."
+  "Sends the sexp located before the point or
+the active region to the REPL and evaluates it.
+Then the Clojure buffer is activated as if nothing happened."
   (interactive)
   (if (not (region-active-p))
       (cider-insert-last-sexp-in-repl)
@@ -1042,7 +1039,6 @@
          ("C-c C-l"     . cider-repl-clear-buffer))
 
   :config
-  (use-package slamhound)
   (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
   (setq exec-path (append exec-path '("/home/benwiz/bin")))
   ;; (setq exec-path (append '("/Users/benwiz/.nvm/versions/node/v12.16.1/bin") exec-path))

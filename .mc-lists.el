@@ -33,6 +33,7 @@
         paredit-backward-down
         paredit-backward-slurp-sexp
         paredit-backward-up
+        paredit-close-curly
         paredit-close-round
         paredit-close-square
         paredit-delete-indentation
@@ -60,8 +61,12 @@
       '(
         beginning-of-buffer
         cider-load-buffer
+        counsel-M-x
         counsel-find-file
         end-of-buffer
         goto-line
+        mc-mark-next-like-this-then-cycle-forward
+        mc-mark-previous-like-this-then-cycle-backward
+        mc-skip-to-previous-like-this-then-cycle-backward
         swiper-isearch
         ))
