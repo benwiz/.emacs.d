@@ -30,3 +30,7 @@ secret.el
 /jabber-history/
 /site-lisp/
 /eshell/
+/#init.el#
+/#recentf#
+/ido.last
+/tramp
