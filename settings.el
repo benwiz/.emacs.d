@@ -134,6 +134,8 @@
     (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
 
+(setq custom--inhibit-theme-enable nil)
+
 ;; Underline/highlight selected line
 (global-hl-line-mode 1)
 
@@ -361,44 +363,6 @@
 ;;   (wm-xmodmap)
 ;;   )
 
-(use-package page-break-lines)
-(use-package dashboard
-  ;; https://github.com/emacs-dashboard/emacs-dashboard ;
-  :ensure t
-  :init
-  ;; Banner and title and footer
-  (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard"
-        dashboard-startup-banner 2 ;; 'official, 'logo, 1, 2, 3, or a path to img
-        dashboard-center-content nil
-        dashboard-show-shortcuts t
-        dashboard-set-navigator t ;; Idk what this does, I think it isn't working
-        dashboard-set-init-info t
-        ;; dashboard-init-info "This is an init message!" ;; Customize init-info
-        dashboard-set-footer t
-        ;; dashboard-footer-messages '("Dashboard is pretty cool!") ;; Customize footer messages
-        )
-  ;; Widgets
-  (setq dashboard-items '((recents  . 5)
-                          (bookmarks . 5)
-                          (projects . 5)
-                          (agenda . 5)
-                          (registers . 5))
-        dashboard-set-heading-icons nil
-        dashboard-set-file-icons nil)
-  :config
-  (dashboard-setup-startup-hook)
-  ;; Custom widget
-  ;; Ideas: weather, widget dedicated to each of my projects, news
-  (defun dashboard-insert-custom (list-size)
-    (insert "Custom text"))
-  (add-to-list 'dashboard-item-generators '(custom . dashboard-insert-custom))
-  (add-to-list 'dashboard-items '(custom) t)
-  (defun dashboard ()
-    "Open dashboard."
-    (interactive)
-    (switch-to-buffer "*dashboard*")
-    (dashboard-refresh-buffer)))
-
 (use-package restart-emacs)
 (use-package dictionary)
 ;; (use-package htmlize) ;; awesome package but no use at the moment
@@ -412,25 +376,53 @@
   :config
   (exec-path-from-shell-initialize))
 
+(defun mc-mark-next-like-this-then-cycle-forward (arg)
+  "Mark next like this then cycle forward, take interactive ARG."
+  (interactive "p")
+  (call-interactively 'mc/mark-next-like-this)
+  (call-interactively 'mc/cycle-forward))
+
+(defun mc-skip-to-next-like-this-then-cycle-forward (arg)
+  "Skip to next like this then cycle forward, take interactive ARG."
+  (interactive "p")
+  (call-interactively 'mc/cycle-backward)
+  (call-interactively 'mc/skip-to-next-like-this)
+  (call-interactively 'mc/cycle-forward))
+
+(defun mc-mark-previous-like-this-then-cycle-backward (arg)
+  "Mark previous like this then cycle backward take interactive ARG."
+  (interactive "p")
+  (call-interactively 'mc/mark-previous-like-this)
+  (call-interactively 'mc/cycle-backward))
+
+(defun mc-skip-to-previous-like-this-then-cycle-backward (arg)
+  "Skip to previous like this then cycle backward take interactive ARG."
+  (interactive "p")
+  (call-interactively 'mc/cycle-forward)
+  (call-interactively 'mc/skip-to-previous-like-this)
+  (call-interactively 'mc/cycle-backward))
+
 (use-package multiple-cursors
-  :bind (("C-S-c C-S-c" . mc/edit-lines)
-         ("C->" . mc/mark-next-like-this)
-         ("C-M->" . mc/skip-to-next-like-this)
-         ("C-<" . mc/mark-previous-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)
+  :bind (("C->" . mc-mark-next-like-this-then-cycle-forward)
+         ("C-M->" . mc-skip-to-next-like-this-then-cycle-forward)
+         ("C-<" . mc-mark-previous-like-this-then-cycle-backward)
+         ("C-M-<" . mc-skip-to-previous-like-this-then-cycle-backward)
+         ("C-c C->" . mc/mark-all-like-this)
          ("C-S-<mouse-1>" . mc/add-cursor-on-click)
          )
   :config
-  ;; By default, <return> exits mc
+  ;; By default, <return> exits mc ;; TODO FIXME
   (define-key mc/keymap (kbd "<return>") nil))
 
 (use-package ivy
+  :init
+  (setq ivy-use-virtual-buffers t
+        enable-recursive-minibuffers t
+        ivy-count-format "(%d/%d) "
+        ivy-use-selectable-prompt t)
   :config
   (ivy-mode 1)
   (require 'mc-hide-unmatched-lines-mode)
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
-  (setq ivy-count-format "(%d/%d) ")
   (global-set-key (kbd "C-c C-r") 'ivy-resume)
   (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
   (global-set-key (kbd "C-x C-b") 'ivy-switch-buffer)
@@ -528,69 +520,6 @@
   :config
   (global-undo-tree-mode))
 
-;; TODO try to call (global-hl-line-mode 0) when highlight-symbol is active
-;; TODO probably have to switch to highlight.el
-;; (use-package highlight-symbol
-;;   :init
-;;   (global-set-key (kbd "<f3>") 'highlight-symbol)
-;;   (global-set-key (kbd "C-<f3>") 'highlight-symbol-next)
-;;   (global-set-key (kbd "S-<f3>") 'highlight-symbol-prev)
-;;   (global-set-key (kbd "M-<f3>") 'highlight-symbol-query))
-
-;; (use-package jabber
-;;   :after (:all load-env-vars)
-;;   :init
-;;   (defun jabber ()
-;;     (interactive)
-;;     (call-interactively #'jabber-connect) ;; TODO it would be nice to auto select bwisialowski@gmail.com
-;;     (switch-to-buffer "*-jabber-roster-*"))
-;;   (global-set-key (kbd "<f9>") 'jabber)
-;;   :config
-;;   (setq jabber-account-list (cons (cons "bwisialowski@gmail.com" (cons (append '(:password) (getenv "GMAIL_JABBER_PASSWORD")) '())) '())
-;;         jabber-chat-buffer-show-avatar nil
-;;         jabber-vcard-avatars-retrieve nil
-;;         jabber-history-enabled t
-;;         jabber-activity-make-strings 'jabber-activity-make-strings-shorten
-;;         )
-;;   (set-face-attribute 'jabber-roster-user-online nil :foreground "cyan")
-;;   (set-face-attribute 'jabber-roster-user-away nil :foreground "green")
-;;   ;; (set-face-attribute 'jabber-activity-string nil :foreground "cyan") ;; TODO need to set this programmatically, right now it's set via customization interface
-;;   )
-
-;; (unless *is-a-mac*
-;;   (use-package spotify
-;;     :load-path "packages/spotify.el"
-;;     :init
-;;     (setq spotify-oauth2-client-secret (getenv "SPOTIFY_CLIENT_SECRET"))
-;;     (setq spotify-oauth2-client-id (getenv "SPOTIFY_CLIENT_ID"))
-;;     (setq spotify-transport 'connect)
-;;     (setq spotify-player-status-truncate-length 30)
-;;     (setq spotify-player-status-refresh-interval 7)
-;;     (setq spotify-player-status-playing-text "⏵")
-;;     (setq spotify-player-status-paused-text "⏸")
-;;     (setq spotify-player-status-stopped-text "⏹")
-;;     (setq spotify-player-status-format "%p %t - %a ") ;; trailing space is important
-;;     :config
-;;     ;; (define-key spotify-mode-map (kbd "C-c C-s C-p") 'spotify-command-map)
-;;     ) ;; FIXME maybe not loading spotify-mode-map, maybe I need to turn on some minor mode
-;;   )
-
-;; (use-package elfeed
-;;   :config
-;;   (setq elfeed-feeds
-;;         '("http://feeds.bbci.co.uk/news/world/rss.xml"
-;;           "https://xkcd.com/rss.xml"
-;;           ""))
-;;   ;; Entries older than 4 weeks are marked as read
-;;   (add-hook 'elfeed-new-entry-hook
-;;             (elfeed-make-tagger :before "4 weeks ago"
-;;                                 :remove 'unread))
-;;   ;; Mark all as read
-;;   (defun elfeed-mark-all-as-read ()
-;;     (interactive)
-;;     (mark-whole-buffer)
-;;     (elfeed-search-untag-all-unread)))
-
 (use-package restclient
   :mode ("\\.http\\'" . restclient-mode))
 
@@ -605,6 +534,44 @@
   :config
   (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
   (add-hook 'prog-mode-hook 'fic-mode))
+
+
+(use-package dashboard
+    ;; https://github.com/emacs-dashboard/emacs-dashboard ;
+    :ensure t
+    :init
+    ;; Banner and title and footer
+    (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard"
+          dashboard-startup-banner 2 ;; 'official, 'logo, 1, 2, 3, or a path to img
+          dashboard-center-content nil
+          dashboard-show-shortcuts t
+          dashboard-set-navigator t ;; Idk what this does, I think it isn't working
+          dashboard-set-init-info t
+          ;; dashboard-init-info "This is an init message!" ;; Customize init-info
+          dashboard-set-footer t
+          ;; dashboard-footer-messages '("Dashboard is pretty cool!") ;; Customize footer messages
+          )
+    ;; Widgets
+    (setq dashboard-items '((recents  . 5)
+                            (bookmarks . 5)
+                            (projects . 5)
+                            (agenda . 5)
+                            (registers . 5))
+          dashboard-set-heading-icons nil
+          dashboard-set-file-icons nil)
+    :config
+    (dashboard-setup-startup-hook)
+    ;; Custom widget
+    ;; Ideas: weather, widget dedicated to each of my projects, news
+    (defun dashboard-insert-custom (list-size)
+      (insert "Custom text"))
+    (add-to-list 'dashboard-item-generators '(custom . dashboard-insert-custom))
+    (add-to-list 'dashboard-items '(custom) t)
+    (defun dashboard ()
+      "Open dashboard."
+      (interactive)
+      (switch-to-buffer "*dashboard*")
+      (dashboard-refresh-buffer)))
 
 (use-package ws-butler
   :hook (prog-mode . ws-butler-mode)

@@ -157,6 +157,11 @@
       (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
     (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
 
+  ;; emacs27 loads themes immediately, this line prevents that. Presumably there is a good reason
+  ;; for that and I should figure out a workaround. Also, this is a private variable so may change
+  ;; or go away in the future.
+  (setq custom--inhibit-theme-enable nil)
+
   ;; Underline/highlight selected line
   (global-hl-line-mode 1)
 
@@ -401,7 +406,7 @@
 
 
 #+END_SRC
-** COMMENT Misc. Packages
+** Misc. Packages
 #+BEGIN_SRC emacs-lisp
   (use-package restart-emacs)
   (use-package dictionary)
