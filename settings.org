@@ -167,6 +167,7 @@
 
   ;; Light theme. I like the default theme more than any other light theme I found.
   ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.
+  (set-face-attribute 'default nil :family "Ubuntu Mono")
   (set-face-attribute 'hl-line nil :background "#e3ffe3")
   (set-face-attribute 'region nil :background "#EAEAEA")
   (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
