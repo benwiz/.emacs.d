@@ -93,13 +93,11 @@
     (package-refresh-contents)))
 
 ;; list the packages you want
-(setq package-list
-    '(
-      use-package
-     ))
+(setq package-list '(use-package))
 
 ;; activate all the packages
-(package-initialize)
+;; commented out after upgrade to emacs27. If continues to work can delete entirely.
+;; (package-initialize)
 
 ;; fetch the list of packages available
 ;; `unless` is the same as clojure's `when-not`
@@ -134,6 +132,9 @@
     (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
 
+;; emacs27 loads themes immediately, this line prevents that. Presumably there is a good reason
+;; for that and I should figure out a workaround. Also, this is a private variable so may change
+;; or go away in the future.
 (setq custom--inhibit-theme-enable nil)
 
 ;; Underline/highlight selected line
@@ -708,9 +709,8 @@
 (use-package rjsx-mode
   :init
   (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
-  (setq js-basic-indent 2)
   (setq-default js2-basic-indent 2
-                js2-basic-offset 2
+                ;; js2-basic-offset 2 ;; may need to use js-indent-level. js2-basic-offset is just an alias
                 js2-auto-indent-p t
                 js2-cleanup-whitespace t
                 js2-enter-indents-newline t
