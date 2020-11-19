@@ -92,17 +92,12 @@
   (when (y-or-n-p-with-timeout "Do you want to refresh melpa? " 6 nil)
     (package-refresh-contents)))
 
-;; list the packages you want
-(setq package-list '(use-package))
-
-;; activate all the packages
-;; commented out after upgrade to emacs27. If continues to work can delete entirely.
-;; (package-initialize)
-
-;; fetch the list of packages available
-;; `unless` is the same as clojure's `when-not`
+;; Fetch pacakges when package-archive-contents does not exist
 (unless package-archive-contents
   (package-refresh-contents))
+
+;; list the packages you want
+(setq package-list '(use-package))
 
 ;; install the missing packages
 (dolist (package package-list)
@@ -129,7 +124,7 @@
 (use-package gnu-elpa-keyring-update)
 
 (if *is-a-mac*
-    (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
+       (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
 
 ;; emacs27 loads themes immediately, this line prevents that. Presumably there is a good reason
@@ -214,73 +209,72 @@
   :init
   (load-env-vars "~/.emacs.d/emacs.env"))
 
-(require 'misc)
+;; (require 'misc)
 
-(global-unset-key (kbd "C-z"))
-(global-unset-key (kbd "M-l"))
-(global-unset-key (kbd "M-u"))
-(global-unset-key (kbd "C-i"))
-(global-unset-key (kbd "C-x C-x"))
+;; (global-unset-key (kbd "C-z"))
+;; (global-unset-key (kbd "M-l"))
+;; (global-unset-key (kbd "M-u"))
+;; (global-unset-key (kbd "C-i"))
+;; (global-unset-key (kbd "C-x C-x"))
 
-(global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
-(global-set-key (kbd "C-x C-x") 'mode-line-other-buffer)
-(global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
-(global-set-key (kbd "C-c o") 'other-frame)
-(global-set-key (kbd "C-M-z") 'zap-up-to-char)
-(global-set-key (kbd "C-c n") 'narrow-to-defun)
-(global-set-key (kbd "C-c w") 'widen)
-(global-set-key (kbd "C-c l") 'recenter)
+;; (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
+;; (global-set-key (kbd "C-x C-x") 'mode-line-other-buffer)
+;; (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
+;; (global-set-key (kbd "C-c o") 'other-frame)
+;; (global-set-key (kbd "C-M-z") 'zap-up-to-char)
+;; (global-set-key (kbd "C-c n") 'narrow-to-defun)
+;; (global-set-key (kbd "C-c w") 'widen)
+;; (global-set-key (kbd "C-c l") 'recenter)
 
-(use-package dired
-  :ensure nil ;; dired is not package.el
-  :config
-  (setq dired-omit-files "^.~$")
+;; (use-package dired
+;;   :ensure nil ;; dired is not package.el
+;;   :config
+;;   (setq dired-omit-files "^.~$")
 
-  ;; dired - reuse current buffer by pressing 'a'
-  ;; (put 'dired-find-alternate-file 'disabled nil)
+;;   ;; dired - reuse current buffer by pressing 'a'
+;;   ;; (put 'dired-find-alternate-file 'disabled nil)
 
-  ;; always delete and copy recursively
-  (setq dired-recursive-deletes 'always)
-  (setq dired-recursive-copies 'always)
+;;   ;; always delete and copy recursively
+;;   (setq dired-recursive-deletes 'always)
+;;   (setq dired-recursive-copies 'always)
 
-  (require 'dired-x)
-  (add-hook 'dired-mode-hook 'dired-omit-mode))
+;;   (require 'dired-x)
+;;   (add-hook 'dired-mode-hook 'dired-omit-mode))
 
-;; No lines in DocView (actually i think it is off by default, the number is from something else) (pdf viewer)
-;; (add-hook 'doc-view-minor-mode-hook (lambda () (linum-mode 0)))
+;; ;; no lines in docview (actually i think it is off by default, the number is from something else) (pdf viewer)
+;; ;; (add-hook 'doc-view-minor-mode-hook (lambda () (linum-mode 0)))
 
 (if *is-a-mac*
-  (use-package bela-mode
-    :load-path "~/code/bela-mode.el"
-    :init (setq bela-scripts-dir "~/code/Bela/scripts/"))
-  (use-package bela-mode
-    :load-path "~/code/personal/bela-mode.el"
-    :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
+ (use-package bela-mode
+   :load-path "~/code/bela-mode.el"
+   :init (setq bela-scripts-dir "~/code/Bela/scripts/"))
+ (use-package bela-mode
+   :load-path "~/code/personal/bela-mode.el"
+   :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
 
 (use-package magit
   :config
-  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
-  )
+  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
-(use-package git-gutter
-  :diminish git-gutter-mode
-  :init
-  (global-git-gutter-mode)
-  (progn
-    (setq git-gutter:separator-sign " "
-          git-gutter:lighter " GG"))
-  :config
-  (progn
-    (set-face-background 'git-gutter:deleted "#990A1B")
-    (set-face-foreground 'git-gutter:deleted "#990A1B")
-    (set-face-background 'git-gutter:modified "#00736F")
-    (set-face-foreground 'git-gutter:modified "#00736F")
-    (set-face-background 'git-gutter:added "#546E00")
-    (set-face-foreground 'git-gutter:added "#546E00"))
-  :bind (("C-x p" . git-gutter:previous-hunk)
-         ("C-x n" . git-gutter:next-hunk)
-         ("C-x v =" . git-gutter:popup-hunk)
-         ("C-x v r" . git-gutter:revert-hunk)))
+;; (use-package git-gutter
+;;   :diminish git-gutter-mode
+;;   :init
+;;   (global-git-gutter-mode)
+;;   (progn
+;;     (setq git-gutter:separator-sign " "
+;;           git-gutter:lighter " GG"))
+;;   :config
+;;   (progn
+;;     (set-face-background 'git-gutter:deleted "#990A1B")
+;;     (set-face-foreground 'git-gutter:deleted "#990A1B")
+;;     (set-face-background 'git-gutter:modified "#00736F")
+;;     (set-face-foreground 'git-gutter:modified "#00736F")
+;;     (set-face-background 'git-gutter:added "#546E00")
+;;     (set-face-foreground 'git-gutter:added "#546E00"))
+;;   :bind (("C-x p" . git-gutter:previous-hunk)
+;;          ("C-x n" . git-gutter:next-hunk)
+;;          ("C-x v =" . git-gutter:popup-hunk)
+;;          ("C-x v r" . git-gutter:revert-hunk)))
 
 (use-package git-link
   :config
@@ -423,264 +417,264 @@
 ;;   :config
 ;;   (counsel-projectile-mode))
 
-(use-package restart-emacs)
-(use-package dictionary)
-;; (use-package htmlize) ;; awesome package but no use at the moment
-;; (use-package wgrep) ;; edit file in grep buffer
-(use-package itail)
+;; (use-package restart-emacs)
+;; (use-package dictionary)
+;; ;; (use-package htmlize) ;; awesome package but no use at the moment
+;; ;; (use-package wgrep) ;; edit file in grep buffer
+;; (use-package itail)
 
-(use-package scratch
-  :bind (("C-c s" . scratch)))
+;; (use-package scratch
+;;   :bind (("C-c s" . scratch)))
 
-(use-package exec-path-from-shell
-  :config
-  (exec-path-from-shell-initialize))
+;; (use-package exec-path-from-shell
+;;   :config
+;;   (exec-path-from-shell-initialize))
 
-(defun mc-mark-next-like-this-then-cycle-forward (arg)
-  "Mark next like this then cycle forward, take interactive ARG."
-  (interactive "p")
-  (call-interactively 'mc/mark-next-like-this)
-  (call-interactively 'mc/cycle-forward))
+;; (defun mc-mark-next-like-this-then-cycle-forward (arg)
+;;   "Mark next like this then cycle forward, take interactive ARG."
+;;   (interactive "p")
+;;   (call-interactively 'mc/mark-next-like-this)
+;;   (call-interactively 'mc/cycle-forward))
 
-(defun mc-skip-to-next-like-this-then-cycle-forward (arg)
-  "Skip to next like this then cycle forward, take interactive ARG."
-  (interactive "p")
-  (call-interactively 'mc/cycle-backward)
-  (call-interactively 'mc/skip-to-next-like-this)
-  (call-interactively 'mc/cycle-forward))
+;; (defun mc-skip-to-next-like-this-then-cycle-forward (arg)
+;;   "Skip to next like this then cycle forward, take interactive ARG."
+;;   (interactive "p")
+;;   (call-interactively 'mc/cycle-backward)
+;;   (call-interactively 'mc/skip-to-next-like-this)
+;;   (call-interactively 'mc/cycle-forward))
 
-(defun mc-mark-previous-like-this-then-cycle-backward (arg)
-  "Mark previous like this then cycle backward take interactive ARG."
-  (interactive "p")
-  (call-interactively 'mc/mark-previous-like-this)
-  (call-interactively 'mc/cycle-backward))
+;; (defun mc-mark-previous-like-this-then-cycle-backward (arg)
+;;   "Mark previous like this then cycle backward take interactive ARG."
+;;   (interactive "p")
+;;   (call-interactively 'mc/mark-previous-like-this)
+;;   (call-interactively 'mc/cycle-backward))
 
-(defun mc-skip-to-previous-like-this-then-cycle-backward (arg)
-  "Skip to previous like this then cycle backward take interactive ARG."
-  (interactive "p")
-  (call-interactively 'mc/cycle-forward)
-  (call-interactively 'mc/skip-to-previous-like-this)
-  (call-interactively 'mc/cycle-backward))
+;; (defun mc-skip-to-previous-like-this-then-cycle-backward (arg)
+;;   "Skip to previous like this then cycle backward take interactive ARG."
+;;   (interactive "p")
+;;   (call-interactively 'mc/cycle-forward)
+;;   (call-interactively 'mc/skip-to-previous-like-this)
+;;   (call-interactively 'mc/cycle-backward))
 
-(use-package multiple-cursors
-  :bind (("C->" . mc-mark-next-like-this-then-cycle-forward)
-         ("C-M->" . mc-skip-to-next-like-this-then-cycle-forward)
-         ("C-<" . mc-mark-previous-like-this-then-cycle-backward)
-         ("C-M-<" . mc-skip-to-previous-like-this-then-cycle-backward)
-         ("C-c C->" . mc/mark-all-like-this)
-         ("C-S-<mouse-1>" . mc/add-cursor-on-click)
-         )
-  :config
-  ;; By default, <return> exits mc ;; TODO FIXME
-  (define-key mc/keymap (kbd "<return>") nil))
+;; (use-package multiple-cursors
+;;   :bind (("C->" . mc-mark-next-like-this-then-cycle-forward)
+;;          ("C-M->" . mc-skip-to-next-like-this-then-cycle-forward)
+;;          ("C-<" . mc-mark-previous-like-this-then-cycle-backward)
+;;          ("C-M-<" . mc-skip-to-previous-like-this-then-cycle-backward)
+;;          ("C-c C->" . mc/mark-all-like-this)
+;;          ("C-S-<mouse-1>" . mc/add-cursor-on-click)
+;;          )
+;;   :config
+;;   ;; By default, <return> exits mc ;; TODO FIXME
+;;   (define-key mc/keymap (kbd "<return>") nil))
 
-(use-package term
-  :config
-  ;; NOTE: After changing the following regexp, call `term-mode' in the term
-  ;; buffer for this expression to be effective; because the term buffers
-  ;; make a local copy of this var each time a new term buffer is opened or
-  ;; `term-mode' is called again.
-  (setq term-prompt-regexp ".*:.*>.*? "))
+;; (use-package term
+;;   :config
+;;   ;; NOTE: After changing the following regexp, call `term-mode' in the term
+;;   ;; buffer for this expression to be effective; because the term buffers
+;;   ;; make a local copy of this var each time a new term buffer is opened or
+;;   ;; `term-mode' is called again.
+;;   (setq term-prompt-regexp ".*:.*>.*? "))
 
-(use-package multi-term
-  :config
-  ;; TODO need to chang blue color to another color. I could look into `dircolors -b` but there may be an easier way.
-  (setq term-bind-key-alist
-        '(("C-c C-c" . term-interrupt-subjob)            ; default
-          ("C-c C-e" . term-send-esc)                    ; default
-          ;; ("C-c C-j" . term-line-mode) ;; TODO can I use the same command as EXWM?
-          ;; ("C-c C-k" . term-char-mode) ;; TODO can I use the same command as EXWM?
-          ("C-a"     . term-send-raw) ; term-bol
-          ("C-b"     . term-send-left)
-          ("C-f"     . term-send-right)
-          ("C-p"     . previous-line)                    ; default
-          ("C-n"     . next-line)                        ; default
-          ("C-s"     . isearch-forward)                  ; default
-          ("C-r"     . isearch-backward)                 ; default
-          ("C-m"     . term-send-return)                 ; default
-          ("C-y"     . term-paste)                       ; default
-          ("M-f"     . term-send-forward-word)           ; default
-          ("M-b"     . term-send-backward-word)          ; default
-          ("M-o"     . term-send-backspace)              ; default
-          ("M-p"     . term-send-up)                     ; default
-          ("M-n"     . term-send-down)                   ; default
-          ;; ("M-M"     . term-send-forward-kill-word)   ; default
-          ("M-d"     . term-send-forward-kill-word)
-          ;; ("M-N"     . term-send-backward-kill-word)  ; default
-          ("M-DEL"   . term-send-backward-kill-word)
-          ("M-r"     . term-send-reverse-search-history) ; default
-          ("M-,"     . term-send-raw)                    ; default
-          ("M-."     . comint-dynamic-complete)))        ; default
+;; (use-package multi-term
+;;   :config
+;;   ;; TODO need to chang blue color to another color. I could look into `dircolors -b` but there may be an easier way.
+;;   (setq term-bind-key-alist
+;;         '(("C-c C-c" . term-interrupt-subjob)            ; default
+;;           ("C-c C-e" . term-send-esc)                    ; default
+;;           ;; ("C-c C-j" . term-line-mode) ;; TODO can I use the same command as EXWM?
+;;           ;; ("C-c C-k" . term-char-mode) ;; TODO can I use the same command as EXWM?
+;;           ("C-a"     . term-send-raw) ; term-bol
+;;           ("C-b"     . term-send-left)
+;;           ("C-f"     . term-send-right)
+;;           ("C-p"     . previous-line)                    ; default
+;;           ("C-n"     . next-line)                        ; default
+;;           ("C-s"     . isearch-forward)                  ; default
+;;           ("C-r"     . isearch-backward)                 ; default
+;;           ("C-m"     . term-send-return)                 ; default
+;;           ("C-y"     . term-paste)                       ; default
+;;           ("M-f"     . term-send-forward-word)           ; default
+;;           ("M-b"     . term-send-backward-word)          ; default
+;;           ("M-o"     . term-send-backspace)              ; default
+;;           ("M-p"     . term-send-up)                     ; default
+;;           ("M-n"     . term-send-down)                   ; default
+;;           ;; ("M-M"     . term-send-forward-kill-word)   ; default
+;;           ("M-d"     . term-send-forward-kill-word)
+;;           ;; ("M-N"     . term-send-backward-kill-word)  ; default
+;;           ("M-DEL"   . term-send-backward-kill-word)
+;;           ("M-r"     . term-send-reverse-search-history) ; default
+;;           ("M-,"     . term-send-raw)                    ; default
+;;           ("M-."     . comint-dynamic-complete)))        ; default
 
-  (setq multi-term-buffer-name "term"))
+;;   (setq multi-term-buffer-name "term"))
 
-(use-package free-keys
-  :bind ("C-h C-k" . 'free-keys))
+;; (use-package free-keys
+;;   :bind ("C-h C-k" . 'free-keys))
 
-(use-package undo-tree
-  :config
-  (global-undo-tree-mode))
+;; (use-package undo-tree
+;;   :config
+;;   (global-undo-tree-mode))
 
-(use-package restclient
-  :mode ("\\.http\\'" . restclient-mode))
+;; (use-package restclient
+;;   :mode ("\\.http\\'" . restclient-mode))
 
-(use-package fic-mode
-  :init
-  (defface fic-face
-    '((((class color))
-       (:foreground "orange" :weight bold :slant italic))
-      (t (:weight bold :slant italic)))
-    "Face to fontify FIXME/TODO words"
-    :group 'fic-mode)
-  :config
-  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
-  (add-hook 'prog-mode-hook 'fic-mode))
+;; (use-package fic-mode
+;;   :init
+;;   (defface fic-face
+;;     '((((class color))
+;;        (:foreground "orange" :weight bold :slant italic))
+;;       (t (:weight bold :slant italic)))
+;;     "Face to fontify FIXME/TODO words"
+;;     :group 'fic-mode)
+;;   :config
+;;   (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
+;;   (add-hook 'prog-mode-hook 'fic-mode))
 
 
-(use-package dashboard
-    ;; https://github.com/emacs-dashboard/emacs-dashboard ;
-    :ensure t
-    :init
-    ;; Banner and title and footer
-    (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard"
-          dashboard-startup-banner 2 ;; 'official, 'logo, 1, 2, 3, or a path to img
-          dashboard-center-content nil
-          dashboard-show-shortcuts t
-          dashboard-set-navigator t ;; Idk what this does, I think it isn't working
-          dashboard-set-init-info t
-          ;; dashboard-init-info "This is an init message!" ;; Customize init-info
-          dashboard-set-footer t
-          ;; dashboard-footer-messages '("Dashboard is pretty cool!") ;; Customize footer messages
-          )
-    ;; Widgets
-    (setq dashboard-items '((recents  . 5)
-                            (bookmarks . 5)
-                            (projects . 5)
-                            (agenda . 5)
-                            (registers . 5))
-          dashboard-set-heading-icons nil
-          dashboard-set-file-icons nil)
-    :config
-    (dashboard-setup-startup-hook)
-    ;; Custom widget
-    ;; Ideas: weather, widget dedicated to each of my projects, news
-    (defun dashboard-insert-custom (list-size)
-      (insert "Custom text"))
-    (add-to-list 'dashboard-item-generators '(custom . dashboard-insert-custom))
-    (add-to-list 'dashboard-items '(custom) t)
-    (defun dashboard ()
-      "Open dashboard."
-      (interactive)
-      (switch-to-buffer "*dashboard*")
-      (dashboard-refresh-buffer)))
+;; (use-package dashboard
+;;     ;; https://github.com/emacs-dashboard/emacs-dashboard ;
+;;     :ensure t
+;;     :init
+;;     ;; Banner and title and footer
+;;     (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard"
+;;           dashboard-startup-banner 2 ;; 'official, 'logo, 1, 2, 3, or a path to img
+;;           dashboard-center-content nil
+;;           dashboard-show-shortcuts t
+;;           dashboard-set-navigator t ;; Idk what this does, I think it isn't working
+;;           dashboard-set-init-info t
+;;           ;; dashboard-init-info "This is an init message!" ;; Customize init-info
+;;           dashboard-set-footer t
+;;           ;; dashboard-footer-messages '("Dashboard is pretty cool!") ;; Customize footer messages
+;;           )
+;;     ;; Widgets
+;;     (setq dashboard-items '((recents  . 5)
+;;                             (bookmarks . 5)
+;;                             (projects . 5)
+;;                             (agenda . 5)
+;;                             (registers . 5))
+;;           dashboard-set-heading-icons nil
+;;           dashboard-set-file-icons nil)
+;;     :config
+;;     (dashboard-setup-startup-hook)
+;;     ;; Custom widget
+;;     ;; Ideas: weather, widget dedicated to each of my projects, news
+;;     (defun dashboard-insert-custom (list-size)
+;;       (insert "Custom text"))
+;;     (add-to-list 'dashboard-item-generators '(custom . dashboard-insert-custom))
+;;     (add-to-list 'dashboard-items '(custom) t)
+;;     (defun dashboard ()
+;;       "Open dashboard."
+;;       (interactive)
+;;       (switch-to-buffer "*dashboard*")
+;;       (dashboard-refresh-buffer)))
 
-(use-package ws-butler
-  :hook (prog-mode . ws-butler-mode)
-  :config (ws-butler-global-mode 1))
+;; (use-package ws-butler
+;;   :hook (prog-mode . ws-butler-mode)
+;;   :config (ws-butler-global-mode 1))
 
-(use-package editorconfig
-  :config
-  (editorconfig-mode 1))
+;; (use-package editorconfig
+;;   :config
+;;   (editorconfig-mode 1))
 
-(use-package flycheck
-  :init (global-flycheck-mode))
+;; (use-package flycheck
+;;   :init (global-flycheck-mode))
 
-(setq lsp-keymap-prefix "C-l")
-(use-package lsp-mode
-  ;; :hook ((clojure-mode . lsp)
-  ;;        (clojurec-mode . lsp)
-  ;;        (clojurescript-mode . lsp)
-  ;;        (c++-mode . lsp)
-  ;;        ;; (python-mode . lsp)
-  ;;        ;; (javascript-mode . lsp)
-  ;;        ;; (java-mode . lsp)
-  ;;        ;; (c++-mode . lsp)
-  ;;        )
-  ;; :commands lsp
-  :config
-  (setq lsp-modeline-code-actions-segments '(icon)
-        lsp-modeline-diagnostics-enable nil
-        lsp-enable-file-watchers nil
-        lsp-enable-indentation nil
-        lsp-enable-on-type-formatting nil
-        ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
-        gc-cons-threshold 100000000
-        read-process-output-max (* 1024 1024)
-        lsp-completion-provider :capf))
-(use-package lsp-ui
-  :commands lsp-ui-mode
-  :config
-  (setq lsp-ui-doc-enable nil
-        lsp-ui-sideline-show-code-actions nil))
-(use-package lsp-ivy
-  :commands lsp-ivy-workspace-symbol
-  :config
-  (define-key lsp-command-map "i"
-    (lambda ()
-      (interactive)
-      (setq current-prefix-arg '(4))
-      (call-interactively 'lsp-ivy-workspace-symbol))))
-(use-package company-lsp
-  :commands company-lsp)
-
-;; NOTE modify like below to defer
+;; (setq lsp-keymap-prefix "C-l")
 ;; (use-package lsp-mode
-;;     :hook (XXX-mode . lsp-deferred)
-;;     :commands (lsp lsp-deferred))
+;;   ;; :hook ((clojure-mode . lsp)
+;;   ;;        (clojurec-mode . lsp)
+;;   ;;        (clojurescript-mode . lsp)
+;;   ;;        (c++-mode . lsp)
+;;   ;;        ;; (python-mode . lsp)
+;;   ;;        ;; (javascript-mode . lsp)
+;;   ;;        ;; (java-mode . lsp)
+;;   ;;        ;; (c++-mode . lsp)
+;;   ;;        )
+;;   ;; :commands lsp
+;;   :config
+;;   (setq lsp-modeline-code-actions-segments '(icon)
+;;         lsp-modeline-diagnostics-enable nil
+;;         lsp-enable-file-watchers nil
+;;         lsp-enable-indentation nil
+;;         lsp-enable-on-type-formatting nil
+;;         ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
+;;         gc-cons-threshold 100000000
+;;         read-process-output-max (* 1024 1024)
+;;         lsp-completion-provider :capf))
+;; (use-package lsp-ui
+;;   :commands lsp-ui-mode
+;;   :config
+;;   (setq lsp-ui-doc-enable nil
+;;         lsp-ui-sideline-show-code-actions nil))
+;; (use-package lsp-ivy
+;;   :commands lsp-ivy-workspace-symbol
+;;   :config
+;;   (define-key lsp-command-map "i"
+;;     (lambda ()
+;;       (interactive)
+;;       (setq current-prefix-arg '(4))
+;;       (call-interactively 'lsp-ivy-workspace-symbol))))
+;; (use-package company-lsp
+;;   :commands company-lsp)
 
-(use-package expand-region
-  :config
-  (global-set-key (kbd "C-=") 'er/expand-region))
+;; ;; NOTE modify like below to defer
+;; ;; (use-package lsp-mode
+;; ;;     :hook (XXX-mode . lsp-deferred)
+;; ;;     :commands (lsp lsp-deferred))
 
-(use-package company
-  :init (global-company-mode)
-  :config
-  (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
-  ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
-  )
+;; (use-package expand-region
+;;   :config
+;;   (global-set-key (kbd "C-=") 'er/expand-region))
 
-(use-package hideshow
-  :bind (("C-\\" . hs-toggle-hiding)
-         ("M-+" . hs-show-all)
-         ("M--" . hs-hide-all))
-  :init (add-hook #'prog-mode-hook #'hs-minor-mode)
-  :diminish hs-minor-mode
-  :config
-  ;; Add `json-mode' and `javascript-mode' to the list
-  (setq hs-special-modes-alist
-        (mapcar 'purecopy
-                '((c-mode "{" "}" "/[*/]" nil nil)
-                  (c++-mode "{" "}" "/[*/]" nil nil)
-                  (java-mode "{" "}" "/[*/]" nil nil)
-                  (js-mode "{" "}" "/[*/]" nil)
-                  (json-mode "{" "}" "/[*/]" nil)
-                  (javascript-mode  "{" "}" "/[*/]" nil)))))
+;; (use-package company
+;;   :init (global-company-mode)
+;;   :config
+;;   (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+;;   ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
+;;   )
 
-(defun duplicate-line()
-  (interactive)
-  (move-beginning-of-line 1)
-  (kill-line)
-  (yank)
-  (open-line 1)
-  (next-line 1)
-  (yank))
-(global-set-key (kbd "C-c D") 'duplicate-line)
+;; (use-package hideshow
+;;   :bind (("C-\\" . hs-toggle-hiding)
+;;          ("M-+" . hs-show-all)
+;;          ("M--" . hs-hide-all))
+;;   :init (add-hook #'prog-mode-hook #'hs-minor-mode)
+;;   :diminish hs-minor-mode
+;;   :config
+;;   ;; Add `json-mode' and `javascript-mode' to the list
+;;   (setq hs-special-modes-alist
+;;         (mapcar 'purecopy
+;;                 '((c-mode "{" "}" "/[*/]" nil nil)
+;;                   (c++-mode "{" "}" "/[*/]" nil nil)
+;;                   (java-mode "{" "}" "/[*/]" nil nil)
+;;                   (js-mode "{" "}" "/[*/]" nil)
+;;                   (json-mode "{" "}" "/[*/]" nil)
+;;                   (javascript-mode  "{" "}" "/[*/]" nil)))))
 
-(use-package markdown-mode
-  :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+;; (defun duplicate-line()
+;;   (interactive)
+;;   (move-beginning-of-line 1)
+;;   (kill-line)
+;;   (yank)
+;;   (open-line 1)
+;;   (next-line 1)
+;;   (yank))
+;; (global-set-key (kbd "C-c D") 'duplicate-line)
 
-(use-package highlight-indent-guides
-    :hook (python-mode . highlight-indent-guides-mode)
-    :config
-    (setq highlight-indent-guides-method 'character)
-    (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
-    (setq highlight-indent-guides-auto-character-face-perc 20))
+;; (use-package markdown-mode
+;;   :commands (markdown-mode gfm-mode)
+;;   :mode (("README\\.md\\'" . gfm-mode)
+;;          ("\\.md\\'" . markdown-mode)
+;;          ("\\.markdown\\'" . markdown-mode))
+;;   :init (setq markdown-command "multimarkdown"))
 
-(use-package symbol-overlay)
+;; (use-package highlight-indent-guides
+;;     :hook (python-mode . highlight-indent-guides-mode)
+;;     :config
+;;     (setq highlight-indent-guides-method 'character)
+;;     (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
+;;     (setq highlight-indent-guides-auto-character-face-perc 20))
+
+;; (use-package symbol-overlay)
 
 (define-key org-mode-map (kbd "M-n") 'org-todo)
 
@@ -688,346 +682,346 @@
 
 
 
-(use-package yaml-mode
-  :mode ("\\.yml$" . yaml-mode))
+;; (use-package yaml-mode
+;;   :mode ("\\.yml$" . yaml-mode))
 
-;; TODO use use-package
-(setq load-path (append (list (expand-file-name "/usr/share/emacs/site-lisp")) load-path))
-(require 'lilypond-mode)
-(add-to-list 'auto-mode-alist '("\\.ly\\'" . LilyPond-mode))
-(defun lilypond-compile ()
-  "Compile current file to PDF. The built in function
-       was using the /tmp dir and was just confusing.
+;; ;; TODO use use-package
+;; (setq load-path (append (list (expand-file-name "/usr/share/emacs/site-lisp")) load-path))
+;; (require 'lilypond-mode)
+;; (add-to-list 'auto-mode-alist '("\\.ly\\'" . LilyPond-mode))
+;; (defun lilypond-compile ()
+;;   "Compile current file to PDF. The built in function
+;;        was using the /tmp dir and was just confusing.
 
-       Actually, just use C-c C-l LilyPond-command-lilypond."
-  (interactive)
-  (shell-command (concat "lilypond " (buffer-file-name))))
-(define-key LilyPond-mode-map (kbd "C-c C-k") 'lilypond-compile)
-;; (add-hook 'after-save-hook
-;;           (lambda ()
-;;             (when (eq major-mode 'LilyPond-mode)
-;;               (lilypond-compile))))
+;;        Actually, just use C-c C-l LilyPond-command-lilypond."
+;;   (interactive)
+;;   (shell-command (concat "lilypond " (buffer-file-name))))
+;; (define-key LilyPond-mode-map (kbd "C-c C-k") 'lilypond-compile)
+;; ;; (add-hook 'after-save-hook
+;; ;;           (lambda ()
+;; ;;             (when (eq major-mode 'LilyPond-mode)
+;; ;;               (lilypond-compile))))
 
-(use-package rjsx-mode
-  :init
-  (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
-  (setq-default js2-basic-indent 2
-                ;; js2-basic-offset 2 ;; may need to use js-indent-level. js2-basic-offset is just an alias
-                js2-auto-indent-p t
-                js2-cleanup-whitespace t
-                js2-enter-indents-newline t
-                js2-indent-on-enter-key t
-                js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
+;; (use-package rjsx-mode
+;;   :init
+;;   (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+;;   (setq-default js2-basic-indent 2
+;;                 ;; js2-basic-offset 2 ;; may need to use js-indent-level. js2-basic-offset is just an alias
+;;                 js2-auto-indent-p t
+;;                 js2-cleanup-whitespace t
+;;                 js2-enter-indents-newline t
+;;                 js2-indent-on-enter-key t
+;;                 js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
 
-  (add-hook 'rjsx-mode-hook
-            (lambda ()
-              (flycheck-select-checker "javascript-eslint")
-              (electric-pair-mode 1)))
+;;   (add-hook 'rjsx-mode-hook
+;;             (lambda ()
+;;               (flycheck-select-checker "javascript-eslint")
+;;               (electric-pair-mode 1)))
 
-  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+;;   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
 
-;; Idk what this does
-;; (use-package tern
-;;    :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-;;    :config
-;;      (use-package company-tern
-;;         :ensure t
-;;         :init (add-to-list 'company-backends 'company-tern)))
+;; ;; Idk what this does
+;; ;; (use-package tern
+;; ;;    :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+;; ;;    :config
+;; ;;      (use-package company-tern
+;; ;;         :ensure t
+;; ;;         :init (add-to-list 'company-backends 'company-tern)))
 
-(use-package js2-refactor
-  :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
-  :config (js2r-add-keybindings-with-prefix "C-c ."))
+;; (use-package js2-refactor
+;;   :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
+;;   :config (js2r-add-keybindings-with-prefix "C-c ."))
 
-;; Not sure what this does
-(provide 'init-javascript)
+;; ;; Not sure what this does
+;; (provide 'init-javascript)
 
-(use-package typescript-mode
-  :mode (("\\.ts\\'" . typescript-mode)
-         ("\\.tsx\\'" . typescript-mode)))
+;; (use-package typescript-mode
+;;   :mode (("\\.ts\\'" . typescript-mode)
+;;          ("\\.tsx\\'" . typescript-mode)))
 
-(use-package go-projectile
-  :init)
+;; (use-package go-projectile
+;;   :init)
 
-(use-package go-mode
-  :init
-  :config
-  (use-package go-errcheck
-    :ensure t
-    )
-  (defun my-go-mode-hook ()
-    ;; golang.org/x/tools/cmd/goimports
-    (setq gofmt-command "goimports")
-    ;; call gofmt before saving
-    (add-hook 'before-save-hook 'gofmt-before-save)
-    (add-to-list 'exec-path "~/Repos/go/bin")
-    ;; Customize compile command to run go build
-    (if (not (string-match "go" compile-command))
-        (set (make-local-variable 'compile-command)
-             "go build -v && go vet"))
-    ;; This proved to be too slow in big projects:
-    ;; && go test -short -coverprofile cover.out && go tool cover -func cover.out
+;; (use-package go-mode
+;;   :init
+;;   :config
+;;   (use-package go-errcheck
+;;     :ensure t
+;;     )
+;;   (defun my-go-mode-hook ()
+;;     ;; golang.org/x/tools/cmd/goimports
+;;     (setq gofmt-command "goimports")
+;;     ;; call gofmt before saving
+;;     (add-hook 'before-save-hook 'gofmt-before-save)
+;;     (add-to-list 'exec-path "~/Repos/go/bin")
+;;     ;; Customize compile command to run go build
+;;     (if (not (string-match "go" compile-command))
+;;         (set (make-local-variable 'compile-command)
+;;              "go build -v && go vet"))
+;;     ;; This proved to be too slow in big projects:
+;;     ;; && go test -short -coverprofile cover.out && go tool cover -func cover.out
 
-    (local-set-key (kbd "C-c C-c") 'compile)
-    (local-set-key (kbd "C-c C-g") 'go-goto-imports)
-    (local-set-key (kbd "C-c C-k") 'godoc)
-    ;; github.com/kisielk/errcheck
-    (local-set-key (kbd "C-c C-e") 'go-errcheck)
-    (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)
-    ;; Godef jump key binding
-    ;; code.google.com/p/rog-go/exp/cmd/godef
-    (local-set-key (kbd "M-\"") 'godef-jump)
-    ;; use company-go in go-mode
-    (set (make-local-variable 'company-backends) '(company-go))
-    (company-mode)
+;;     (local-set-key (kbd "C-c C-c") 'compile)
+;;     (local-set-key (kbd "C-c C-g") 'go-goto-imports)
+;;     (local-set-key (kbd "C-c C-k") 'godoc)
+;;     ;; github.com/kisielk/errcheck
+;;     (local-set-key (kbd "C-c C-e") 'go-errcheck)
+;;     (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)
+;;     ;; Godef jump key binding
+;;     ;; code.google.com/p/rog-go/exp/cmd/godef
+;;     (local-set-key (kbd "M-\"") 'godef-jump)
+;;     ;; use company-go in go-mode
+;;     (set (make-local-variable 'company-backends) '(company-go))
+;;     (company-mode)
 
-    (setenv "GOROOT" (shell-command-to-string ". /etc/zshrc; echo -n $GOROOT"))
-    (setenv "GOPATH" (shell-command-to-string ". /etc/zshrc; echo -n $GOPATH")))
+;;     (setenv "GOROOT" (shell-command-to-string ". /etc/zshrc; echo -n $GOROOT"))
+;;     (setenv "GOPATH" (shell-command-to-string ". /etc/zshrc; echo -n $GOPATH")))
 
-  ;; Ensure all linting passes, then use 'go build' to compile, then test/vet
-  (defun setup-go-mode-compile ()
-    (if (not (string-match "go" compile-command))
-        (set (make-local-variable 'compile-command)
-             "gometalinter.v1 --deadline 10s && go build -v && go test -v && go vet")))
+;;   ;; Ensure all linting passes, then use 'go build' to compile, then test/vet
+;;   (defun setup-go-mode-compile ()
+;;     (if (not (string-match "go" compile-command))
+;;         (set (make-local-variable 'compile-command)
+;;              "gometalinter.v1 --deadline 10s && go build -v && go test -v && go vet")))
 
-    ;; set helm-dash documentation
-  (defun go-doc ()
-    (interactive)
-    (setq-local helm-dash-docsets '("Go")))
+;;     ;; set helm-dash documentation
+;;   (defun go-doc ()
+;;     (interactive)
+;;     (setq-local helm-dash-docsets '("Go")))
 
-  (add-hook 'go-mode-hook 'company-mode)
-  (add-hook 'go-mode-hook 'go-eldoc-setup)
-  (add-hook 'go-mode-hook 'highlight-word-hook)
-  (add-to-list 'load-path (concat (getenv "GOPATH")
-                                  "/src/github.com/golang/lint/misc/emacs"))
-  ;; (require 'golint)
-  ;; (add-hook 'go-mode-hook 'my-go-mode-hook)
-  ;; (add-hook 'go-mode-hook 'go-doc)
-  ;; (add-hook 'go-mode-hook 'setup-go-mode-compile)
+;;   (add-hook 'go-mode-hook 'company-mode)
+;;   (add-hook 'go-mode-hook 'go-eldoc-setup)
+;;   (add-hook 'go-mode-hook 'highlight-word-hook)
+;;   (add-to-list 'load-path (concat (getenv "GOPATH")
+;;                                   "/src/github.com/golang/lint/misc/emacs"))
+;;   ;; (require 'golint)
+;;   ;; (add-hook 'go-mode-hook 'my-go-mode-hook)
+;;   ;; (add-hook 'go-mode-hook 'go-doc)
+;;   ;; (add-hook 'go-mode-hook 'setup-go-mode-compile)
 
-  (require 'go-guru)
-  (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
-  )
+;;   (require 'go-guru)
+;;   (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
+;;   )
 
-(eval-after-load 'go-mode
-  '(substitute-key-definition 'go-import-add 'helm-go-package go-mode-map))
+;; (eval-after-load 'go-mode
+;;   '(substitute-key-definition 'go-import-add 'helm-go-package go-mode-map))
 
-;; Completion integration
-(use-package company-go
-  :after go
-  :config
-  (setq tab-width 4)
+;; ;; Completion integration
+;; (use-package company-go
+;;   :after go
+;;   :config
+;;   (setq tab-width 4)
 
-  :bind (:map go-mode-map
-              ("M-." . godef-jump)))
+;;   :bind (:map go-mode-map
+;;               ("M-." . godef-jump)))
 
-;; ElDoc integration
-(use-package go-eldoc
-  :config
-  (add-hook 'go-mode-hook 'go-eldoc-setup))
+;; ;; ElDoc integration
+;; (use-package go-eldoc
+;;   :config
+;;   (add-hook 'go-mode-hook 'go-eldoc-setup))
 
-;; Linting
-(use-package flycheck-gometalinter
-  :config
-  (progn
-    (flycheck-gometalinter-setup))
-    ;; skip linting for vendor dirs
-    (setq flycheck-gometalinter-vendor t)
-    ;; use in test files
-    (setq flycheck-gometalinter-test t)
-    ;; only use fast linters
-    (setq flycheck-gometalinter-fast t)
-    ;; explicitly disable 'gotype' linter
-    (setq flycheck-gometalinter-disable-linters '("gotype")))
+;; ;; Linting
+;; (use-package flycheck-gometalinter
+;;   :config
+;;   (progn
+;;     (flycheck-gometalinter-setup))
+;;     ;; skip linting for vendor dirs
+;;     (setq flycheck-gometalinter-vendor t)
+;;     ;; use in test files
+;;     (setq flycheck-gometalinter-test t)
+;;     ;; only use fast linters
+;;     (setq flycheck-gometalinter-fast t)
+;;     ;; explicitly disable 'gotype' linter
+;;     (setq flycheck-gometalinter-disable-linters '("gotype")))
 
-(use-package toml-mode)
+;; (defun paredit-delete-indentation (&optional arg)
+;;   "Handle joining lines that end in a comment."
+;;   (interactive "*P")
+;;   (let (comt)
+;;     (save-excursion
+;;       (move-beginning-of-line (if arg 1 0))
+;;       (when (skip-syntax-forward "^<" (point-at-eol))
+;;         (setq comt (delete-and-extract-region (point) (point-at-eol)))))
+;;     (delete-indentation arg)
+;;     (when comt
+;;       (save-excursion
+;;         (move-end-of-line 1)
+;;         (insert " ")
+;;         (insert comt)))))
 
-(use-package rust-mode
-  :hook (rust-mode . lsp)
-  :config
-  (add-hook 'rust-mode-hook
-            (lambda ()
-              (electric-pair-mode 1)))
-  )
+;; (defun paredit-remove-newlines ()
+;;   "Removes extras whitespace and newlines from the current point
+;;    to the next parenthesis."
+;;   (interactive)
+;;   (let ((up-to (point))
+;;         (from (re-search-forward "[])}]")))
+;;     (backward-char)
+;;     (while (> (point) up-to)
+;;       (paredit-delete-indentation))))
 
-;; Add keybindings for interacting with Cargo
-(use-package cargo
-  :hook (rust-mode . cargo-minor-mode)
-  :config
-  ;; (define-key cargo-minor-mode-map (kbd "C-c C-c C-r") (lambda ()
-  ;;                                                        (interactive)
-  ;;                                                        (message "hey")))
-  )
+;; (use-package paredit
+;;   ;; TODO When killing a newline delete all whitespace until next character (maybe just bring in Smartparens kill command)
+;;   :bind (("M-^" . paredit-delete-indentation)
+;;          ("C-^" . paredit-remove-newlines) ;; basically clean up a multi-line sexp
+;;          ("C-<return>" . paredit-close-parenthesis-and-newline))
+;;   :init
+;;   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+;;   (add-hook 'clojure-mode-hook 'paredit-mode)
+;;   (add-hook 'cider-repl-mode-hook 'paredit-mode)
+;;   (add-hook 'slime-lisp-mode-hook 'paredit-mode)
+;;   (add-hook 'lisp-mode-hook 'paredit-mode))
 
-(use-package flycheck-rust
-  :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+;; ;; Like: sp-kill-sexp (to delete the whole symbol not just forward like C-M-k does)
+;; (defun kill-symbol ()
+;;   (interactive)
+;;   (backward-sexp) ;; TODO instead of backward-sexp, need to go to beginning of current symbol or go nowhere if already there
+;;   (kill-sexp))
 
-(use-package glsl-mode)
+;; (global-set-key (kbd "M-k") 'kill-symbol)
 
-(defun paredit-delete-indentation (&optional arg)
-  "Handle joining lines that end in a comment."
-  (interactive "*P")
-  (let (comt)
-    (save-excursion
-      (move-beginning-of-line (if arg 1 0))
-      (when (skip-syntax-forward "^<" (point-at-eol))
-        (setq comt (delete-and-extract-region (point) (point-at-eol)))))
-    (delete-indentation arg)
-    (when comt
-      (save-excursion
-        (move-end-of-line 1)
-        (insert " ")
-        (insert comt)))))
+;; (use-package toml-mode)
 
-(defun paredit-remove-newlines ()
-  "Removes extras whitespace and newlines from the current point
-   to the next parenthesis."
-  (interactive)
-  (let ((up-to (point))
-        (from (re-search-forward "[])}]")))
-    (backward-char)
-    (while (> (point) up-to)
-      (paredit-delete-indentation))))
+;; (use-package rust-mode
+;;   :hook (rust-mode . lsp)
+;;   :config
+;;   (add-hook 'rust-mode-hook
+;;             (lambda ()
+;;               (electric-pair-mode 1)))
+;;   )
 
-(use-package paredit
-  ;; TODO When killing a newline delete all whitespace until next character (maybe just bring in Smartparens kill command)
-  :bind (("M-^" . paredit-delete-indentation)
-         ("C-^" . paredit-remove-newlines) ;; basically clean up a multi-line sexp
-         ("C-<return>" . paredit-close-parenthesis-and-newline))
-  :init
-  (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-  (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'cider-repl-mode-hook 'paredit-mode)
-  (add-hook 'slime-lisp-mode-hook 'paredit-mode)
-  (add-hook 'lisp-mode-hook 'paredit-mode))
+;; ;; Add keybindings for interacting with Cargo
+;; (use-package cargo
+;;   :hook (rust-mode . cargo-minor-mode)
+;;   :config
+;;   ;; (define-key cargo-minor-mode-map (kbd "C-c C-c C-r") (lambda ()
+;;   ;;                                                        (interactive)
+;;   ;;                                                        (message "hey")))
+;;   )
 
-;; Like: sp-kill-sexp (to delete the whole symbol not just forward like C-M-k does)
-(defun kill-symbol ()
-  (interactive)
-  (backward-sexp) ;; TODO instead of backward-sexp, need to go to beginning of current symbol or go nowhere if already there
-  (kill-sexp))
+;; (use-package flycheck-rust
+;;   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
-(global-set-key (kbd "M-k") 'kill-symbol)
+;; (use-package glsl-mode)
 
-(use-package slime-company)
+;; (use-package slime-company)
 
-;; TODO full frame repl
-;; TODO switch from repl back to code with C-c C-z
-(use-package slime
-  :config
-  (load (expand-file-name "~/quicklisp/slime-helper.el"))
-  (setq inferior-lisp-program "sbcl")
-  (setq slime-lisp-implementations '((sbcl ("sbcl")))
-      slime-default-lisp 'sbclp
-      slime-contribs '(slime-fancy))
-  (slime-setup '(slime-fancy slime-company slime-cl-indent))
-  (defun slime-connect-localhost-4005 ()
-        (interactive)
-        (slime-connect "localhost" "4005"))
-  (define-key slime-mode-map (kbd "C-c C-x j j") 'slime-connect-localhost-4005)
-  (define-key slime-mode-map (kbd "C-c C-e") 'slime-eval-last-expression))
+;; ;; TODO full frame repl
+;; ;; TODO switch from repl back to code with C-c C-z
+;; (use-package slime
+;;   :config
+;;   (load (expand-file-name "~/quicklisp/slime-helper.el"))
+;;   (setq inferior-lisp-program "sbcl")
+;;   (setq slime-lisp-implementations '((sbcl ("sbcl")))
+;;       slime-default-lisp 'sbclp
+;;       slime-contribs '(slime-fancy))
+;;   (slime-setup '(slime-fancy slime-company slime-cl-indent))
+;;   (defun slime-connect-localhost-4005 ()
+;;         (interactive)
+;;         (slime-connect "localhost" "4005"))
+;;   (define-key slime-mode-map (kbd "C-c C-x j j") 'slime-connect-localhost-4005)
+;;   (define-key slime-mode-map (kbd "C-c C-e") 'slime-eval-last-expression))
 
-(add-to-list 'exec-path "/usr/local/bin/")
-(add-to-list 'exec-path "/home/benwiz/bin/")
-(use-package clojure-snippets)
-(use-package flycheck-clj-kondo)
+;; (add-to-list 'exec-path "/usr/local/bin/")
+;; (add-to-list 'exec-path "/home/benwiz/bin/")
+;; (use-package clojure-snippets)
+;; (use-package flycheck-clj-kondo)
 
-(use-package clj-refactor
-  :init (add-hook 'clojure-mode-hook (lambda ()
-    (yas-minor-mode 1)
-    (clj-refactor-mode 1)
-    (cljr-add-keybindings-with-prefix "C-c C-m"))))
+;; (use-package clj-refactor
+;;   :init (add-hook 'clojure-mode-hook (lambda ()
+;;     (yas-minor-mode 1)
+;;     (clj-refactor-mode 1)
+;;     (cljr-add-keybindings-with-prefix "C-c C-m"))))
 
-;; (use-package anakondo
-;;   :ensure t
-;;   :commands anakondo-minor-mode)
+;; ;; (use-package anakondo
+;; ;;   :ensure t
+;; ;;   :commands anakondo-minor-mode)
 
-(defun insert-discard ()
-  "Insert #_ at current location."
-  (interactive)
-  (insert "#_"))
+;; (defun insert-discard ()
+;;   "Insert #_ at current location."
+;;   (interactive)
+;;   (insert "#_"))
 
-(use-package clojure-mode
- :bind (("C-c d f" . cider-code)
-        ("C-c d g" . cider-grimoire)
-        ("C-c d w" . cidler-grimoire-web)
-        ("C-c d c" . clojure-cheatsheet)
-        ("C-c d d" . dash-at-point)
-        ("C-c C-;" . insert-discard))
- :init
- (setq clojure-indent-style 'align-arguments
-       clojure-align-forms-automatically t)
- :config
- (add-hook 'clojure-mode-hook 'paredit-mode)
- ;; (add-hook 'clojure-mode-hook #'anakondo-minor-mode)
- ;; (add-hook 'clojurescript-mode-hook #'anakondo-minor-mode)
- ;; (add-hook 'clojurec-mode-hook #'anakondo-minor-mode)
- (require 'flycheck-clj-kondo)
- )
+;; (use-package clojure-mode
+;;  :bind (("C-c d f" . cider-code)
+;;         ("C-c d g" . cider-grimoire)
+;;         ("C-c d w" . cidler-grimoire-web)
+;;         ("C-c d c" . clojure-cheatsheet)
+;;         ("C-c d d" . dash-at-point)
+;;         ("C-c C-;" . insert-discard))
+;;  :init
+;;  (setq clojure-indent-style 'align-arguments
+;;        clojure-align-forms-automatically t)
+;;  :config
+;;  (add-hook 'clojure-mode-hook 'paredit-mode)
+;;  ;; (add-hook 'clojure-mode-hook #'anakondo-minor-mode)
+;;  ;; (add-hook 'clojurescript-mode-hook #'anakondo-minor-mode)
+;;  ;; (add-hook 'clojurec-mode-hook #'anakondo-minor-mode)
+;;  (require 'flycheck-clj-kondo)
+;;  )
 
-(defun cider-send-and-evaluate-sexp ()
-  "Sends the sexp located before the point or
-the active region to the REPL and evaluates it.
-Then the Clojure buffer is activated as if nothing happened."
-  (interactive)
-  (if (not (region-active-p))
-      (cider-insert-last-sexp-in-repl)
-    (cider-insert-in-repl
-     (buffer-substring (region-beginning) (region-end)) nil))
-  (cider-switch-to-repl-buffer)
-  (cider-repl-closing-return)
-  (cider-switch-to-last-clojure-buffer)
-  (message ""))
+;; (defun cider-send-and-evaluate-sexp ()
+;;   "Sends the sexp located before the point or
+;; the active region to the REPL and evaluates it.
+;; Then the Clojure buffer is activated as if nothing happened."
+;;   (interactive)
+;;   (if (not (region-active-p))
+;;       (cider-insert-last-sexp-in-repl)
+;;     (cider-insert-in-repl
+;;      (buffer-substring (region-beginning) (region-end)) nil))
+;;   (cider-switch-to-repl-buffer)
+;;   (cider-repl-closing-return)
+;;   (cider-switch-to-last-clojure-buffer)
+;;   (message ""))
 
-(use-package cider
-  :commands (cider cider-connect cider-jack-in)
+;; (use-package cider
+;;   :commands (cider cider-connect cider-jack-in)
 
-  :init
-  (setq cider-auto-select-error-buffer t
-        cider-repl-pop-to-buffer-on-connect nil
-        cider-repl-display-in-current-window t
-        cider-repl-use-clojure-font-lock t
-        cider-repl-wrap-history t
-        cider-repl-history-size 1000
-        cider-show-error-buffer t
-        nrepl-hide-special-buffers t
-        ;; Stop error buffer from popping up while working in buffers other than the REPL:
-        nrepl-popup-stacktraces nil)
+;;   :init
+;;   (setq cider-auto-select-error-buffer t
+;;         cider-repl-pop-to-buffer-on-connect nil
+;;         cider-repl-display-in-current-window t
+;;         cider-repl-use-clojure-font-lock t
+;;         cider-repl-wrap-history t
+;;         cider-repl-history-size 1000
+;;         cider-show-error-buffer t
+;;         nrepl-hide-special-buffers t
+;;         ;; Stop error buffer from popping up while working in buffers other than the REPL:
+;;         nrepl-popup-stacktraces nil)
 
-  ;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  (add-hook 'cider-mode-hook 'company-mode)
+;;   ;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+;;   (add-hook 'cider-mode-hook 'company-mode)
 
-  (add-hook 'cider-repl-mode-hook 'paredit-mode)
-  (add-hook 'cider-repl-mode-hook 'superword-mode)
-  (add-hook 'cider-repl-mode-hook 'company-mode)
-  (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
+;;   (add-hook 'cider-repl-mode-hook 'paredit-mode)
+;;   (add-hook 'cider-repl-mode-hook 'superword-mode)
+;;   (add-hook 'cider-repl-mode-hook 'company-mode)
+;;   (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
 
-  :bind (:map cider-mode-map
-         ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
-         ("C-c C-p"     . cider-pprint-eval-last-sexp-to-comment)
-         ("C-c C-<tab>" . cider-format-edn-region))
-        (:map cider-repl-mode-map
-         ("C-c C-l"     . cider-repl-clear-buffer))
+;;   :bind (:map cider-mode-map
+;;          ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
+;;          ("C-c C-p"     . cider-pprint-eval-last-sexp-to-comment)
+;;          ("C-c C-<tab>" . cider-format-edn-region))
+;;         (:map cider-repl-mode-map
+;;          ("C-c C-l"     . cider-repl-clear-buffer))
 
-  :config
-  (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
-  (setq exec-path (append exec-path '("/home/benwiz/bin")))
-  ;; (setq exec-path (append '("/Users/benwiz/.nvm/versions/node/v12.16.1/bin") exec-path))
-  (add-to-list 'exec-path "/home/benwiz/.nvm/versions/node/v14.4.0/bin")
-  (setq exec-path (append '("/Users/benwiz/.yarn/bin") exec-path))
-  (setq cider-cljs-repl-types '((nashorn "(do (require 'cljs.repl.nashorn) (cider.piggieback/cljs-repl (cljs.repl.nashorn/repl-env)))" cider-check-nashorn-requirements)
-                              (figwheel "(do (require 'figwheel-sidecar.repl-api) (figwheel-sidecar.repl-api/start-figwheel!) (figwheel-sidecar.repl-api/cljs-repl))" cider-check-figwheel-requirements)
-                              (figwheel-main cider-figwheel-main-init-form cider-check-figwheel-main-requirements)
-                              (figwheel-connected "(figwheel-sidecar.repl-api/cljs-repl)" cider-check-figwheel-requirements)
-                              (node "(do (require 'cljs.repl.node) (cider.piggieback/cljs-repl (cljs.repl.node/repl-env)))" cider-check-node-requirements)
-                              (weasel "(do (require 'weasel.repl.websocket) (cider.piggieback/cljs-repl (weasel.repl.websocket/repl-env :ip \"127.0.0.1\" :port 9001)))" cider-check-weasel-requirements)
-                              (boot "(do (require 'adzerk.boot-cljs-repl) (adzerk.boot-cljs-repl/start-repl))" cider-check-boot-requirements)
-                              (app cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements) ;; this is what is being added
-                              (shadow cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements)
-                              (shadow-select cider-shadow-select-cljs-init-form cider-check-shadow-cljs-requirements)
-                              (custom cider-custom-cljs-repl-init-form nil))))
+;;   :config
+;;   (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
+;;   (setq exec-path (append exec-path '("/home/benwiz/bin")))
+;;   ;; (setq exec-path (append '("/Users/benwiz/.nvm/versions/node/v12.16.1/bin") exec-path))
+;;   (add-to-list 'exec-path "/home/benwiz/.nvm/versions/node/v14.4.0/bin")
+;;   (setq exec-path (append '("/Users/benwiz/.yarn/bin") exec-path))
+;;   (setq cider-cljs-repl-types '((nashorn "(do (require 'cljs.repl.nashorn) (cider.piggieback/cljs-repl (cljs.repl.nashorn/repl-env)))" cider-check-nashorn-requirements)
+;;                               (figwheel "(do (require 'figwheel-sidecar.repl-api) (figwheel-sidecar.repl-api/start-figwheel!) (figwheel-sidecar.repl-api/cljs-repl))" cider-check-figwheel-requirements)
+;;                               (figwheel-main cider-figwheel-main-init-form cider-check-figwheel-main-requirements)
+;;                               (figwheel-connected "(figwheel-sidecar.repl-api/cljs-repl)" cider-check-figwheel-requirements)
+;;                               (node "(do (require 'cljs.repl.node) (cider.piggieback/cljs-repl (cljs.repl.node/repl-env)))" cider-check-node-requirements)
+;;                               (weasel "(do (require 'weasel.repl.websocket) (cider.piggieback/cljs-repl (weasel.repl.websocket/repl-env :ip \"127.0.0.1\" :port 9001)))" cider-check-weasel-requirements)
+;;                               (boot "(do (require 'adzerk.boot-cljs-repl) (adzerk.boot-cljs-repl/start-repl))" cider-check-boot-requirements)
+;;                               (app cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements) ;; this is what is being added
+;;                               (shadow cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements)
+;;                               (shadow-select cider-shadow-select-cljs-init-form cider-check-shadow-cljs-requirements)
+;;                               (custom cider-custom-cljs-repl-init-form nil))))
 
-(defun ha/cider-append-comment ()
-  (when (null (nth 8 (syntax-ppss)))
-    (insert " ; ")))
+;; (defun ha/cider-append-comment ()
+;;   (when (null (nth 8 (syntax-ppss)))
+;;     (insert " ; ")))
 
-(advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
+;; (advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
