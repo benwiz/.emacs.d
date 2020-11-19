@@ -404,59 +404,8 @@
 
 
 #+END_SRC
-** Misc. Packages
+** Ivy, Swiper, Counsel, Projectile
 #+BEGIN_SRC emacs-lisp
-  (use-package restart-emacs)
-  (use-package dictionary)
-  ;; (use-package htmlize) ;; awesome package but no use at the moment
-  ;; (use-package wgrep) ;; edit file in grep buffer
-  (use-package itail)
-
-  (use-package scratch
-    :bind (("C-c s" . scratch)))
-
-  (use-package exec-path-from-shell
-    :config
-    (exec-path-from-shell-initialize))
-
-  (defun mc-mark-next-like-this-then-cycle-forward (arg)
-    "Mark next like this then cycle forward, take interactive ARG."
-    (interactive "p")
-    (call-interactively 'mc/mark-next-like-this)
-    (call-interactively 'mc/cycle-forward))
-
-  (defun mc-skip-to-next-like-this-then-cycle-forward (arg)
-    "Skip to next like this then cycle forward, take interactive ARG."
-    (interactive "p")
-    (call-interactively 'mc/cycle-backward)
-    (call-interactively 'mc/skip-to-next-like-this)
-    (call-interactively 'mc/cycle-forward))
-
-  (defun mc-mark-previous-like-this-then-cycle-backward (arg)
-    "Mark previous like this then cycle backward take interactive ARG."
-    (interactive "p")
-    (call-interactively 'mc/mark-previous-like-this)
-    (call-interactively 'mc/cycle-backward))
-
-  (defun mc-skip-to-previous-like-this-then-cycle-backward (arg)
-    "Skip to previous like this then cycle backward take interactive ARG."
-    (interactive "p")
-    (call-interactively 'mc/cycle-forward)
-    (call-interactively 'mc/skip-to-previous-like-this)
-    (call-interactively 'mc/cycle-backward))
-
-  (use-package multiple-cursors
-    :bind (("C->" . mc-mark-next-like-this-then-cycle-forward)
-           ("C-M->" . mc-skip-to-next-like-this-then-cycle-forward)
-           ("C-<" . mc-mark-previous-like-this-then-cycle-backward)
-           ("C-M-<" . mc-skip-to-previous-like-this-then-cycle-backward)
-           ("C-c C->" . mc/mark-all-like-this)
-           ("C-S-<mouse-1>" . mc/add-cursor-on-click)
-           )
-    :config
-    ;; By default, <return> exits mc ;; TODO FIXME
-    (define-key mc/keymap (kbd "<return>") nil))
-
   (use-package ivy
     :init
     (setq ivy-use-virtual-buffers t
@@ -515,6 +464,59 @@
   (use-package counsel-projectile
     :config
     (counsel-projectile-mode))
+#+END_SRC
+** Misc. Packages
+#+BEGIN_SRC emacs-lisp
+  (use-package restart-emacs)
+  (use-package dictionary)
+  ;; (use-package htmlize) ;; awesome package but no use at the moment
+  ;; (use-package wgrep) ;; edit file in grep buffer
+  (use-package itail)
+
+  (use-package scratch
+    :bind (("C-c s" . scratch)))
+
+  (use-package exec-path-from-shell
+    :config
+    (exec-path-from-shell-initialize))
+
+  (defun mc-mark-next-like-this-then-cycle-forward (arg)
+    "Mark next like this then cycle forward, take interactive ARG."
+    (interactive "p")
+    (call-interactively 'mc/mark-next-like-this)
+    (call-interactively 'mc/cycle-forward))
+
+  (defun mc-skip-to-next-like-this-then-cycle-forward (arg)
+    "Skip to next like this then cycle forward, take interactive ARG."
+    (interactive "p")
+    (call-interactively 'mc/cycle-backward)
+    (call-interactively 'mc/skip-to-next-like-this)
+    (call-interactively 'mc/cycle-forward))
+
+  (defun mc-mark-previous-like-this-then-cycle-backward (arg)
+    "Mark previous like this then cycle backward take interactive ARG."
+    (interactive "p")
+    (call-interactively 'mc/mark-previous-like-this)
+    (call-interactively 'mc/cycle-backward))
+
+  (defun mc-skip-to-previous-like-this-then-cycle-backward (arg)
+    "Skip to previous like this then cycle backward take interactive ARG."
+    (interactive "p")
+    (call-interactively 'mc/cycle-forward)
+    (call-interactively 'mc/skip-to-previous-like-this)
+    (call-interactively 'mc/cycle-backward))
+
+  (use-package multiple-cursors
+    :bind (("C->" . mc-mark-next-like-this-then-cycle-forward)
+           ("C-M->" . mc-skip-to-next-like-this-then-cycle-forward)
+           ("C-<" . mc-mark-previous-like-this-then-cycle-backward)
+           ("C-M-<" . mc-skip-to-previous-like-this-then-cycle-backward)
+           ("C-c C->" . mc/mark-all-like-this)
+           ("C-S-<mouse-1>" . mc/add-cursor-on-click)
+           )
+    :config
+    ;; By default, <return> exits mc ;; TODO FIXME
+    (define-key mc/keymap (kbd "<return>") nil))
 
   (use-package term
     :config
@@ -724,6 +726,8 @@
       (setq highlight-indent-guides-method 'character)
       (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
       (setq highlight-indent-guides-auto-character-face-perc 20))
+
+  (use-package symbol-overlay)
 #+END_SRC
 ** Org mode
  #+BEGIN_SRC emacs-lisp

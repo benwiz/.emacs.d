@@ -14,6 +14,7 @@
         cljr-raise-sexp
         cljr-slash
         clojure-sort-ns
+        comment-line
         company-indent-or-complete-common
         counsel-yank-pop
         dabbrev-expand
@@ -67,6 +68,7 @@
         goto-line
         mc-mark-next-like-this-then-cycle-forward
         mc-mark-previous-like-this-then-cycle-backward
+        mc-skip-to-next-like-this-then-cycle-forward
         mc-skip-to-previous-like-this-then-cycle-backward
         swiper-isearch
         ))

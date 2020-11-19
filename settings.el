@@ -364,6 +364,65 @@
 ;;   (wm-xmodmap)
 ;;   )
 
+;; (use-package ivy
+;;   :init
+;;   (setq ivy-use-virtual-buffers t
+;;         enable-recursive-minibuffers t
+;;         ivy-count-format "(%d/%d) "
+;;         ivy-use-selectable-prompt t)
+;;   :config
+;;   (ivy-mode 1)
+;;   (require 'mc-hide-unmatched-lines-mode)
+;;   (global-set-key (kbd "C-c C-r") 'ivy-resume)
+;;   (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+;;   (global-set-key (kbd "C-x C-b") 'ivy-switch-buffer)
+;;   (global-set-key (kbd "C-c v") 'ivy-push-view)
+;;   (global-set-key (kbd "C-c V") 'ivy-pop-view))
+
+;; (use-package swiper
+;;   :init
+;;   (set-face-attribute 'isearch nil :background "#FF9F93")
+;;   :config
+;;   (global-set-key (kbd "M-i") 'swiper-isearch))
+
+;; (defun swiper--from-isearch ()
+;;   "Invoke `swiper' from isearch.
+;;      https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da61c948a6fd/helm-swoop.el#L657-668 "
+;;   (interactive)
+;;   (let (($query (if isearch-regexp
+;;                     isearch-string
+;;                   (regexp-quote isearch-string))))
+;;     (isearch-exit)
+;;     (swiper $query)))
+;; (define-key isearch-mode-map (kbd "M-i") 'swiper--from-isearch)
+
+;; (use-package counsel
+;;   :config
+;;   ;; tons more suggested key bindings here https://oremacs.com/swiper
+;;   (global-set-key (kbd "M-x") 'counsel-M-x)
+;;   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+;;   (global-set-key (kbd "M-y") 'counsel-yank-pop)
+;;   (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+;;   (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+;;   (global-set-key (kbd "<f1> l") 'counsel-find-library)
+;;   (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+;;   (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+;;   (global-set-key (kbd "<f2> j") 'counsel-set-variable)
+;;   (global-set-key (kbd "C-c c") 'counsel-compile)
+;;   ;; (global-set-key (kbd "C-c g") 'counsel-git)
+;;   (global-set-key (kbd "C-i") 'counsel-git-grep)
+;;   (global-set-key (kbd "C-c a") 'counsel-linux-app))
+
+;; (use-package projectile
+;;   :config
+;;   (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
+;;   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+;;   (projectile-mode +1))
+
+;; (use-package counsel-projectile
+;;   :config
+;;   (counsel-projectile-mode))
+
 (use-package restart-emacs)
 (use-package dictionary)
 ;; (use-package htmlize) ;; awesome package but no use at the moment
@@ -414,65 +473,6 @@
   :config
   ;; By default, <return> exits mc ;; TODO FIXME
   (define-key mc/keymap (kbd "<return>") nil))
-
-(use-package ivy
-  :init
-  (setq ivy-use-virtual-buffers t
-        enable-recursive-minibuffers t
-        ivy-count-format "(%d/%d) "
-        ivy-use-selectable-prompt t)
-  :config
-  (ivy-mode 1)
-  (require 'mc-hide-unmatched-lines-mode)
-  (global-set-key (kbd "C-c C-r") 'ivy-resume)
-  (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-  (global-set-key (kbd "C-x C-b") 'ivy-switch-buffer)
-  (global-set-key (kbd "C-c v") 'ivy-push-view)
-  (global-set-key (kbd "C-c V") 'ivy-pop-view))
-
-(use-package swiper
-  :init
-  (set-face-attribute 'isearch nil :background "#FF9F93")
-  :config
-  (global-set-key (kbd "M-i") 'swiper-isearch))
-
-(defun swiper--from-isearch ()
-  "Invoke `swiper' from isearch.
-     https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da61c948a6fd/helm-swoop.el#L657-668 "
-  (interactive)
-  (let (($query (if isearch-regexp
-                    isearch-string
-                  (regexp-quote isearch-string))))
-    (isearch-exit)
-    (swiper $query)))
-(define-key isearch-mode-map (kbd "M-i") 'swiper--from-isearch)
-
-(use-package counsel
-  :config
-  ;; tons more suggested key bindings here https://oremacs.com/swiper
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "M-y") 'counsel-yank-pop)
-  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-  (global-set-key (kbd "<f1> l") 'counsel-find-library)
-  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-  (global-set-key (kbd "<f2> j") 'counsel-set-variable)
-  (global-set-key (kbd "C-c c") 'counsel-compile)
-  ;; (global-set-key (kbd "C-c g") 'counsel-git)
-  (global-set-key (kbd "C-i") 'counsel-git-grep)
-  (global-set-key (kbd "C-c a") 'counsel-linux-app))
-
-(use-package projectile
-  :config
-  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode +1))
-
-(use-package counsel-projectile
-  :config
-  (counsel-projectile-mode))
 
 (use-package term
   :config
@@ -679,6 +679,8 @@
     (setq highlight-indent-guides-method 'character)
     (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
     (setq highlight-indent-guides-auto-character-face-perc 20))
+
+(use-package symbol-overlay)
 
 (define-key org-mode-map (kbd "M-n") 'org-todo)
 
