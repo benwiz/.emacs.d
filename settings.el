@@ -209,6 +209,10 @@
   :init
   (load-env-vars "~/.emacs.d/emacs.env"))
 
+(use-package exec-path-from-shell
+  :config
+  (exec-path-from-shell-initialize))
+
 ;; (require 'misc)
 
 ;; (global-unset-key (kbd "C-z"))
@@ -254,31 +258,15 @@
 
 (use-package magit
   :config
-  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-
-;; (use-package git-gutter
-;;   :diminish git-gutter-mode
-;;   :init
-;;   (global-git-gutter-mode)
-;;   (progn
-;;     (setq git-gutter:separator-sign " "
-;;           git-gutter:lighter " GG"))
-;;   :config
-;;   (progn
-;;     (set-face-background 'git-gutter:deleted "#990A1B")
-;;     (set-face-foreground 'git-gutter:deleted "#990A1B")
-;;     (set-face-background 'git-gutter:modified "#00736F")
-;;     (set-face-foreground 'git-gutter:modified "#00736F")
-;;     (set-face-background 'git-gutter:added "#546E00")
-;;     (set-face-foreground 'git-gutter:added "#546E00"))
-;;   :bind (("C-x p" . git-gutter:previous-hunk)
-;;          ("C-x n" . git-gutter:next-hunk)
-;;          ("C-x v =" . git-gutter:popup-hunk)
-;;          ("C-x v r" . git-gutter:revert-hunk)))
+  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))   
 
 (use-package git-link
   :config
   (global-set-key (kbd "C-c g l") 'git-link))
+
+(use-package diff-hl
+  :config
+  (global-diff-hl-mode))
 
 ;; (use-package exwm
 ;;   :config
@@ -417,56 +405,52 @@
 ;;   :config
 ;;   (counsel-projectile-mode))
 
-;; (use-package restart-emacs)
-;; (use-package dictionary)
-;; ;; (use-package htmlize) ;; awesome package but no use at the moment
-;; ;; (use-package wgrep) ;; edit file in grep buffer
-;; (use-package itail)
+(defun mc-mark-next-like-this-then-cycle-forward (arg)
+  "Mark next like this then cycle forward, take interactive ARG."
+  (interactive "p")
+  (call-interactively 'mc/mark-next-like-this)
+  (call-interactively 'mc/cycle-forward))
 
-;; (use-package scratch
-;;   :bind (("C-c s" . scratch)))
+(defun mc-skip-to-next-like-this-then-cycle-forward (arg)
+  "Skip to next like this then cycle forward, take interactive ARG."
+  (interactive "p")
+  (call-interactively 'mc/cycle-backward)
+  (call-interactively 'mc/skip-to-next-like-this)
+  (call-interactively 'mc/cycle-forward))
 
-;; (use-package exec-path-from-shell
-;;   :config
-;;   (exec-path-from-shell-initialize))
+(defun mc-mark-previous-like-this-then-cycle-backward (arg)
+  "Mark previous like this then cycle backward take interactive ARG."
+  (interactive "p")
+  (call-interactively 'mc/mark-previous-like-this)
+  (call-interactively 'mc/cycle-backward))
 
-;; (defun mc-mark-next-like-this-then-cycle-forward (arg)
-;;   "Mark next like this then cycle forward, take interactive ARG."
-;;   (interactive "p")
-;;   (call-interactively 'mc/mark-next-like-this)
-;;   (call-interactively 'mc/cycle-forward))
+(defun mc-skip-to-previous-like-this-then-cycle-backward (arg)
+  "Skip to previous like this then cycle backward take interactive ARG."
+  (interactive "p")
+  (call-interactively 'mc/cycle-forward)
+  (call-interactively 'mc/skip-to-previous-like-this)
+  (call-interactively 'mc/cycle-backward))
 
-;; (defun mc-skip-to-next-like-this-then-cycle-forward (arg)
-;;   "Skip to next like this then cycle forward, take interactive ARG."
-;;   (interactive "p")
-;;   (call-interactively 'mc/cycle-backward)
-;;   (call-interactively 'mc/skip-to-next-like-this)
-;;   (call-interactively 'mc/cycle-forward))
+(use-package multiple-cursors
+  :bind (("C->" . mc-mark-next-like-this-then-cycle-forward)
+         ("C-M->" . mc-skip-to-next-like-this-then-cycle-forward)
+         ("C-<" . mc-mark-previous-like-this-then-cycle-backward)
+         ("C-M-<" . mc-skip-to-previous-like-this-then-cycle-backward)
+         ("C-c C->" . mc/mark-all-like-this)
+         ("C-S-<mouse-1>" . mc/add-cursor-on-click)
+         )
+  :config
+  ;; By default, <return> exits mc ;; TODO FIXME
+  (define-key mc/keymap (kbd "<return>") nil))
 
-;; (defun mc-mark-previous-like-this-then-cycle-backward (arg)
-;;   "Mark previous like this then cycle backward take interactive ARG."
-;;   (interactive "p")
-;;   (call-interactively 'mc/mark-previous-like-this)
-;;   (call-interactively 'mc/cycle-backward))
+(use-package restart-emacs)
+(use-package dictionary)
+;; (use-package htmlize) ;; awesome package but no use at the moment
+;; (use-package wgrep) ;; edit file in grep buffer
+;; (use-package itail) ;; tail file within emacs
 
-;; (defun mc-skip-to-previous-like-this-then-cycle-backward (arg)
-;;   "Skip to previous like this then cycle backward take interactive ARG."
-;;   (interactive "p")
-;;   (call-interactively 'mc/cycle-forward)
-;;   (call-interactively 'mc/skip-to-previous-like-this)
-;;   (call-interactively 'mc/cycle-backward))
-
-;; (use-package multiple-cursors
-;;   :bind (("C->" . mc-mark-next-like-this-then-cycle-forward)
-;;          ("C-M->" . mc-skip-to-next-like-this-then-cycle-forward)
-;;          ("C-<" . mc-mark-previous-like-this-then-cycle-backward)
-;;          ("C-M-<" . mc-skip-to-previous-like-this-then-cycle-backward)
-;;          ("C-c C->" . mc/mark-all-like-this)
-;;          ("C-S-<mouse-1>" . mc/add-cursor-on-click)
-;;          )
-;;   :config
-;;   ;; By default, <return> exits mc ;; TODO FIXME
-;;   (define-key mc/keymap (kbd "<return>") nil))
+(use-package scratch
+  :bind (("C-c s" . scratch)))
 
 ;; (use-package term
 ;;   :config

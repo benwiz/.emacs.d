@@ -32,6 +32,7 @@
 * Default Tweaks
 #+BEGIN_SRC emacs-lisp
   (when window-system
+
     (blink-cursor-mode 0)                           ; Disable the cursor blinking
     (scroll-bar-mode 0)                             ; Disable the scroll bar
     (tool-bar-mode 0)                               ; Disable the tool bar
@@ -293,12 +294,15 @@
      :config
      (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
-   
-
    (use-package git-link
      :config
      (global-set-key (kbd "C-c g l") 'git-link))
 
+   (use-package diff-hl
+     :config
+     (diff-hl-margin-mode)
+     (diff-hl-flydiff-mode) ;; if I encounter any speed issues, toggling this is a good first debugging step
+     (global-diff-hl-mode))
  #+END_SRC
 ** EXWM - in case I ever return to it, do not delete!
 #+BEGIN_SRC emacs-lisp
