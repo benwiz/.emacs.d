@@ -12,6 +12,11 @@
   (load-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "C-c i") 'load-init-el)
 
+(global-unset-key (kbd "<down-mouse-1>"))
+(global-unset-key (kbd "<mouse-1>"))
+(global-unset-key (kbd "<down-mouse-3>"))
+(global-unset-key (kbd "<mouse-3>"))
+
 (when window-system
 
   (blink-cursor-mode 0)                           ; Disable the cursor blinking
@@ -700,6 +705,7 @@
 ;; ;;     :hook (XXX-mode . lsp-deferred)
 ;; ;;     :commands (lsp lsp-deferred))
 
+(require 'org-tempo)
 (define-key org-mode-map (kbd "M-n") 'org-todo)
 
 (use-package markdown-mode

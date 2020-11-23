@@ -29,6 +29,13 @@
      (load-file "~/.emacs.d/init.el"))
    (global-set-key (kbd "C-c i") 'load-init-el)
 #+END_SRC
+* Mouse / Touchpad
+  #+begin_src emacs-lisp
+    (global-unset-key (kbd "<down-mouse-1>"))
+    (global-unset-key (kbd "<mouse-1>"))
+    (global-unset-key (kbd "<down-mouse-3>"))
+    (global-unset-key (kbd "<mouse-3>"))
+  #+end_src
 * Default Tweaks
 #+BEGIN_SRC emacs-lisp
   (when window-system
@@ -755,7 +762,8 @@
 #+END_SRC
 ** Org mode
  #+BEGIN_SRC emacs-lisp
-   (define-key org-mode-map (kbd "M-n") 'org-todo)
+  (require 'org-tempo)
+  (define-key org-mode-map (kbd "M-n") 'org-todo)
  #+END_SRC
 ** Markdown Mode
 #+BEGIN_SRC emacs-lisp
