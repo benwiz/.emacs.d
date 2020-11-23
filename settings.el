@@ -55,7 +55,7 @@
  line-spacing 1                                   ; Add N pixel below each line
  truncate-lines t                                 ; Truncate long lines
  )
-(cd "~/code/")                                    ; Move to the user directory
+;; (cd "~/code/")                                    ; Move to the user directory
 (delete-selection-mode 1)                         ; Replace region when inserting text
 (display-time-mode 1)                             ; Enable time in the mode-line
 (fringe-mode 0)                                   ; Disable fringes
@@ -271,10 +271,82 @@
   (global-set-key (kbd "C-c g l") 'git-link))
 
 (use-package diff-hl
+  :after (switch-buffer-functions)
   :config
   (diff-hl-margin-mode)
   ;; (diff-hl-flydiff-mode) ;; if I encounter any speed issues, toggling this is a good first debugging step
+  (add-hook 'switch-buffer-functions (lambda (prev curr) (diff-hl-update)))
   (global-diff-hl-mode))
+
+(use-package restart-emacs)
+(use-package dictionary)
+;; (use-package htmlize) ;; awesome package but no use at the moment
+;; (use-package wgrep) ;; edit file in grep buffer
+;; (use-package itail) ;; tail file within emacs
+
+(use-package scratch
+  :bind (("C-c s" . scratch)))
+
+(use-package fic-mode
+  :init
+  (defface fic-face
+    '((((class color))
+       (:foreground "orange" :weight bold :slant italic))
+      (t (:weight bold :slant italic)))
+    "Face to fontify FIXME/TODO words"
+    :group 'fic-mode)
+  :config
+  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
+  (add-hook 'prog-mode-hook 'fic-mode))
+
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode))
+
+(use-package switch-buffer-functions)
+
+;; (use-package free-keys
+;;   :bind ("C-h C-k" . 'free-keys))
+
+;; (use-package restclient
+;;   :mode ("\\.http\\'" . restclient-mode))
+
+;; (use-package dashboard
+;;     ;; https://github.com/emacs-dashboard/emacs-dashboard ;
+;;     :ensure t
+;;     :init
+;;     ;; Banner and title and footer
+;;     (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard"
+;;           dashboard-startup-banner 2 ;; 'official, 'logo, 1, 2, 3, or a path to img
+;;           dashboard-center-content nil
+;;           dashboard-show-shortcuts t
+;;           dashboard-set-navigator t ;; Idk what this does, I think it isn't working
+;;           dashboard-set-init-info t
+;;           ;; dashboard-init-info "This is an init message!" ;; Customize init-info
+;;           dashboard-set-footer t
+;;           ;; dashboard-footer-messages '("Dashboard is pretty cool!") ;; Customize footer messages
+;;           )
+;;     ;; Widgets
+;;     (setq dashboard-items '((recents  . 5)
+;;                             (bookmarks . 5)
+;;                             (projects . 5)
+;;                             (agenda . 5)
+;;                             (registers . 5))
+;;           dashboard-set-heading-icons nil
+;;           dashboard-set-file-icons nil)
+;;     :config
+;;     (dashboard-setup-startup-hook)
+;;     ;; Custom widget
+;;     ;; Ideas: weather, widget dedicated to each of my projects, news
+;;     (defun dashboard-insert-custom (list-size)
+;;       (insert "Custom text"))
+;;     (add-to-list 'dashboard-item-generators '(custom . dashboard-insert-custom))
+;;     (add-to-list 'dashboard-items '(custom) t)
+;;     (defun dashboard ()
+;;       "Open dashboard."
+;;       (interactive)
+;;       (switch-to-buffer "*dashboard*")
+;;       (dashboard-refresh-buffer)))
 
 ;; (use-package exwm
 ;;   :config
@@ -490,74 +562,6 @@
 ;;           ("M-."     . comint-dynamic-complete)))        ; default
 
 ;;   (setq multi-term-buffer-name "term"))
-
-(use-package restart-emacs)
-(use-package dictionary)
-;; (use-package htmlize) ;; awesome package but no use at the moment
-;; (use-package wgrep) ;; edit file in grep buffer
-;; (use-package itail) ;; tail file within emacs
-
-(use-package scratch
-  :bind (("C-c s" . scratch)))
-
-(use-package fic-mode
-  :init
-  (defface fic-face
-    '((((class color))
-       (:foreground "orange" :weight bold :slant italic))
-      (t (:weight bold :slant italic)))
-    "Face to fontify FIXME/TODO words"
-    :group 'fic-mode)
-  :config
-  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
-  (add-hook 'prog-mode-hook 'fic-mode))
-
-(use-package undo-tree
-  :config
-  (global-undo-tree-mode))
-
-;; (use-package free-keys
-;;   :bind ("C-h C-k" . 'free-keys))
-
-;; (use-package restclient
-;;   :mode ("\\.http\\'" . restclient-mode))
-
-;; (use-package dashboard
-;;     ;; https://github.com/emacs-dashboard/emacs-dashboard ;
-;;     :ensure t
-;;     :init
-;;     ;; Banner and title and footer
-;;     (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard"
-;;           dashboard-startup-banner 2 ;; 'official, 'logo, 1, 2, 3, or a path to img
-;;           dashboard-center-content nil
-;;           dashboard-show-shortcuts t
-;;           dashboard-set-navigator t ;; Idk what this does, I think it isn't working
-;;           dashboard-set-init-info t
-;;           ;; dashboard-init-info "This is an init message!" ;; Customize init-info
-;;           dashboard-set-footer t
-;;           ;; dashboard-footer-messages '("Dashboard is pretty cool!") ;; Customize footer messages
-;;           )
-;;     ;; Widgets
-;;     (setq dashboard-items '((recents  . 5)
-;;                             (bookmarks . 5)
-;;                             (projects . 5)
-;;                             (agenda . 5)
-;;                             (registers . 5))
-;;           dashboard-set-heading-icons nil
-;;           dashboard-set-file-icons nil)
-;;     :config
-;;     (dashboard-setup-startup-hook)
-;;     ;; Custom widget
-;;     ;; Ideas: weather, widget dedicated to each of my projects, news
-;;     (defun dashboard-insert-custom (list-size)
-;;       (insert "Custom text"))
-;;     (add-to-list 'dashboard-item-generators '(custom . dashboard-insert-custom))
-;;     (add-to-list 'dashboard-items '(custom) t)
-;;     (defun dashboard ()
-;;       "Open dashboard."
-;;       (interactive)
-;;       (switch-to-buffer "*dashboard*")
-;;       (dashboard-refresh-buffer)))
 
 (use-package ws-butler
   :hook (prog-mode . ws-butler-mode)
