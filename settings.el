@@ -273,9 +273,9 @@
 (use-package diff-hl
   :after (switch-buffer-functions)
   :config
+  ;; do not use diff-hl-flydiff-mode for fear of speed issues
   (diff-hl-margin-mode)
-  ;; (diff-hl-flydiff-mode) ;; if I encounter any speed issues, toggling this is a good first debugging step
-  (add-hook 'switch-buffer-functions (lambda (prev curr) (diff-hl-update)))
+  (add-hook 'switch-buffer-functions (lambda (prev curr) (diff-hl-update))) ;; update diff when switching buffers
   (global-diff-hl-mode))
 
 (use-package restart-emacs)
@@ -709,7 +709,7 @@
 ;; ;;     :hook (XXX-mode . lsp-deferred)
 ;; ;;     :commands (lsp lsp-deferred))
 
-(require 'org-tempo)
+(use-package org-tempo)
 (define-key org-mode-map (kbd "M-n") 'org-todo)
 
 (use-package markdown-mode

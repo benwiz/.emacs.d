@@ -766,7 +766,7 @@
 #+END_SRC
 ** Org mode
  #+BEGIN_SRC emacs-lisp
-  (require 'org-tempo)
+  (use-package org-tempo)
   (define-key org-mode-map (kbd "M-n") 'org-todo)
  #+END_SRC
 ** Markdown Mode
