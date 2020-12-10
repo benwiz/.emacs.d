@@ -42,7 +42,7 @@
      (cider-shadow-default-options . ":app")
      (cider-default-cljs-repl . shadow)
      (cider-preferred-build-tool . shadow-cljs)
-     (setenv "breeze.ehr.use-shared-hitch-graph" "true")))))
+     (setenv "breeze.ehr.use-shared-hitch-graph" "true"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
