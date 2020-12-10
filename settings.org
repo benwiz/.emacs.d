@@ -94,6 +94,10 @@
   ;(if (eq window-system 'ns)
   ;  (add-to-list 'default-frame-alist '(maximized .))
   ;  (add-to-list 'default-frame-alist '(fullscreen .)))
+  (add-hook 'after-make-frame-functions
+            (lambda (frame)
+              (set-frame-parameter frame 'fullscreen 'fullboth)
+              (tool-bar-mode 0)))
   (set-frame-parameter nil 'fullscreen 'fullboth)
 
   (add-hook 'focus-out-hook #'garbage-collect)
@@ -193,9 +197,8 @@
      ))
 
   ;; Start in spolsky
-  ;; (add-hook 'after-make-frame-functions #'load-spolsky)
+  (add-hook 'after-make-frame-functions (lambda (frame) (load-spolsky)))
   (load-spolsky)
-
 
   ;; Toggle themes
   (defun toggle-theme ()

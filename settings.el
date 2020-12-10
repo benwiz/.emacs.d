@@ -73,6 +73,10 @@
 ;(if (eq window-system 'ns)
 ;  (add-to-list 'default-frame-alist '(maximized .))
 ;  (add-to-list 'default-frame-alist '(fullscreen .)))
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (set-frame-parameter frame 'fullscreen 'fullboth)
+            (tool-bar-mode 0)))
 (set-frame-parameter nil 'fullscreen 'fullboth)
 
 (add-hook 'focus-out-hook #'garbage-collect)
@@ -93,10 +97,10 @@
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
-;; Ask to refresh package contents 5% of the time.
-(when (eq 0 (random 20))
-  (when (y-or-n-p-with-timeout "Do you want to refresh melpa? " 6 nil)
-    (package-refresh-contents)))
+;; ;; Ask to refresh package contents 5% of the time.
+;; (when (eq 0 (random 20))
+;;   (when (y-or-n-p-with-timeout "Do you want to refresh melpa? " 6 nil)
+;;     (package-refresh-contents)))
 
 ;; Fetch pacakges when package-archive-contents does not exist
 (unless package-archive-contents
@@ -168,9 +172,8 @@
    ))
 
 ;; Start in spolsky
-;; (add-hook 'after-make-frame-functions #'load-spolsky)
+(add-hook 'after-make-frame-functions (lambda (frame) (load-spolsky)))
 (load-spolsky)
-
 
 ;; Toggle themes
 (defun toggle-theme ()
