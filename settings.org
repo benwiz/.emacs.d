@@ -155,7 +155,7 @@
 * Theme and Modeline
 #+BEGIN_SRC emacs-lisp
   (if *is-a-mac*
-         (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
+      (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
     (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
 
   ;; emacs27 loads themes immediately, this line prevents that. Presumably there is a good reason
@@ -194,6 +194,10 @@
 
   ;; Start in spolsky
   (load-spolsky)
+  ;; (if (daemonp)
+      ;; (add-hook 'after-make-frame-functions (lambda () (load-spolsky)))
+    ;; (load-spolsky))
+
 
   ;; Toggle themes
   (defun toggle-theme ()
@@ -342,11 +346,11 @@
 
   (use-package switch-buffer-functions)
 
+  (use-package restclient
+    :mode ("\\.http\\'" . restclient-mode))
+
   ;; (use-package free-keys
   ;;   :bind ("C-h C-k" . 'free-keys))
-
-  ;; (use-package restclient
-  ;;   :mode ("\\.http\\'" . restclient-mode))
 
   ;; (use-package dashboard
   ;;     ;; https://github.com/emacs-dashboard/emacs-dashboard ;
@@ -1000,11 +1004,11 @@
   (use-package clojure-snippets)
   (use-package flycheck-clj-kondo)
 
-  (use-package clj-refactor
-    :init (add-hook 'clojure-mode-hook (lambda ()
-      (yas-minor-mode 1)
-      (clj-refactor-mode 1)
-      (cljr-add-keybindings-with-prefix "C-c C-m"))))
+  ;; (use-package clj-refactor
+  ;;   :init (add-hook 'clojure-mode-hook (lambda ()
+  ;;     (yas-minor-mode 1)
+  ;;     (clj-refactor-mode 1)
+  ;;     (cljr-add-keybindings-with-prefix "C-c C-m"))))
 
   ;; (use-package anakondo
   ;;   :ensure t
@@ -1075,7 +1079,8 @@
            ("C-c C-p"     . cider-pprint-eval-last-sexp-to-comment)
            ("C-c C-<tab>" . cider-format-edn-region))
           (:map cider-repl-mode-map
-           ("C-c C-l"     . cider-repl-clear-buffer))
+                ("C-c C-l"     . cider-repl-clear-buffer)
+                ("C-c C-<tab>" . cider-format-edn-region))
 
     :config
     (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
