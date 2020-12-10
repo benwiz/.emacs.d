@@ -715,7 +715,7 @@
 ;; ;;     :hook (XXX-mode . lsp-deferred)
 ;; ;;     :commands (lsp lsp-deferred))
 
-(use-package org-tempo)
+;; (use-package org-tempo)
 (define-key org-mode-map (kbd "M-n") 'org-todo)
 
 (use-package markdown-mode
