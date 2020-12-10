@@ -68,12 +68,16 @@
 (set-default-coding-systems 'utf-8)               ; Default to utf-8 encodingo
 (global-display-line-numbers-mode)                ; Display line numbers
 (show-paren-mode)                                 ; Show matching parenthesis
-(desktop-save-mode 0)                            ; Don't save buffer and window state
+(desktop-save-mode 0)                             ; Don't save buffer and window state
 
+;(if (eq window-system 'ns)
+;  (add-to-list 'default-frame-alist '(maximized .))
+;  (add-to-list 'default-frame-alist '(fullscreen .)))
 (add-hook 'after-make-frame-functions
           (lambda (frame)
             (set-frame-parameter frame 'fullscreen 'fullboth)
-            (tool-bar-mode 0)))
+            (tool-bar-mode 0)
+            (scroll-bar-mode 0)))
 (set-frame-parameter nil 'fullscreen 'fullboth)
 
 (add-hook 'focus-out-hook #'garbage-collect)
@@ -86,11 +90,11 @@
 
 (require 'package)
 
-(add-to-list 'package-archives '("elpy" . "http://jorgenschaefer.github.io/packages/") t)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("elpy" . "https://jorgenschaefer.github.io/packages/") t)
+;; (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
+;; (add-to-list 'package-archives '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-;;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+;; (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
