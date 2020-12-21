@@ -21,7 +21,11 @@
    (quote
     (org-tempo switch-buffer-functions free-keys multiple-cursors counsel-projectile all-the-icons symbol-overlay ivy-filthy-rich ivy-rich anakondo typescript-mode yaml-mode redtick tomatinho lsp-ui company-lsp lsp-ivy projectile doom-modeline glsl-mode dictionary define-word LilyPond-mode lilypond-mode lilypond slime-company magit magit-margin restclient flycheck-gometalinter company-go go-errcheck go-projectile multi-term exwm dashboard page-break-lines solarized-theme highlight elfeedn emojify restart-emacs mew jabberx-autoloads jabber-autoloads jabber hangups hackernews pomodoro editorconfig exec-path-from-shell rjsx-mode js2-refactor company-tern tern js2-mode flycheck-rust cargo rust-mode toml-mode lsp-mode markdown-mode itail misc auto-highlight-symbol highlight-symbol avy ws-butler wttrin git-link scratch dired-x dired undo-tree clj-refactor clojure-snippets auto-package-update wgrep highlight-indent-guides htmlize git-gutter diff-hl fic-mode expand-region rainbow-blocks dumb-jump load-env-vars company company-mode slamhound counsel swiper ivy rainbow-delimiters gnu-elpa-keyring-update queue-0\.2 ob-clojure cider flycheck-clj-kondo paredit flycheck use-package)))
  '(safe-local-variable-values
-   '((cider-clojure-cli-global-options . "-A:dev:runtime")
+   (quote
+    ((cider-figwheel-main-default-options . ":dev")
+     (cider-default-cljs-repl . figwheel-main)
+     (cider-clojure-cli-global-options . "-A:fig")
+     (cider-clojure-cli-global-options . "-A:dev:runtime")
      (cider-clojure-cli-global-options . "-A:emacs")
      (cider-clojure-cli-global-options . "-A:emacs:test")
      (cider-preferred-build-tool . clojure-cli)
@@ -42,7 +46,7 @@
      (cider-shadow-default-options . ":app")
      (cider-default-cljs-repl . shadow)
      (cider-preferred-build-tool . shadow-cljs)
-     (setenv "breeze.ehr.use-shared-hitch-graph" "true"))))
+     (setenv "breeze.ehr.use-shared-hitch-graph" "true")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -148,7 +148,7 @@
 
 ;; Light theme. I like the default theme more than any other light theme I found.
 ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.
-(set-face-attribute 'default nil :family "Ubuntu Mono")
+(set-face-attribute 'default nil :family "Ubuntu Mono" :height 135)
 (set-face-attribute 'hl-line nil :background "#e3ffe3")
 (set-face-attribute 'region nil :background "#EAEAEA")
 (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
@@ -664,6 +664,7 @@
   (add-hook 'slime-lisp-mode-hook 'paredit-mode)
   (add-hook 'lisp-mode-hook 'paredit-mode))
 
+
 ;; Like: sp-kill-sexp (to delete the whole symbol not just forward like C-M-k does)
 (defun kill-symbol ()
   (interactive)
@@ -717,6 +718,9 @@
 
 ;; (use-package org-tempo)
 (define-key org-mode-map (kbd "M-n") 'org-todo)
+;; (define-key global-map (kbd "C-c l") 'org-store-link)
+;; (define-key global-map (kbd "C-c a") 'org-agenda)
+(setq org-log-done t)
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
@@ -727,7 +731,7 @@
 
 (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
 
-
+(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
 (use-package yaml-mode
   :mode ("\\.yml$" . yaml-mode))
