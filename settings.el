@@ -240,7 +240,7 @@
 (global-set-key (kbd "C-M-z") 'zap-up-to-char)
 (global-set-key (kbd "C-c n") 'narrow-to-defun)
 (global-set-key (kbd "C-c w") 'widen)
-(global-set-key (kbd "C-c l") 'recenter)
+(global-set-key (kbd "C-l") 'recenter)
 
 (use-package dired
   :ensure nil ;; dired is not package.el
@@ -479,7 +479,8 @@
   (global-set-key (kbd "C-c c") 'counsel-compile)
   ;; (global-set-key (kbd "C-c g") 'counsel-git)
   (global-set-key (kbd "C-i") 'counsel-git-grep)
-  (global-set-key (kbd "C-c a") 'counsel-linux-app))
+  ;; (global-set-key (kbd "C-c a") 'counsel-linux-app)
+  )
 
 (use-package projectile
   :config
@@ -719,8 +720,12 @@
 ;; (use-package org-tempo)
 (define-key org-mode-map (kbd "M-n") 'org-todo)
 ;; (define-key global-map (kbd "C-c l") 'org-store-link)
-;; (define-key global-map (kbd "C-c a") 'org-agenda)
-(setq org-log-done t)
+(define-key global-map (kbd "C-c a") 'org-agenda)
+(setq org-log-done nil)
+(setq org-agenda-files (list "~/org/work.org"
+                             "~/org/school.org"
+                             "~/org/guitar.org"
+                             "~/org/learn.org"))
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
