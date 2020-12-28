@@ -570,6 +570,16 @@
 
 ;;   (setq multi-term-buffer-name "term"))
 
+(defun my-reload-dir-locals-for-all-buffer-in-this-directory ()
+  "For every buffer with the same `default-directory` as the
+current buffer's, reload dir-locals."
+  (interactive)
+  (let ((dir default-directory))
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer
+        (when (equal default-directory dir))
+        (my-reload-dir-locals-for-current-buffer)))))
+
 (use-package ws-butler
   :hook (prog-mode . ws-butler-mode)
   :config (ws-butler-global-mode 1))
@@ -984,7 +994,7 @@ Then the Clojure buffer is activated as if nothing happened."
   (message ""))
 
 (use-package cider
-  :commands (cider cider-connect cider-jack-in)
+  :commands (cider cider-connect cider-jack-in cider-jack-in-clj cider-jack-in-cljs)
 
   :init
   (setq cider-auto-select-error-buffer t
