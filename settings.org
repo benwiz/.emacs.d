@@ -121,7 +121,7 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
   (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
-  ;; I don't think this is necessary unless depending on auto-update-packages, I think list-packages handles the refresh
+  ;; I don't think this is necessary unless depending on auto-package-update, I think list-packages handles the refresh
   ;; ;; Ask to refresh package contents occasionally
   ;; (when (eq 0 (random 50))
   ;;   (when (y-or-n-p-with-timeout "Do you want to refresh melpa? " 6 nil)
