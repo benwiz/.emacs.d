@@ -137,7 +137,7 @@
   (when (eq 0 (random 50))
     (when (y-or-n-p-with-timeout "Do you want to check packages for upgrades? " 6 nil)
       (package-list-packages)
-      (message "Run `U x` to upgrade")))
+      (message "Run `Shift-U x` to upgrade")))
 
   ;; force packages to always be installed, no need to defer with emacsclient, I think
   ;; NOTE must set `:ensure nil` if not a package.el package, like dired
