@@ -121,13 +121,14 @@
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
   (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
-  ;; Ask to refresh package contents occasionally
-  (when (eq 0 (random 50))
-    (when (y-or-n-p-with-timeout "Do you want to refresh melpa? " 6 nil)
-      (package-refresh-contents)))
+  ;; I don't think this is necessary unless depending on auto-update-packages, I think list-packages handles the refresh
+  ;; ;; Ask to refresh package contents occasionally
+  ;; (when (eq 0 (random 50))
+  ;;   (when (y-or-n-p-with-timeout "Do you want to refresh melpa? " 6 nil)
+  ;;     (package-refresh-contents)))
 
   ;; Fetch pacakges when package-archive-contents does not exist
-  (unless package-archive-contents
+  (when (not package-archive-contents)
     (package-refresh-contents))
 
   ;; list the packages you want
