@@ -148,12 +148,15 @@
   ;; does not conflict with use-pockage-always-ensure
   ;; (setq use-package-always-defer t)
 
-  ;; I think this keeps packages up to date assuming that melpa is up to date
-  (use-package auto-package-update
-    :config
-    (setq auto-package-update-delete-old-versions t)
-    (setq auto-package-update-hide-results t)
-    (auto-package-update-maybe))
+  ;; (use-package auto-package-update
+  ;;   :config
+  ;;   (setq auto-package-update-delete-old-versions nil) ;; remember to run package-autoremove occassionally
+  ;;   (setq auto-package-update-prompt-before-update t)
+  ;;   (setq auto-package-update-hide-results nil) ;; absolutely need to see results
+  ;;   (auto-package-update-maybe))
+
+  ;; To upgrade manually `M-x list-packages U x`, if that is not convenient check below stackoverflow post for some helper functions
+  ;; https://emacs.stackexchange.com/questions/31872/how-to-update-packages-installed-with-use-package
 
   (use-package gnu-elpa-keyring-update)
 #+END_SRC
@@ -795,7 +798,7 @@
                                 "~/org/school.org"
                                 "~/org/guitar.org"
                                 "~/org/learn.org")
-         org-log-done nil
+         org-log-done t
          org-enforce-todo-dependencies t)
 
 

@@ -98,10 +98,10 @@
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
-;; ;; Ask to refresh package contents 5% of the time.
-;; (when (eq 0 (random 20))
-;;   (when (y-or-n-p-with-timeout "Do you want to refresh melpa? " 6 nil)
-;;     (package-refresh-contents)))
+;; Ask to refresh package contents occasionally
+(when (eq 0 (random 50))
+  (when (y-or-n-p-with-timeout "Do you want to refresh melpa? " 6 nil)
+    (package-refresh-contents)))
 
 ;; Fetch pacakges when package-archive-contents does not exist
 (unless package-archive-contents
@@ -125,12 +125,15 @@
 ;; does not conflict with use-pockage-always-ensure
 ;; (setq use-package-always-defer t)
 
-;; I think this keeps packages up to date assuming that melpa is up to date
-(use-package auto-package-update
-  :config
-  (setq auto-package-update-delete-old-versions t)
-  (setq auto-package-update-hide-results t)
-  (auto-package-update-maybe))
+;; (use-package auto-package-update
+;;   :config
+;;   (setq auto-package-update-delete-old-versions nil) ;; remember to run package-autoremove occassionally
+;;   (setq auto-package-update-prompt-before-update t)
+;;   (setq auto-package-update-hide-results nil) ;; absolutely need to see results
+;;   (auto-package-update-maybe))
+
+;; To upgrade manually `M-x list-packages U x`, if that is not convenient check below stackoverflow post for some helper functions
+;; https://emacs.stackexchange.com/questions/31872/how-to-update-packages-installed-with-use-package
 
 (use-package gnu-elpa-keyring-update)
 
@@ -731,11 +734,23 @@ current buffer's, reload dir-locals."
 (define-key org-mode-map (kbd "M-n") 'org-todo)
 ;; (define-key global-map (kbd "C-c l") 'org-store-link)
 (define-key global-map (kbd "C-c a") 'org-agenda)
-(setq org-log-done nil)
 (setq org-agenda-files (list "~/org/work.org"
                              "~/org/school.org"
                              "~/org/guitar.org"
-                             "~/org/learn.org"))
+                             "~/org/learn.org")
+      org-log-done t
+      org-enforce-todo-dependencies t)
+
+
+(defun org-archive-done-tasks ()
+  (interactive)
+  (org-map-entries
+   (lambda ()
+     (org-archive-subtree)
+     (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
+   "/DONE" 'tree))
+
+(define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
