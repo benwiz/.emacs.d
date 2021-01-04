@@ -1,16 +1,15 @@
 * To Do
-** continue setting up lsp-mode and turn on lsp-ui and lsp-ivy
 ** Set up dashboard
-*** shortcut to open
 *** links to main files in each project
+** better jump-to-char-in-line, maybe just write it myself. more vim-like.
+** better keybindings for delete to/until both forward and backward. more vim-like.
+** continue setting up lsp-mode and turn on lsp-ui and lsp-ivy
 ** paredit: my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)
 ** paredit: paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.
 ** paredit: paredit kill needs to kill any created whitepsace
 ** paredit: go to beginning or end of top level form (maybe, C-M-S-u)
 ** registers: better shortcuts
 ** prepend current project to each item in "Switch to Buffer" selector
-** better jump-to-char-in-line, maybe just write it myself
-** better keybindings for delete to/until both forward and backward
 * Operating System
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -31,6 +30,7 @@
 #+END_SRC
 * Mouse / Touchpad
   #+begin_src emacs-lisp
+    ;; Shut off mouse clicks because my work computer's trackpad is super annoying, resizing windows with mouse still works
     (global-unset-key (kbd "<down-mouse-1>"))
     (global-unset-key (kbd "<mouse-1>"))
     (global-unset-key (kbd "<down-mouse-3>"))
@@ -39,7 +39,6 @@
 * Default Tweaks
 #+BEGIN_SRC emacs-lisp
   (when window-system
-
     (blink-cursor-mode 0)                           ; Disable the cursor blinking
     (scroll-bar-mode 0)                             ; Disable the scroll bar
     (tool-bar-mode 0)                               ; Disable the tool bar
@@ -168,7 +167,7 @@
   ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.
   (set-face-attribute 'default nil :family "Ubuntu Mono" :height 135)
   (set-face-attribute 'hl-line nil :background "#e3ffe3")
-  (set-face-attribute 'region nil :background "#EAEAEA")
+  (set-face-attribute 'region nil :background "#E4E4E4")
   (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
   (set-face-attribute 'font-lock-constant-face nil :foreground "#255814") ;; Forest Green is default; DarkGreen is good; hex is darker forest green
