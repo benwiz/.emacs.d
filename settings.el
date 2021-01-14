@@ -3,22 +3,13 @@
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 (setq mac-command-modifier 'meta)
 
-(setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
-(when (file-exists-p custom-file)
-  (load custom-file))
-
-(defun load-init-el ()
-  (interactive)
-  (load-file "~/.emacs.d/init.el"))
-(global-set-key (kbd "C-c i") 'load-init-el)
-
+;; Shut off mouse clicks because my work computer's trackpad is super annoying, resizing windows with mouse still works
 (global-unset-key (kbd "<down-mouse-1>"))
 (global-unset-key (kbd "<mouse-1>"))
 (global-unset-key (kbd "<down-mouse-3>"))
 (global-unset-key (kbd "<mouse-3>"))
 
 (when window-system
-
   (blink-cursor-mode 0)                           ; Disable the cursor blinking
   (scroll-bar-mode 0)                             ; Disable the scroll bar
   (tool-bar-mode 0)                               ; Disable the tool bar
@@ -98,42 +89,32 @@
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/") t)
 (add-to-list 'load-path "~/.emacs.d/site-lisp/")
 
-;; Ask to refresh package contents occasionally
-(when (eq 0 (random 50))
-  (when (y-or-n-p-with-timeout "Do you want to refresh melpa? " 6 nil)
-    (package-refresh-contents)))
-
 ;; Fetch pacakges when package-archive-contents does not exist
-(unless package-archive-contents
+(when (not package-archive-contents)
   (package-refresh-contents))
 
-;; list the packages you want
+;; List packages to install
 (setq package-list '(use-package))
 
-;; install the missing packages
+;; Install the missing packages
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
 
-;; force packages to always be installed
+;; Suggest to upgrade packages occasionally, TODO would be better to ask the first time emacs is opened each month
+(when (eq 0 (random 50))
+  (when (y-or-n-p-with-timeout "Do you want to check packages for upgrades? " 6 nil)
+    (package-list-packages)
+    (message "Run `Shift-U x` to upgrade")))
+
+;; force packages to always be installed, no need to defer with emacsclient, I think
 ;; NOTE must set `:ensure nil` if not a package.el package, like dired
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
-;; TODO figure out if this is a good idea
-;; force packages to be deferred (use `:demand t` to override)
-;; does not conflict with use-pockage-always-ensure
-;; (setq use-package-always-defer t)
-
-;; (use-package auto-package-update
-;;   :config
-;;   (setq auto-package-update-delete-old-versions nil) ;; remember to run package-autoremove occassionally
-;;   (setq auto-package-update-prompt-before-update t)
-;;   (setq auto-package-update-hide-results nil) ;; absolutely need to see results
-;;   (auto-package-update-maybe))
-
 ;; To upgrade manually `M-x list-packages U x`, if that is not convenient check below stackoverflow post for some helper functions
 ;; https://emacs.stackexchange.com/questions/31872/how-to-update-packages-installed-with-use-package
+;; Alternatively use auto-package-update but that caused surprise issues in the past when upgrading blindly
 
 (use-package gnu-elpa-keyring-update)
 
@@ -153,7 +134,7 @@
 ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.
 (set-face-attribute 'default nil :family "Ubuntu Mono" :height 135)
 (set-face-attribute 'hl-line nil :background "#e3ffe3")
-(set-face-attribute 'region nil :background "#EAEAEA")
+(set-face-attribute 'region nil :background "#E4E4E4")
 (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
 (set-face-attribute 'font-lock-constant-face nil :foreground "#255814") ;; Forest Green is default; DarkGreen is good; hex is darker forest green

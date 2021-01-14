@@ -1,3 +1,4 @@
+-*- eval: (add-hook 'after-save-hook 'org-html-export-to-html t t); -*-
 * To Do
 ** Set up dashboard
 *** links to main files in each project
@@ -19,14 +20,17 @@
 #+END_SRC
 * emacs.d
 #+BEGIN_SRC emacs-lisp
-   (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
-   (when (file-exists-p custom-file)
-     (load custom-file))
+    (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
+    (when (file-exists-p custom-file)
+      (load custom-file))
 
-   (defun load-init-el ()
-     (interactive)
-     (load-file "~/.emacs.d/init.el"))
-   (global-set-key (kbd "C-c i") 'load-init-el)
+    (defun load-init-el ()
+      (interactive)
+      (load-file "~/.emacs.d/init.el"))
+    (global-set-key (kbd "C-c i") 'load-init-el)
+
+  ;; See top of file for eval that updates the html file
+
 #+END_SRC
 * Mouse / Touchpad
   #+begin_src emacs-lisp
@@ -315,8 +319,8 @@
 #+BEGIN_SRC emacs-lisp
   (use-package restart-emacs)
   (use-package dictionary)
-  ;; (use-package htmlize) ;; awesome package but no use at the moment
-  ;; (use-package wgrep) ;; edit file in grep buffer
+  (use-package htmlize) ;; awesome package but no use at the moment
+  (use-package wgrep) ;; edit file in grep buffer
   ;; (use-package itail) ;; tail file within emacs
 
   (use-package scratch
