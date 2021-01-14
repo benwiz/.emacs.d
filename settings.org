@@ -33,7 +33,7 @@
 #+END_SRC
 ** settings.org HTML Export [[https://benwiz.com/emacs][html export]]
 #+BEGIN_SRC emacs-lisp
-  ;; See top of file for eval that updates the html fil
+  ;; See top of file for eval that updates the html file
   (defun org-inline-css-hook (exporter)
     "Insert custom inline css to automatically set the
   background of code to whatever theme I'm using's background"
