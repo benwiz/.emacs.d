@@ -12,19 +12,20 @@
   (load-file "~/.emacs.d/init.el"))
 (global-set-key (kbd "C-c i") 'load-init-el)
 
-;; See top of file for eval that updates the html fil
+;; See top of file for eval that updates the html file
+
 (defun org-inline-css-hook (exporter)
   "Insert custom inline css to automatically set the
-background of code to whatever theme I'm using's background"
+  background of code to whatever theme I'm using's background"
   (when (eq exporter 'html)
     (let* ((my-pre-bg (face-background 'default))
            (my-pre-fg (face-foreground 'default)))
-      (setq
-       org-html-head-extra
-       (concat
-        org-html-head-extra
-        (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
-                my-pre-bg my-pre-fg))))))
+      (setq org-html-head-extra
+            (concat org-html-head-extra
+                    (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
+                            my-pre-bg my-pre-fg)
+                    (format "<style type=\"text/css\">\n pre.src-emacs-lisp: {background-color: %s; color: %s;}</style>\n"
+                            my-pre-bg "black"))))))
 
 (add-hook 'org-export-before-processing-hook 'org-inline-css-hook)
 
@@ -771,23 +772,6 @@ current buffer's, reload dir-locals."
 
 (use-package yaml-mode
   :mode ("\\.yml$" . yaml-mode))
-
-;; ;; TODO use use-package
-;; (setq load-path (append (list (expand-file-name "/usr/share/emacs/site-lisp")) load-path))
-;; (require 'lilypond-mode)
-;; (add-to-list 'auto-mode-alist '("\\.ly\\'" . LilyPond-mode))
-;; (defun lilypond-compile ()
-;;   "Compile current file to PDF. The built in function
-;;        was using the /tmp dir and was just confusing.
-
-;;        Actually, just use C-c C-l LilyPond-command-lilypond."
-;;   (interactive)
-;;   (shell-command (concat "lilypond " (buffer-file-name))))
-;; (define-key LilyPond-mode-map (kbd "C-c C-k") 'lilypond-compile)
-;; ;; (add-hook 'after-save-hook
-;; ;;           (lambda ()
-;; ;;             (when (eq major-mode 'LilyPond-mode)
-;; ;;               (lilypond-compile))))
 
 ;; (use-package rjsx-mode
 ;;   :init
