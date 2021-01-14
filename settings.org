@@ -1,4 +1,5 @@
 -*- eval: (add-hook 'after-save-hook 'org-html-export-to-html t t); -*-
+#+TITLE settings.org | Ben Wiz
 * To Do
 ** Set up dashboard
 *** links to main files in each project
@@ -29,7 +30,8 @@
       (load-file "~/.emacs.d/init.el"))
     (global-set-key (kbd "C-c i") 'load-init-el)
 
-  ;; See top of file for eval that updates the html file
+  ;; See top of file for eval that updates the html fil
+  (use-package htmlize) ;; for fonts, but I think i need to tweak my font settings for it to work better (needs explicit settings)
 
 #+END_SRC
 * Mouse / Touchpad
@@ -169,6 +171,7 @@
 
   ;; Light theme. I like the default theme more than any other light theme I found.
   ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.
+  ;; TODO need to set this gray font
   (set-face-attribute 'default nil :family "Ubuntu Mono" :height 135)
   (set-face-attribute 'hl-line nil :background "#e3ffe3")
   (set-face-attribute 'region nil :background "#E4E4E4")
@@ -319,7 +322,6 @@
 #+BEGIN_SRC emacs-lisp
   (use-package restart-emacs)
   (use-package dictionary)
-  (use-package htmlize) ;; awesome package but no use at the moment
   (use-package wgrep) ;; edit file in grep buffer
   ;; (use-package itail) ;; tail file within emacs
 
