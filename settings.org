@@ -6,14 +6,13 @@
 ** better jump-to-char-in-line, maybe just write it myself. more vim-like.
 ** better keybindings for delete to/until both forward and backward. more vim-like.
 ** continue setting up lsp-mode and turn on lsp-ui and lsp-ivy
-** paredit: my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)
-** paredit: paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.
-** paredit: paredit kill needs to kill any created whitepsace
-** paredit: go to beginning or end of top level form (maybe, C-M-S-u)
+** paredit
+*** my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)
+*** paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.
+*** paredit kill needs to kill any created whitepsace
+*** go to beginning or end of top level form (maybe, C-M-S-u)
 ** registers: better shortcuts
 ** prepend current project to each item in "Switch to Buffer" selector
-* Info
-** [[https://github.com/benwiz/.emacs.d][Repo]]
 * Operating System
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -21,7 +20,7 @@
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 (setq mac-command-modifier 'meta)
 #+END_SRC
-* emacs.d
+* emacs.d [[https://github.com/benwiz/emacs.d][repo]]
 #+BEGIN_SRC emacs-lisp
   (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
   (when (file-exists-p custom-file)
@@ -32,7 +31,7 @@
     (load-file "~/.emacs.d/init.el"))
   (global-set-key (kbd "C-c i") 'load-init-el)
 #+END_SRC
-** settings.org HTML Export
+** settings.org HTML Export [[https://benwiz.com/emacs][html export]]
 #+BEGIN_SRC emacs-lisp
   ;; See top of file for eval that updates the html fil
   (defun org-inline-css-hook (exporter)

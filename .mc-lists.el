@@ -28,6 +28,7 @@
         move-to-window-line-top-bottom
         org-cycle
         org-delete-char
+        org-metaright
         org-self-insert-command
         outline-show-children
         paredit-backward
