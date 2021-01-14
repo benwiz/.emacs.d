@@ -31,7 +31,9 @@
     (interactive)
     (load-file "~/.emacs.d/init.el"))
   (global-set-key (kbd "C-c i") 'load-init-el)
-
+#+END_SRC
+** settings.org HTML Export
+#+BEGIN_SRC emacs-lisp
   ;; See top of file for eval that updates the html fil
   (defun org-inline-css-hook (exporter)
     "Insert custom inline css to automatically set the
@@ -47,7 +49,6 @@
                   my-pre-bg my-pre-fg))))))
 
   (add-hook 'org-export-before-processing-hook 'org-inline-css-hook)
-
 #+END_SRC
 * Mouse / Touchpad
   #+begin_src emacs-lisp
