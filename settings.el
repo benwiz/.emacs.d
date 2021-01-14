@@ -24,8 +24,8 @@
             (concat org-html-head-extra
                     (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
                             my-pre-bg my-pre-fg)
-                    (format "<style type=\"text/css\">\n pre.src-emacs-lisp: {background-color: %s; color: %s;}</style>\n"
-                            my-pre-bg "black"))))))
+                    (format "<style type=\"text/css\">\n pre.src-emacs-lisp:before {background-color: %s; color: %s;}</style>\n"
+                            my-pre-fg my-pre-bg))))))
 
 (add-hook 'org-export-before-processing-hook 'org-inline-css-hook)
 
