@@ -17,81 +17,9 @@
  '(jabber-mode-line-mode nil)
  '(linum-format " %7i ")
  '(package-selected-packages
-   '(paradox org-tempo switch-buffer-functions free-keys multiple-cursors counsel-projectile all-the-icons symbol-overlay ivy-filthy-rich ivy-rich anakondo typescript-mode yaml-mode redtick tomatinho lsp-ui company-lsp lsp-ivy projectile doom-modeline glsl-mode dictionary define-word LilyPond-mode lilypond-mode lilypond slime-company magit magit-margin restclient flycheck-gometalinter company-go go-errcheck go-projectile multi-term exwm dashboard page-break-lines solarized-theme highlight elfeedn emojify restart-emacs mew jabberx-autoloads jabber-autoloads jabber hangups hackernews pomodoro editorconfig exec-path-from-shell rjsx-mode js2-refactor company-tern tern js2-mode flycheck-rust cargo rust-mode toml-mode lsp-mode markdown-mode itail misc auto-highlight-symbol highlight-symbol avy ws-butler wttrin git-link scratch dired-x dired undo-tree clj-refactor clojure-snippets auto-package-update wgrep highlight-indent-guides htmlize git-gutter diff-hl fic-mode expand-region rainbow-blocks dumb-jump load-env-vars company company-mode slamhound counsel swiper ivy rainbow-delimiters gnu-elpa-keyring-update queue-0\.2 ob-clojure cider flycheck-clj-kondo paredit flycheck use-package))
+   '(htmlize yaml-mode ws-butler use-package undo-tree switch-buffer-functions scratch restclient restart-emacs redtick pomodoro paradox markdown-mode magit load-env-vars gnu-elpa-keyring-update git-link flycheck-clj-kondo fic-mode exwm expand-region exec-path-from-shell editorconfig doom-modeline diff-hl dictionary counsel-projectile company clojure-snippets clj-refactor auto-package-update))
  '(safe-local-variable-values
-   '((eval add-hook 'after-save-hook
-           (lambda nil
-             (message "saved, says dir locals!!"))
-           nil t)
-     (eval progn
-           (add-hook 'after-save-hook
-                     (lambda nil
-                       (message "saved, says dir locals!!"))))
-     (eval add-hook 'after-save-hook
-           (lambda nil
-             (message "saved!!"))
-           nil t)
-     (eval progn
-           (setenv "breeze.ehr.services.config-url" "file:dev-resources/prod-service-config.edn")
-           (setenv "GOOGLE_APPLICATION_CREDENTIALS" "/home/benwiz/code/master-at-arms/mast/dev-resources/mast-service-account.json")
-           (setenv "breeze.ehr.services.account-service-key" "accounts")
-           (setenv "breeze.ehr.session.cookie-attrs.secure" "false")
-           (setenv "breeze.ehr.session.cookie-name" "mast-ec")
-           (setenv "breeze.ehr.session.store.impl" "encrypted-cookie")
-           (setenv "breeze.ehr.session.store.encrypted-cookie.key" "00000000000000000000000000000000")
-           (setenv "breeze.ehr.goog.app-name" "mast")
-           (setenv "breeze.ehr.goog.service-account-id" "local-development@breeze-ehr.breezeehr.com.iam.gserviceaccount.com")
-           (setenv "breeze.ehr.goog.p12-file" "dev-resources/Breeze-EHR_local-development_a3f4668ebdc0.p12")
-           (setenv "breeze.ehr.goog.do-document-uploads" "true")
-           (setenv "breeze.ehr.rule-engine.do-receive" "true")
-           (setenv "breeze.ehr.http.do-send-stacktrace" "true")
-           (setenv "breeze.ehr.use-shared-hitch-graph" "true"))
-     (eval progn
-           (setenv "GOOGLE_APPLICATION_CREDENTIALS" "/app/certs/breezeehr.com breeze-ehr-b8d518d1a8b6.json"))
-     (eval add-hook 'cider-connected-hook
-           (lambda nil
-             (shell-command "./git-version.sh"))
-           nil t)
-     (eval progn
-           (setenv "breeze.ehr.services.config-url" "file:dev-resources/prod-service-config.edn")
-           (setenv "GOOGLE_APPLICATION_CREDENTIALS" "/home/benwiz/code/master-at-arms/mast/dev-resources/mast-service-account.json")
-           (setenv "breeze.ehr.services.account-service-key" "accounts")
-           (setenv "breeze.ehr.session.cookie-attrs.secure" "false")
-           (setenv "breeze.ehr.session.cookie-name" "mast-ec")
-           (setenv "breeze.ehr.session.store.impl" "encrypted-cookie")
-           (setenv "breeze.ehr.session.store.encrypted-cookie.key" "00000000000000000000000000000000")
-           (setenv "breeze.ehr.goog.app-name" "mast")
-           (setenv "breeze.ehr.goog.service-account-id" "mast-service@breeze-ehr.breezeehr.com.iam.gserviceaccount.com")
-           (setenv "breeze.ehr.goog.p12-file" "dev-resources/Breeze-EHR_local-development_a3f4668ebdc0.p12")
-           (setenv "breeze.ehr.goog.do-document-uploads" "true")
-           (setenv "breeze.ehr.rule-engine.do-receive" "true")
-           (setenv "breeze.ehr.http.do-send-stacktrace" "true")
-           (setenv "breeze.ehr.use-shared-hitch-graph" "true"))
-     (cider-figwheel-main-default-options . ":dev")
-     (cider-default-cljs-repl . figwheel-main)
-     (cider-clojure-cli-global-options . "-A:fig")
-     (cider-clojure-cli-global-options . "-A:dev:runtime")
-     (cider-clojure-cli-global-options . "-A:emacs")
-     (cider-clojure-cli-global-options . "-A:emacs:test")
-     (cider-preferred-build-tool . clojure-cli)
-     (eval progn
-           (setenv "breeze.ehr.services.config-url" "file:dev-resources/prod-service-config.edn")
-           (setenv "breeze.ehr.services.account-service-key" "accounts")
-           (setenv "breeze.ehr.session.cookie-attrs.secure" "false")
-           (setenv "breeze.ehr.session.cookie-name" "mast-ec")
-           (setenv "breeze.ehr.session.store.impl" "encrypted-cookie")
-           (setenv "breeze.ehr.session.store.encrypted-cookie.key" "00000000000000000000000000000000")
-           (setenv "breeze.ehr.goog.app-name" "mast")
-           (setenv "breeze.ehr.goog.service-account-id" "local-development@breeze-ehr.breezeehr.com.iam.gserviceaccount.com")
-           (setenv "breeze.ehr.goog.p12-file" "dev-resources/Breeze-EHR_local-development_a3f4668ebdc0.p12")
-           (setenv "breeze.ehr.goog.do-document-uploads" "true")
-           (setenv "breeze.ehr.rule-engine.do-receive" "true")
-           (setenv "breeze.ehr.http.do-send-stacktrace" "true")
-           (setenv "breeze.ehr.use-shared-hitch-graph" "true"))
-     (cider-shadow-default-options . ":app")
-     (cider-default-cljs-repl . shadow)
-     (cider-preferred-build-tool . shadow-cljs)
-     (setenv "breeze.ehr.use-shared-hitch-graph" "true"))))
+   '((eval add-hook 'after-save-hook 'org-html-export-to-html t t))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

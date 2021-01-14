@@ -3,6 +3,31 @@
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 (setq mac-command-modifier 'meta)
 
+(setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+(defun load-init-el ()
+  (interactive)
+  (load-file "~/.emacs.d/init.el"))
+(global-set-key (kbd "C-c i") 'load-init-el)
+
+;; See top of file for eval that updates the html fil
+(defun org-inline-css-hook (exporter)
+  "Insert custom inline css to automatically set the
+background of code to whatever theme I'm using's background"
+  (when (eq exporter 'html)
+    (let* ((my-pre-bg (face-background 'default))
+           (my-pre-fg (face-foreground 'default)))
+      (setq
+       org-html-head-extra
+       (concat
+        org-html-head-extra
+        (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
+                my-pre-bg my-pre-fg))))))
+
+(add-hook 'org-export-before-processing-hook 'org-inline-css-hook)
+
 ;; Shut off mouse clicks because my work computer's trackpad is super annoying, resizing windows with mouse still works
 (global-unset-key (kbd "<down-mouse-1>"))
 (global-unset-key (kbd "<mouse-1>"))
@@ -132,6 +157,7 @@
 
 ;; Light theme. I like the default theme more than any other light theme I found.
 ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.
+;; TODO need to set this gray font
 (set-face-attribute 'default nil :family "Ubuntu Mono" :height 135)
 (set-face-attribute 'hl-line nil :background "#e3ffe3")
 (set-face-attribute 'region nil :background "#E4E4E4")
@@ -147,7 +173,7 @@
   (load-theme 'spolsky t)
   (custom-theme-set-faces
    'spolsky
-   `(default ((t (:foreground "#F2F2F2"))))
+   `(default ((t (:foreground "#F2F2F2" :background "#161A1F"))))
    `(hl-line ((t (:background "#1E252F" :underline nil))))
    `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
    `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
@@ -270,8 +296,7 @@
 
 (use-package restart-emacs)
 (use-package dictionary)
-;; (use-package htmlize) ;; awesome package but no use at the moment
-;; (use-package wgrep) ;; edit file in grep buffer
+(use-package wgrep) ;; edit file in grep buffer
 ;; (use-package itail) ;; tail file within emacs
 
 (use-package scratch
