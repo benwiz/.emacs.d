@@ -1,5 +1,5 @@
 -*- eval: (add-hook 'after-save-hook 'org-html-export-to-html t t); -*-
-#+TITLE settings.org | Ben Wiz
+#+TITLE: settings.org | Ben Wiz
 * To Do
 ** Set up dashboard
 *** links to main files in each project
@@ -32,6 +32,7 @@
 
   ;; See top of file for eval that updates the html fil
   (use-package htmlize) ;; for fonts, but I think i need to tweak my font settings for it to work better (needs explicit settings)
+
 
 #+END_SRC
 * Mouse / Touchpad
