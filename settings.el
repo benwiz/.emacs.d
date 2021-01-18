@@ -14,6 +14,7 @@
 
 ;; See top of file for eval that updates the html file
 
+;; FIXME there is a bug here, these endlessly appends to the head, it need to not do this forever
 (defun org-inline-css-hook (exporter)
   "Insert custom inline css to automatically set the
   background of code to whatever theme I'm using's background"
