@@ -24,6 +24,7 @@
         ivy-switch-buffer
         kill-region
         kill-sexp
+        magit-status
         mark-sexp
         move-to-window-line-top-bottom
         org-cycle
