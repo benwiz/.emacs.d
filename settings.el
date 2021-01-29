@@ -229,9 +229,9 @@
 
 (use-package redtick)
 
-(use-package load-env-vars
-  :init
-  (load-env-vars "~/.emacs.d/emacs.env"))
+;; (use-package load-env-vars
+;;   :init
+;;   (load-env-vars "~/.emacs.d/emacs.env"))
 
 (use-package exec-path-from-shell
   :config
@@ -272,13 +272,11 @@
 ;; no lines in docview (actually i think it is off by default, the number is from something else) (pdf viewer)
 ;; (add-hook 'doc-view-minor-mode-hook (lambda () (linum-mode 0)))
 
-(if *is-a-mac*
+(if (and (file-directory-p "~/code/bela-mode.el")
+         (file-directory-p "~/code/Bela/scripts/"))
  (use-package bela-mode
    :load-path "~/code/bela-mode.el"
-   :init (setq bela-scripts-dir "~/code/Bela/scripts/"))
- (use-package bela-mode
-   :load-path "~/code/personal/bela-mode.el"
-   :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
+   :init (setq bela-scripts-dir "~/code/Bela/scripts/")))
 
 (use-package magit
   :config

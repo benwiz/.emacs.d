@@ -19,26 +19,11 @@
  '(package-selected-packages
    '(htmlize yaml-mode ws-butler use-package undo-tree switch-buffer-functions scratch restclient restart-emacs redtick pomodoro paradox markdown-mode magit load-env-vars gnu-elpa-keyring-update git-link flycheck-clj-kondo fic-mode exwm expand-region exec-path-from-shell editorconfig doom-modeline diff-hl dictionary counsel-projectile company clojure-snippets clj-refactor auto-package-update))
  '(safe-local-variable-values
-   '((eval progn
-           (setenv "breeze.ehr.services.config-url" "file:dev-resources/prod-service-config.edn")
-           (setenv "GOOGLE_APPLICATION_CREDENTIALS" "/home/benwiz/code/master-at-arms/mast/dev-resources/mast-service-account.json")
-           (setenv "breeze.ehr.services.account-service-key" "accounts")
-           (setenv "breeze.ehr.session.cookie-attrs.secure" "false")
-           (setenv "breeze.ehr.session.cookie-name" "mast-ec")
-           (setenv "breeze.ehr.session.store.impl" "encrypted-cookie")
-           (setenv "breeze.ehr.session.store.encrypted-cookie.key" "00000000000000000000000000000000")
-           (setenv "breeze.ehr.goog.app-name" "mast")
-           (setenv "breeze.ehr.goog.service-account-id" "mast-service@breeze-ehr.breezeehr.com.iam.gserviceaccount.com")
-           (setenv "breeze.ehr.goog.p12-file" "dev-resources/Breeze-EHR_local-development_a3f4668ebdc0.p12")
-           (setenv "breeze.ehr.goog.do-document-uploads" "true")
-           (setenv "breeze.ehr.rule-engine.do-receive" "true")
-           (setenv "breeze.ehr.http.do-send-stacktrace" "true")
-           (setenv "breeze.ehr.use-shared-hitch-graph" "true"))
+   '((cider-shadow-default-options . ":app")
      (eval add-hook 'cider-connected-hook
            (lambda nil
              (shell-command "./git-version.sh"))
            nil t)
-     (cider-shadow-default-options . ":app")
      (cider-default-cljs-repl . shadow)
      (cider-preferred-build-tool . shadow-cljs)
      (eval add-hook 'after-save-hook 'org-html-export-to-html t t))))

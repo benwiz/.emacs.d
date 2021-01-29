@@ -263,9 +263,10 @@
 * Tools and Bindings (not text editing related)
 ** Env Vars
 #+BEGIN_SRC emacs-lisp
-  (use-package load-env-vars
-    :init
-    (load-env-vars "~/.emacs.d/emacs.env"))
+  (if (file-exists-p "~/.emacs.d/emacs.env")
+      (use-package load-env-vars
+        :init
+        (load-env-vars "~/.emacs.d/emacs.env")))
 
   (use-package exec-path-from-shell
     :config
@@ -310,13 +311,11 @@
 #+END_SRC
 ** Local Packages
 #+BEGIN_SRC emacs-lisp
-  (if *is-a-mac*
+  (if (and (file-directory-p "~/code/bela-mode.el/")
+           (file-directory-p "~/code/Bela/scripts/"))
    (use-package bela-mode
      :load-path "~/code/bela-mode.el"
-     :init (setq bela-scripts-dir "~/code/Bela/scripts/"))
-   (use-package bela-mode
-     :load-path "~/code/personal/bela-mode.el"
-     :init (setq bela-scripts-dir "~/code/personal/Bela/scripts/")))
+     :init (setq bela-scripts-dir "~/code/Bela/scripts/")))
 
 #+END_SRC
 ** Git
