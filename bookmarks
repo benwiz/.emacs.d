@@ -1,8 +1,13 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("settings.org"
+(("work.org"
+ (filename . "~/org/work.org")
+ (front-context-string . "** Laptop Setup\n")
+ (rear-context-string)
+ (position . 1))
+("settings.org"
  (filename . "~/.emacs.d/settings.org")
  (front-context-string . "\n   #+END_SRC\n**")
  (rear-context-string . "_SRC emacs-lisp\n")

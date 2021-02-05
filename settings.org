@@ -281,6 +281,8 @@
   (global-unset-key (kbd "M-u"))
   (global-unset-key (kbd "C-i"))
   (global-unset-key (kbd "C-x C-x"))
+  (global-unset-key (kbd "C-x C-l"))
+  (global-unset-key (kbd "C-x C-u"))
 
   (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
   (global-set-key (kbd "C-x C-x") 'mode-line-other-buffer)
