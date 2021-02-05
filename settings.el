@@ -746,7 +746,8 @@ current buffer's, reload dir-locals."
                              "~/org/guitar.org"
                              "~/org/learn.org")
       org-log-done t
-      org-enforce-todo-dependencies t)
+      org-enforce-todo-dependencies t
+      org-archive-location "archive/%s_archive::")
 
 
 (defun org-archive-done-tasks ()

@@ -811,7 +811,8 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
                                 "~/org/guitar.org"
                                 "~/org/learn.org")
          org-log-done t
-         org-enforce-todo-dependencies t)
+         org-enforce-todo-dependencies t
+         org-archive-location "archive/%s_archive::")
 
 
    (defun org-archive-done-tasks ()

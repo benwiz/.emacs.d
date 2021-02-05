@@ -56,6 +56,7 @@
         paredit-splice-sexp
         reposition-window
         rjsx-delete-creates-full-tag
+        sgml-slash
         suspend-frame
         toggle-truncate-lines
         zap-up-to-char
