@@ -36,6 +36,7 @@
 [[https://benwiz.com/emacs][html export]]
 #+BEGIN_SRC emacs-lisp
   ;; See top of file for eval that updates the html file
+  (use-package htmlize)
 
   ;; FIXME there is a bug here, these endlessly appends to the head, it need to not do this forever
   (defun org-inline-css-hook (exporter)

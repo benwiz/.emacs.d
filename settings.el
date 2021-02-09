@@ -5,8 +5,7 @@
 
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
-  (load custom-file)
-  (message "loaded file"))
+  (load custom-file))
 
 (defun load-init-el ()
   (interactive)
@@ -14,6 +13,8 @@
 (global-set-key (kbd "C-c i") 'load-init-el)
 
 ;; See top of file for eval that updates the html file
+
+(use-package htmlize)
 
 ;; FIXME there is a bug here, these endlessly appends to the head, it need to not do this forever
 (defun org-inline-css-hook (exporter)
@@ -246,6 +247,8 @@
 (global-unset-key (kbd "M-u"))
 (global-unset-key (kbd "C-i"))
 (global-unset-key (kbd "C-x C-x"))
+(global-unset-key (kbd "C-x C-l"))
+(global-unset-key (kbd "C-x C-u"))
 
 (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-x C-x") 'mode-line-other-buffer)
