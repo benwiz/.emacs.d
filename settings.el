@@ -13,8 +13,9 @@
 (global-set-key (kbd "C-c i") 'load-init-el)
 
 ;; See top of file for eval that updates the html file
-
 (use-package htmlize)
+(setq org-html-validation-link "")
+
 
 ;; FIXME there is a bug here, these endlessly appends to the head, it need to not do this forever
 (defun org-inline-css-hook (exporter)
@@ -765,11 +766,12 @@ current buffer's, reload dir-locals."
 (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
 
 (use-package markdown-mode
-  :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    ;; :init (setq markdown-command "multimarkdown")
+)
 
 (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
 

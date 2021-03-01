@@ -805,7 +805,7 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
   ;; ;;     :hook (XXX-mode . lsp-deferred)
   ;; ;;     :commands (lsp lsp-deferred))
 #+END_SRC
-** Org mode
+** Org
  #+BEGIN_SRC emacs-lisp
    ;; (use-package org-tempo)
    (define-key org-mode-map (kbd "M-n") 'org-todo)
@@ -830,14 +830,15 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 
    (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
  #+END_SRC
-** Markdown Mode
+** Markdown
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
     :commands (markdown-mode gfm-mode)
     :mode (("README\\.md\\'" . gfm-mode)
            ("\\.md\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode))
-    :init (setq markdown-command "multimarkdown"))
+    ;; make sure to `apt install pandoc`
+    :init (setq markdown-command "pandoc --standalone --from gfm Form-Curator.md --highlight-style kate"))
 #+END_SRC
 ** Bash
 #+BEGIN_SRC emacs-lisp

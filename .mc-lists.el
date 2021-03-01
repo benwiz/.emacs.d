@@ -11,6 +11,7 @@
         cargo-process-run
         cider-eval-last-sexp
         cider-eval-last-sexp-and-replace
+        cider-switch-to-repl-buffer
         cljr-raise-sexp
         cljr-slash
         clojure-sort-ns
@@ -18,6 +19,7 @@
         company-indent-or-complete-common
         counsel-yank-pop
         dabbrev-expand
+        electric-newline-and-maybe-indent
         forward-sexp
         handle-switch-frame
         hs-toggle-hiding
@@ -74,5 +76,6 @@
         mc-mark-previous-like-this-then-cycle-backward
         mc-skip-to-next-like-this-then-cycle-forward
         mc-skip-to-previous-like-this-then-cycle-backward
+        paredit-backslash
         swiper-isearch
         ))
