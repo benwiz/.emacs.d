@@ -333,6 +333,7 @@
      :config
      (global-set-key (kbd "C-c g l") 'git-link))
 
+   (use-package switch-buffer-functions) ;; although this is not explicitly git, my only use case currently is diff-hl
    (use-package diff-hl
      :after (switch-buffer-functions)
      :config
@@ -367,10 +368,8 @@
     :config
     (global-undo-tree-mode))
 
-  (use-package switch-buffer-functions)
-
-  (use-package restclient
-    :mode ("\\.http\\'" . restclient-mode))
+  ;; (use-package restclient
+  ;;   :mode ("\\.http\\'" . restclient-mode))
 
   ;; (use-package free-keys
   ;;   :bind ("C-h C-k" . 'free-keys))
@@ -830,7 +829,7 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 
    (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
  #+END_SRC
-** Markdown
+** COMMENT Markdown
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
     :commands (markdown-mode gfm-mode)
@@ -839,6 +838,8 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
            ("\\.markdown\\'" . markdown-mode))
     ;; make sure to `apt install pandoc`
     :init (setq markdown-command "pandoc --standalone --from gfm Form-Curator.md --highlight-style kate"))
+
+  (use-package markdown-toc)
 #+END_SRC
 ** Bash
 #+BEGIN_SRC emacs-lisp
