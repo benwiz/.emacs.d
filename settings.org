@@ -360,7 +360,7 @@
       "Face to fontify FIXME/TODO words"
       :group 'fic-mode)
     :config
-    (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
+    (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE"))
     (add-hook 'prog-mode-hook 'fic-mode))
 
   (use-package undo-tree
