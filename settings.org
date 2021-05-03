@@ -1042,7 +1042,7 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
   (add-to-list 'exec-path "/usr/local/bin/")
   (add-to-list 'exec-path "/home/benwiz/bin/")
   (use-package clojure-snippets)
-  (use-package flycheck-clj-kondo)
+  (use-package flycheck-clj-kondo) ;; NOTE .clj-kondo/ is in .emacs.d/ for version control, it must be symlinked to home `ln -s ~/.emacs.d/.clj-kondo/ ~/.clj-kondo/`
 
   ;; (use-package clj-refactor
   ;;   :init (add-hook 'clojure-mode-hook (lambda ()

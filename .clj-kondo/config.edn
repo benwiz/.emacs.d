@@ -5,4 +5,5 @@
            clojure.test/deftest                                      clojure.core/def
            manifold.deferred/let-flow                                clojure.core/let
            manifold.deferred/let-flow'                               clojure.core/let
-           hitch2.descriptor-impl-registry/def-registered-descriptor clojure.core/defn}}
+           hitch2.descriptor-impl-registry/def-registered-descriptor clojure.core/defn
+           com.breezeehr.transaction-functions/deftxfn               clojure.core/defn}}
