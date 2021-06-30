@@ -292,6 +292,7 @@
   :config
   (global-set-key (kbd "C-c g l") 'git-link))
 
+(use-package switch-buffer-functions) ;; although this is not explicitly git, my only use case currently is diff-hl
 (use-package diff-hl
   :after (switch-buffer-functions)
   :config
@@ -317,17 +318,15 @@
     "Face to fontify FIXME/TODO words"
     :group 'fic-mode)
   :config
-  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE" "???")) ;; FIXME ??? isn't getting highlighted
+  (setq fic-highlighted-words '("FIXME" "TODO" "BUG" "NOTE"))
   (add-hook 'prog-mode-hook 'fic-mode))
 
 (use-package undo-tree
   :config
   (global-undo-tree-mode))
 
-(use-package switch-buffer-functions)
-
-(use-package restclient
-  :mode ("\\.http\\'" . restclient-mode))
+;; (use-package restclient
+;;   :mode ("\\.http\\'" . restclient-mode))
 
 ;; (use-package free-keys
 ;;   :bind ("C-h C-k" . 'free-keys))
@@ -765,14 +764,6 @@ current buffer's, reload dir-locals."
 
 (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
 
-(use-package markdown-mode
-    :commands (markdown-mode gfm-mode)
-    :mode (("README\\.md\\'" . gfm-mode)
-           ("\\.md\\'" . markdown-mode)
-           ("\\.markdown\\'" . markdown-mode))
-    ;; :init (setq markdown-command "multimarkdown")
-)
-
 (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
 
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
@@ -956,7 +947,7 @@ current buffer's, reload dir-locals."
 (add-to-list 'exec-path "/usr/local/bin/")
 (add-to-list 'exec-path "/home/benwiz/bin/")
 (use-package clojure-snippets)
-(use-package flycheck-clj-kondo)
+(use-package flycheck-clj-kondo) ;; NOTE .clj-kondo/ is in .emacs.d/ for version control, it must be symlinked to home `ln -s ~/.emacs.d/.clj-kondo/ ~/.clj-kondo/`
 
 ;; (use-package clj-refactor
 ;;   :init (add-hook 'clojure-mode-hook (lambda ()

@@ -33,6 +33,7 @@
         org-delete-char
         org-metaright
         org-self-insert-command
+        org-todo
         outline-show-children
         paredit-backward
         paredit-backward-down
@@ -44,6 +45,7 @@
         paredit-delete-indentation
         paredit-doublequote
         paredit-forward
+        paredit-forward-barf-sexp
         paredit-forward-delete
         paredit-forward-down
         paredit-forward-slurp-sexp
@@ -76,6 +78,7 @@
         mc-mark-previous-like-this-then-cycle-backward
         mc-skip-to-next-like-this-then-cycle-forward
         mc-skip-to-previous-like-this-then-cycle-backward
+        mouse-set-region
         paredit-backslash
         swiper-isearch
         ))
