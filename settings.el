@@ -251,7 +251,11 @@
 (global-unset-key (kbd "C-x C-l"))
 (global-unset-key (kbd "C-x C-u"))
 
-(global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
+(defun my-kill-this-buffer ()
+  "Kill current buffer. Built in kill-this-buffer is meant to be used from GUI menu bar, according to some reddit post."
+  (kill-buffer (current-buffer)))
+
+(global-set-key (kbd "C-x k") 'my-kill-this-buffer) ;; Don't ask which buffer, just do it
 (global-set-key (kbd "C-x C-x") 'mode-line-other-buffer)
 (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
 (global-set-key (kbd "C-c o") 'other-frame)
@@ -763,6 +767,16 @@ current buffer's, reload dir-locals."
    "/DONE" 'tree))
 
 (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
+
+(use-package markdown-mode
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  ;; make sure to `apt install pandoc`
+  :init (setq markdown-command "pandoc --standalone --from gfm Form-Curator.md --highlight-style kate"))
+
+(use-package markdown-toc)
 
 (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
 

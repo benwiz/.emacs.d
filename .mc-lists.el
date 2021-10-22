@@ -19,11 +19,13 @@
         company-indent-or-complete-common
         counsel-yank-pop
         dabbrev-expand
+        down-list
         electric-newline-and-maybe-indent
         forward-sexp
         handle-switch-frame
         hs-toggle-hiding
         ivy-switch-buffer
+        jump-to-register
         kill-region
         kill-sexp
         magit-status

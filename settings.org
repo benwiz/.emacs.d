@@ -287,7 +287,11 @@
   (global-unset-key (kbd "C-x C-l"))
   (global-unset-key (kbd "C-x C-u"))
 
-  (global-set-key (kbd "C-x k") 'kill-this-buffer) ;; Don't ask which buffer, just do it
+  (defun my-kill-this-buffer ()
+    "Kill current buffer. Built in kill-this-buffer is meant to be used from GUI menu bar, according to some reddit post."
+    (kill-buffer (current-buffer)))
+
+  (global-set-key (kbd "C-x k") 'my-kill-this-buffer) ;; Don't ask which buffer, just do it
   (global-set-key (kbd "C-x C-x") 'mode-line-other-buffer)
   (global-set-key (kbd "C-c t l") 'toggle-truncate-lines)
   (global-set-key (kbd "C-c o") 'other-frame)
@@ -829,7 +833,7 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 
    (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
  #+END_SRC
-** COMMENT Markdown
+** Markdown
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
     :commands (markdown-mode gfm-mode)
