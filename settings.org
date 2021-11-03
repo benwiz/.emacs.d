@@ -2,9 +2,9 @@
 #+TITLE: settings.org | Ben Wiz
 * To Do
 ** Set up dashboard
-*** links to main files in each project
+*** links to main files in each project, esp. keeping a shortlist up to date
 ** better jump-to-char-in-line, maybe just write it myself. more vim-like.
-** better keybindings for delete to/until both forward and backward. more vim-like.
+** better keybindings for delete to/until both forward and backward. more vim-like. Keybindings should probably be related to C-k, M-k
 ** continue setting up lsp-mode and turn on lsp-ui and lsp-ivy
 ** paredit
 *** my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)
@@ -193,7 +193,7 @@
 
   ;; Light theme. I like the default theme more than any other light theme I found.
   ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.
-  ;; TODO need to set this gray font
+  ;; TODO need to set this following gray font, it is too light currently (make sure to be in light theme when reading this)
   (set-face-attribute 'default nil :family "Ubuntu Mono" :height 135)
   (set-face-attribute 'hl-line nil :background "#e3ffe3")
   (set-face-attribute 'region nil :background "#E4E4E4")
@@ -202,6 +202,7 @@
   (set-face-attribute 'font-lock-constant-face nil :foreground "#255814") ;; Forest Green is default; DarkGreen is good; hex is darker forest green
   (set-face-attribute 'font-lock-type-face nil :foreground "#006060") ;; DarkCyan (#008b8b) is default, hex is darker version
   (set-face-attribute 'trailing-whitespace nil :background "#e0eeff")
+  ;; TODO better isearch colors for light theme
 
   ;; Dark theme
   (defun load-spolsky ()
@@ -216,6 +217,8 @@
      `(trailing-whitespace ((t (:background "#5a708c"))))
      `(lsp-face-highlight-textual ((t (:background "#353535")))) ;; "#323E30" ;; "#555" is same as selection color, the other one is half way between hl-line and trailing-whitespace
      `(org-level-4 ((t (:foreground "#EEEEBF"))))
+     `(isearch ((t (:foreground "#222222" :background "#b5ff80")))) ;; selected isearch results TODO cursor picks up background color and becomes very ugly
+     `(lazy-highlight ((t (:foreground "#222222" :background "#FF80F4")))) ;; other isearch results
      ))
 
   ;; Start in spolsky
@@ -289,6 +292,7 @@
 
   (defun my-kill-this-buffer ()
     "Kill current buffer. Built in kill-this-buffer is meant to be used from GUI menu bar, according to some reddit post."
+    (interactive)
     (kill-buffer (current-buffer)))
 
   (global-set-key (kbd "C-x k") 'my-kill-this-buffer) ;; Don't ask which buffer, just do it

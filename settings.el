@@ -162,7 +162,7 @@
 
 ;; Light theme. I like the default theme more than any other light theme I found.
 ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.
-;; TODO need to set this gray font
+;; TODO need to set this following gray font, it is too light currently (make sure to be in light theme when reading this)
 (set-face-attribute 'default nil :family "Ubuntu Mono" :height 135)
 (set-face-attribute 'hl-line nil :background "#e3ffe3")
 (set-face-attribute 'region nil :background "#E4E4E4")
@@ -185,6 +185,8 @@
    `(trailing-whitespace ((t (:background "#5a708c"))))
    `(lsp-face-highlight-textual ((t (:background "#353535")))) ;; "#323E30" ;; "#555" is same as selection color, the other one is half way between hl-line and trailing-whitespace
    `(org-level-4 ((t (:foreground "#EEEEBF"))))
+   `(isearch ((t (:background "#0000FF"))))
+   `(lazy-highlight ((t (:background "#00FF00"))))
    ))
 
 ;; Start in spolsky
@@ -253,6 +255,7 @@
 
 (defun my-kill-this-buffer ()
   "Kill current buffer. Built in kill-this-buffer is meant to be used from GUI menu bar, according to some reddit post."
+  (interactive)
   (kill-buffer (current-buffer)))
 
 (global-set-key (kbd "C-x k") 'my-kill-this-buffer) ;; Don't ask which buffer, just do it
