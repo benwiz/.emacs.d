@@ -108,6 +108,7 @@
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
+(setq create-lockfiles nil)
 
 (require 'package)
 
@@ -132,10 +133,11 @@
     (package-install package)))
 
 ;; Suggest to upgrade packages occasionally, TODO would be better to ask the first time emacs is opened each month
-(when (eq 0 (random 50))
-  (when (y-or-n-p-with-timeout "Do you want to check packages for upgrades? " 6 nil)
-    (package-list-packages)
-    (message "Run `Shift-U x` to upgrade")))
+;; TODO I never see this because of emacsclient. So I've shut it off for now.
+;; (when (eq 0 (random 50))
+;;   (when (y-or-n-p-with-timeout "Do you want to check packages for upgrades? " 6 nil)
+;;     (package-list-packages)
+;;     (message "Run `Shift-U x` to upgrade")))
 
 ;; force packages to always be installed, no need to defer with emacsclient, I think
 ;; NOTE must set `:ensure nil` if not a package.el package, like dired
@@ -171,6 +173,7 @@
 (set-face-attribute 'font-lock-constant-face nil :foreground "#255814") ;; Forest Green is default; DarkGreen is good; hex is darker forest green
 (set-face-attribute 'font-lock-type-face nil :foreground "#006060") ;; DarkCyan (#008b8b) is default, hex is darker version
 (set-face-attribute 'trailing-whitespace nil :background "#e0eeff")
+;; TODO better isearch colors for light theme
 
 ;; Dark theme
 (defun load-spolsky ()
@@ -185,8 +188,8 @@
    `(trailing-whitespace ((t (:background "#5a708c"))))
    `(lsp-face-highlight-textual ((t (:background "#353535")))) ;; "#323E30" ;; "#555" is same as selection color, the other one is half way between hl-line and trailing-whitespace
    `(org-level-4 ((t (:foreground "#EEEEBF"))))
-   `(isearch ((t (:background "#0000FF"))))
-   `(lazy-highlight ((t (:background "#00FF00"))))
+   `(isearch ((t (:foreground "#222222" :background "#b5ff80")))) ;; selected isearch results TODO cursor picks up background color and becomes very ugly
+   `(lazy-highlight ((t (:foreground "#222222" :background "#FF80F4")))) ;; other isearch results
    ))
 
 ;; Start in spolsky
@@ -788,42 +791,42 @@ current buffer's, reload dir-locals."
 (use-package yaml-mode
   :mode ("\\.yml$" . yaml-mode))
 
-;; (use-package rjsx-mode
-;;   :init
-;;   (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
-;;   (setq-default js2-basic-indent 2
-;;                 ;; js2-basic-offset 2 ;; may need to use js-indent-level. js2-basic-offset is just an alias
-;;                 js2-auto-indent-p t
-;;                 js2-cleanup-whitespace t
-;;                 js2-enter-indents-newline t
-;;                 js2-indent-on-enter-key t
-;;                 js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
+(use-package rjsx-mode
+  :init
+  (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+  (setq-default js2-basic-indent 2
+                ;; js2-basic-offset 2 ;; may need to use js-indent-level. js2-basic-offset is just an alias
+                js2-auto-indent-p t
+                js2-cleanup-whitespace t
+                js2-enter-indents-newline t
+                js2-indent-on-enter-key t
+                js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
 
-;;   (add-hook 'rjsx-mode-hook
-;;             (lambda ()
-;;               (flycheck-select-checker "javascript-eslint")
-;;               (electric-pair-mode 1)))
+  (add-hook 'rjsx-mode-hook
+            (lambda ()
+              (flycheck-select-checker "javascript-eslint")
+              (electric-pair-mode 1)))
 
-;;   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
 
-;; ;; Idk what this does
-;; ;; (use-package tern
-;; ;;    :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-;; ;;    :config
-;; ;;      (use-package company-tern
-;; ;;         :ensure t
-;; ;;         :init (add-to-list 'company-backends 'company-tern)))
+;; Idk what this does
+;; (use-package tern
+;;    :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+;;    :config
+;;      (use-package company-tern
+;;         :ensure t
+;;         :init (add-to-list 'company-backends 'company-tern)))
 
-;; (use-package js2-refactor
-;;   :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
-;;   :config (js2r-add-keybindings-with-prefix "C-c ."))
+(use-package js2-refactor
+  :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
+  :config (js2r-add-keybindings-with-prefix "C-c ."))
 
-;; ;; Not sure what this does
-;; (provide 'init-javascript)
+;; Not sure what this does
+(provide 'init-javascript)
 
-;; (use-package typescript-mode
-;;   :mode (("\\.ts\\'" . typescript-mode)
-;;          ("\\.tsx\\'" . typescript-mode)))
+(use-package typescript-mode
+  :mode (("\\.ts\\'" . typescript-mode)
+         ("\\.tsx\\'" . typescript-mode)))
 
 ;; (use-package go-projectile
 ;;   :init)
