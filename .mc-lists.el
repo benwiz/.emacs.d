@@ -30,6 +30,7 @@
         kill-sexp
         magit-status
         mark-sexp
+        markdown-outdent-or-delete
         move-to-window-line-top-bottom
         org-cycle
         org-delete-char
@@ -80,6 +81,7 @@
         mc-mark-previous-like-this-then-cycle-backward
         mc-skip-to-next-like-this-then-cycle-forward
         mc-skip-to-previous-like-this-then-cycle-backward
+        mouse-drag-secondary
         mouse-set-region
         paredit-backslash
         swiper-isearch
