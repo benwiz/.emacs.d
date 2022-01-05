@@ -307,7 +307,7 @@
   (global-set-key (kbd "C-c w") 'widen)
   (global-set-key (kbd "C-l") (lambda ()
                                 (interactive)
-                                (recenter-top-bottom (/ (window-height) 5)))) ;; TODO try to remove this because the default should do the cycle between center-top-bottom
+                                (recenter-top-bottom (/ (window-height) 4))))
 
   (use-package dired
     :ensure nil ;; dired is not package.el
