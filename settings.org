@@ -1,6 +1,7 @@
 -*- eval: (add-hook 'after-save-hook 'org-html-export-to-html t t); -*-
 #+TITLE: settings.org | Ben Wiz
 * To Do
+** BROKEN: emacs showing unsaved file even after manually deleting the recently added diff
 ** Set up dashboard
 *** links to main files in each project, esp. keeping a shortlist up to date
 ** better jump-to-char-in-line, maybe just write it myself. more vim-like.
@@ -304,7 +305,7 @@
   (global-set-key (kbd "C-M-z") 'zap-up-to-char)
   (global-set-key (kbd "C-c n") 'narrow-to-defun)
   (global-set-key (kbd "C-c w") 'widen)
-  (global-set-key (kbd "C-l") 'recenter)
+  (global-set-key (kbd "C-l") 'recenter) ;; TODO try to remove this because the default should do the cycle between center-top-bottom
 
   (use-package dired
     :ensure nil ;; dired is not package.el
