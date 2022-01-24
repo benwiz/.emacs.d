@@ -329,11 +329,11 @@
 #+END_SRC
 ** Local Packages
 #+BEGIN_SRC emacs-lisp
-  (if (and (file-directory-p "~/code/bela-mode.el/")
-           (file-directory-p "~/code/Bela/scripts/"))
-   (use-package bela-mode
-     :load-path "~/code/bela-mode.el"
-     :init (setq bela-scripts-dir "~/code/Bela/scripts/")))
+  (when (and (file-directory-p "~/code/bela-mode.el/")
+             (file-directory-p "~/code/Bela/scripts/"))
+    (use-package bela-mode
+      :load-path "~/code/bela-mode.el"
+      :init (setq bela-scripts-dir "~/code/Bela/scripts/")))
 
 #+END_SRC
 ** Git

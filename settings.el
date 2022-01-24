@@ -268,7 +268,9 @@
 (global-set-key (kbd "C-M-z") 'zap-up-to-char)
 (global-set-key (kbd "C-c n") 'narrow-to-defun)
 (global-set-key (kbd "C-c w") 'widen)
-(global-set-key (kbd "C-l") 'recenter)
+(global-set-key (kbd "C-l") (lambda ()
+                              (interactive)
+                              (recenter-top-bottom (/ (window-height) 4))))
 
 (use-package dired
   :ensure nil ;; dired is not package.el
