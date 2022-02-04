@@ -14,6 +14,7 @@
 *** go to beginning or end of top level form (maybe, C-M-S-u)
 ** registers: better shortcuts
 ** prepend current project to each item in "Switch to Buffer" selector
+** better git counsel grep `M-P s i` https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep
 * Operating System
 #+BEGIN_SRC emacs-lisp
 (defconst *is-a-mac* (eq system-type 'darwin))

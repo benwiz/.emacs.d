@@ -290,11 +290,11 @@
 ;; no lines in docview (actually i think it is off by default, the number is from something else) (pdf viewer)
 ;; (add-hook 'doc-view-minor-mode-hook (lambda () (linum-mode 0)))
 
-(if (and (file-directory-p "~/code/bela-mode.el/")
-         (file-directory-p "~/code/Bela/scripts/"))
- (use-package bela-mode
-   :load-path "~/code/bela-mode.el"
-   :init (setq bela-scripts-dir "~/code/Bela/scripts/")))
+(when (and (file-directory-p "~/code/bela-mode.el/")
+           (file-directory-p "~/code/Bela/scripts/"))
+  (use-package bela-mode
+    :load-path "~/code/bela-mode.el"
+    :init (setq bela-scripts-dir "~/code/Bela/scripts/")))
 
 (use-package magit
   :config
