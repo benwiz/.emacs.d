@@ -512,6 +512,7 @@
   :config
   (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  ;; TODO may want to add ".gitignore" to this list
   (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
         projectile-project-root-files-functions #'(projectile-root-top-down
                                                    projectile-root-top-down-recurring
