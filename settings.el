@@ -512,7 +512,12 @@
   :config
   (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode +1))
+  (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
+        projectile-project-root-files-functions #'(projectile-root-top-down
+                                                   projectile-root-top-down-recurring
+                                                   projectile-root-bottom-up
+                                                   projectile-root-local))
+  (projectile-mode 1))
 
 (use-package counsel-projectile
   :config
