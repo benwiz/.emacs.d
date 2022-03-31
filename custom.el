@@ -9,6 +9,7 @@
    ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
  '(custom-safe-themes
    '("c433c87bd4b64b8ba9890e8ed64597ea0f8eb0396f4c9a9e01bd20a04d15d358" "e6e8f3ea4b626a0c89ff05f17d65485789e41aca7c569cc717362ada09530a4f" "a68e09ae8b9b1e4f0e622f9620791c00380350960200dd5933f84fec83aedcc5" "c48551a5fb7b9fc019bf3f61ebf14cf7c9cdca79bcb2a4219195371c02268f11" "ea73dbef6fcf27dec442ecdad4328d1e66fc5f29ddc72c824cf8e4a92d3442d2" "a2015ed140a9979715d451046651962886b8c15b2bea969da13dc935049c76d5" default))
+ '(desktop-save-mode nil)
  '(ibuffer-saved-filter-groups
    '(("gangway"
       ("gangway"

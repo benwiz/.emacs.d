@@ -40,6 +40,7 @@
         outline-show-children
         paredit-backward
         paredit-backward-down
+        paredit-backward-kill-word
         paredit-backward-slurp-sexp
         paredit-backward-up
         paredit-close-curly
