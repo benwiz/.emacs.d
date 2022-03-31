@@ -303,6 +303,7 @@
     (use-package redtick)
 
     ;; Tabs
+;; TODO create the tabs programatically
   (setq tab-bar-new-tab-choice "*scratch*"
         tab-bar-show nil
         ;; desktop-auto-save-timeout nil
@@ -322,6 +323,7 @@
   ;;              :force-onscreen desktop-restore-forces-onscreen)))
   (defun current-tab-name ()
     (alist-get 'name (tab-bar--current-tab)))
+
 #+END_SRC
 * Tools and Bindings (not text editing related)
 ** Env Vars

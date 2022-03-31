@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-03-31 Thu 07:11 -->
+<!-- 2022-03-31 Thu 07:15 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>settings.org | Ben Wiz</title>
@@ -205,6 +205,10 @@
  pre.src {background-color: #161A1F; color: #F2F2F2;}</style>
 <style type="text/css">
  pre.src-emacs-lisp:before {background-color: #F2F2F2; color: #161A1F;}</style>
+<style type="text/css">
+ pre.src {background-color: #161A1F; color: #F2F2F2;}</style>
+<style type="text/css">
+ pre.src-emacs-lisp:before {background-color: #F2F2F2; color: #161A1F;}</style>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -259,72 +263,72 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org463312f">1. To Do</a>
+<li><a href="#org1d5b763">1. To Do</a>
 <ul>
-<li><a href="#orgb82b51f">1.1. look into tabs for emacs</a></li>
-<li><a href="#org754c289">1.2. Set up dashboard</a>
+<li><a href="#org6646dad">1.1. look into tabs for emacs</a></li>
+<li><a href="#orgba2676d">1.2. Set up dashboard</a>
 <ul>
-<li><a href="#org650c3b1">1.2.1. list the windows in each tab</a></li>
-<li><a href="#orgc0a50cc">1.2.2. news</a></li>
+<li><a href="#org5ead0aa">1.2.1. list the windows in each tab</a></li>
+<li><a href="#org5ba0cca">1.2.2. news</a></li>
 </ul>
 </li>
-<li><a href="#org5222b7c">1.3. better jump-to-char-in-line, maybe just write it myself. more vim-like.</a></li>
-<li><a href="#org1be404e">1.4. better keybindings for delete to/until both forward and backward. more vim-like. Keybindings should probably be related to C-k, M-k</a></li>
-<li><a href="#orgfae1b49">1.5. continue setting up lsp-mode and turn on lsp-ui and lsp-ivy</a></li>
-<li><a href="#org042f052">1.6. paredit</a>
+<li><a href="#org95db4c5">1.3. better jump-to-char-in-line, maybe just write it myself. more vim-like.</a></li>
+<li><a href="#org93605d4">1.4. better keybindings for delete to/until both forward and backward. more vim-like. Keybindings should probably be related to C-k, M-k</a></li>
+<li><a href="#org9e47507">1.5. continue setting up lsp-mode and turn on lsp-ui and lsp-ivy</a></li>
+<li><a href="#org54ae314">1.6. paredit</a>
 <ul>
-<li><a href="#orgf5f5953">1.6.1. my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)</a></li>
-<li><a href="#orga3ad13b">1.6.2. paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.</a></li>
-<li><a href="#org41dff90">1.6.3. paredit kill needs to kill any created whitepsace</a></li>
-<li><a href="#org3b054cb">1.6.4. go to beginning or end of top level form (maybe, C-M-S-u)</a></li>
+<li><a href="#org5584e2e">1.6.1. my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)</a></li>
+<li><a href="#orgce42c3f">1.6.2. paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.</a></li>
+<li><a href="#orgf9cdaff">1.6.3. paredit kill needs to kill any created whitepsace</a></li>
+<li><a href="#org97a81f9">1.6.4. go to beginning or end of top level form (maybe, C-M-S-u)</a></li>
 </ul>
 </li>
-<li><a href="#org68fc3a9">1.7. registers: better shortcuts</a></li>
-<li><a href="#org0c30eb2">1.8. prepend current project to each item in "Switch to Buffer" selector</a></li>
-<li><a href="#org871c543">1.9. better git counsel grep `M-P s i` https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep</a></li>
+<li><a href="#org1d0181b">1.7. registers: better shortcuts</a></li>
+<li><a href="#org5aa0a81">1.8. prepend current project to each item in "Switch to Buffer" selector</a></li>
+<li><a href="#orgb32bb8e">1.9. better git counsel grep `M-P s i` https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep</a></li>
 </ul>
 </li>
-<li><a href="#org7513a0e">2. Operating System</a></li>
-<li><a href="#org63d1bdb">3. emacs.d</a>
+<li><a href="#org2320d19">2. Operating System</a></li>
+<li><a href="#orgb273549">3. emacs.d</a>
 <ul>
-<li><a href="#org6ca8a22">3.1. settings.org HTML Export</a></li>
+<li><a href="#org085486c">3.1. settings.org HTML Export</a></li>
 </ul>
 </li>
-<li><a href="#org6e39eb0">4. Mouse / Touchpad</a></li>
-<li><a href="#org694bbe6">5. Default Tweaks</a></li>
-<li><a href="#org40794fa">6. Package Management</a></li>
-<li><a href="#org5c44f94">7. Startup</a></li>
-<li><a href="#org7098de5">8. Theme, Modeline, and Tabs</a></li>
-<li><a href="#orgcbd77ae">9. Tools and Bindings (not text editing related)</a>
+<li><a href="#orgf61eff2">4. Mouse / Touchpad</a></li>
+<li><a href="#orgacf048e">5. Default Tweaks</a></li>
+<li><a href="#org79bfa25">6. Package Management</a></li>
+<li><a href="#orgdee07a3">7. Startup</a></li>
+<li><a href="#org0411d16">8. Theme, Modeline, and Tabs</a></li>
+<li><a href="#org4b11dfd">9. Tools and Bindings (not text editing related)</a>
 <ul>
-<li><a href="#org65023da">9.1. Env Vars</a></li>
-<li><a href="#org79e2265">9.2. Built-in Packages</a></li>
-<li><a href="#org836d211">9.3. Local Packages</a></li>
-<li><a href="#org77fc403">9.4. Git</a></li>
-<li><a href="#org5c0888f">9.5. Misc. Packages</a></li>
-<li><a href="#org4304d0e">9.6. EXWM - in case I ever return to it, do not delete!</a></li>
-<li><a href="#org3799007">9.7. Ivy, Swiper, Counsel, Projectile</a></li>
-<li><a href="#orgae19d3a">9.8. Multicursor</a></li>
-<li><a href="#org3275ad5">9.9. Terminal</a></li>
+<li><a href="#org08e280e">9.1. Env Vars</a></li>
+<li><a href="#org9ae715a">9.2. Built-in Packages</a></li>
+<li><a href="#orgeedf202">9.3. Local Packages</a></li>
+<li><a href="#orgda58e8d">9.4. Git</a></li>
+<li><a href="#org10652ef">9.5. Misc. Packages</a></li>
+<li><a href="#org14e2872">9.6. EXWM - in case I ever return to it, do not delete!</a></li>
+<li><a href="#org59b12b8">9.7. Ivy, Swiper, Counsel, Projectile</a></li>
+<li><a href="#org10aa440">9.8. Multicursor</a></li>
+<li><a href="#orgb0d72f9">9.9. Terminal</a></li>
 </ul>
 </li>
-<li><a href="#orgaa1c66f">10. dir-locals</a></li>
-<li><a href="#orgf239d47">11. Programming / Text Editing</a>
+<li><a href="#orgba29f92">10. dir-locals</a></li>
+<li><a href="#org0e528a6">11. Programming / Text Editing</a>
 <ul>
-<li><a href="#org18f6e07">11.1. All</a></li>
-<li><a href="#org036db19">11.2. Paredit</a></li>
-<li><a href="#org82d1b46">11.3. LSP</a></li>
-<li><a href="#orgebf1ea0">11.4. Org</a></li>
-<li><a href="#org1872364">11.5. Markdown</a></li>
-<li><a href="#org6253f10">11.6. Bash</a></li>
-<li><a href="#org89b191f">11.7. Emacs Lisp</a></li>
-<li><a href="#org97f579d">11.8. Yaml</a></li>
-<li><a href="#org0fd53ed">11.9. JavaScript</a></li>
-<li><a href="#orged095a7">11.10. Go</a></li>
-<li><a href="#org8892e76">11.11. Rust</a></li>
-<li><a href="#orgd883bb9">11.12. GLSL</a></li>
-<li><a href="#orge355995">11.13. Common Lisp</a></li>
-<li><a href="#orga12aad8">11.14. Clojure</a></li>
+<li><a href="#orgb9c2c3d">11.1. All</a></li>
+<li><a href="#org80ec391">11.2. Paredit</a></li>
+<li><a href="#org4ac4464">11.3. LSP</a></li>
+<li><a href="#org4fe2bc3">11.4. Org</a></li>
+<li><a href="#org3cde5e7">11.5. Markdown</a></li>
+<li><a href="#orga92fbb6">11.6. Bash</a></li>
+<li><a href="#orgcdcad9d">11.7. Emacs Lisp</a></li>
+<li><a href="#org043e129">11.8. Yaml</a></li>
+<li><a href="#org68ea4f8">11.9. JavaScript</a></li>
+<li><a href="#orge18fb1a">11.10. Go</a></li>
+<li><a href="#orgb69d11a">11.11. Rust</a></li>
+<li><a href="#org0f4229d">11.12. GLSL</a></li>
+<li><a href="#orgfe948f0">11.13. Common Lisp</a></li>
+<li><a href="#orgc21f3c0">11.14. Clojure</a></li>
 </ul>
 </li>
 </ul>
@@ -333,62 +337,62 @@ for the JavaScript code in this tag.
 <p>
 -<b>- eval: (add-hook 'after-save-hook 'org-html-export-to-html t t); -</b>-
 </p>
-<div id="outline-container-org463312f" class="outline-2">
-<h2 id="org463312f"><span class="section-number-2">1</span> To Do</h2>
+<div id="outline-container-org1d5b763" class="outline-2">
+<h2 id="org1d5b763"><span class="section-number-2">1</span> To Do</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orgb82b51f" class="outline-3">
-<h3 id="orgb82b51f"><span class="section-number-3">1.1</span> look into tabs for emacs</h3>
+<div id="outline-container-org6646dad" class="outline-3">
+<h3 id="org6646dad"><span class="section-number-3">1.1</span> look into tabs for emacs</h3>
 </div>
-<div id="outline-container-org754c289" class="outline-3">
-<h3 id="org754c289"><span class="section-number-3">1.2</span> Set up dashboard</h3>
+<div id="outline-container-orgba2676d" class="outline-3">
+<h3 id="orgba2676d"><span class="section-number-3">1.2</span> Set up dashboard</h3>
 <div class="outline-text-3" id="text-1-2">
 </div>
-<div id="outline-container-org650c3b1" class="outline-4">
-<h4 id="org650c3b1"><span class="section-number-4">1.2.1</span> list the windows in each tab</h4>
+<div id="outline-container-org5ead0aa" class="outline-4">
+<h4 id="org5ead0aa"><span class="section-number-4">1.2.1</span> list the windows in each tab</h4>
 </div>
-<div id="outline-container-orgc0a50cc" class="outline-4">
-<h4 id="orgc0a50cc"><span class="section-number-4">1.2.2</span> news</h4>
+<div id="outline-container-org5ba0cca" class="outline-4">
+<h4 id="org5ba0cca"><span class="section-number-4">1.2.2</span> news</h4>
 </div>
 </div>
-<div id="outline-container-org5222b7c" class="outline-3">
-<h3 id="org5222b7c"><span class="section-number-3">1.3</span> better jump-to-char-in-line, maybe just write it myself. more vim-like.</h3>
+<div id="outline-container-org95db4c5" class="outline-3">
+<h3 id="org95db4c5"><span class="section-number-3">1.3</span> better jump-to-char-in-line, maybe just write it myself. more vim-like.</h3>
 </div>
-<div id="outline-container-org1be404e" class="outline-3">
-<h3 id="org1be404e"><span class="section-number-3">1.4</span> better keybindings for delete to/until both forward and backward. more vim-like. Keybindings should probably be related to C-k, M-k</h3>
+<div id="outline-container-org93605d4" class="outline-3">
+<h3 id="org93605d4"><span class="section-number-3">1.4</span> better keybindings for delete to/until both forward and backward. more vim-like. Keybindings should probably be related to C-k, M-k</h3>
 </div>
-<div id="outline-container-orgfae1b49" class="outline-3">
-<h3 id="orgfae1b49"><span class="section-number-3">1.5</span> continue setting up lsp-mode and turn on lsp-ui and lsp-ivy</h3>
+<div id="outline-container-org9e47507" class="outline-3">
+<h3 id="org9e47507"><span class="section-number-3">1.5</span> continue setting up lsp-mode and turn on lsp-ui and lsp-ivy</h3>
 </div>
-<div id="outline-container-org042f052" class="outline-3">
-<h3 id="org042f052"><span class="section-number-3">1.6</span> paredit</h3>
+<div id="outline-container-org54ae314" class="outline-3">
+<h3 id="org54ae314"><span class="section-number-3">1.6</span> paredit</h3>
 <div class="outline-text-3" id="text-1-6">
 </div>
-<div id="outline-container-orgf5f5953" class="outline-4">
-<h4 id="orgf5f5953"><span class="section-number-4">1.6.1</span> my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)</h4>
+<div id="outline-container-org5584e2e" class="outline-4">
+<h4 id="org5584e2e"><span class="section-number-4">1.6.1</span> my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)</h4>
 </div>
-<div id="outline-container-orga3ad13b" class="outline-4">
-<h4 id="orga3ad13b"><span class="section-number-4">1.6.2</span> paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.</h4>
+<div id="outline-container-orgce42c3f" class="outline-4">
+<h4 id="orgce42c3f"><span class="section-number-4">1.6.2</span> paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.</h4>
 </div>
-<div id="outline-container-org41dff90" class="outline-4">
-<h4 id="org41dff90"><span class="section-number-4">1.6.3</span> paredit kill needs to kill any created whitepsace</h4>
+<div id="outline-container-orgf9cdaff" class="outline-4">
+<h4 id="orgf9cdaff"><span class="section-number-4">1.6.3</span> paredit kill needs to kill any created whitepsace</h4>
 </div>
-<div id="outline-container-org3b054cb" class="outline-4">
-<h4 id="org3b054cb"><span class="section-number-4">1.6.4</span> go to beginning or end of top level form (maybe, C-M-S-u)</h4>
-</div>
-</div>
-<div id="outline-container-org68fc3a9" class="outline-3">
-<h3 id="org68fc3a9"><span class="section-number-3">1.7</span> registers: better shortcuts</h3>
-</div>
-<div id="outline-container-org0c30eb2" class="outline-3">
-<h3 id="org0c30eb2"><span class="section-number-3">1.8</span> prepend current project to each item in "Switch to Buffer" selector</h3>
-</div>
-<div id="outline-container-org871c543" class="outline-3">
-<h3 id="org871c543"><span class="section-number-3">1.9</span> better git counsel grep `M-P s i` <a href="https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep">https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep</a></h3>
+<div id="outline-container-org97a81f9" class="outline-4">
+<h4 id="org97a81f9"><span class="section-number-4">1.6.4</span> go to beginning or end of top level form (maybe, C-M-S-u)</h4>
 </div>
 </div>
-<div id="outline-container-org7513a0e" class="outline-2">
-<h2 id="org7513a0e"><span class="section-number-2">2</span> Operating System</h2>
+<div id="outline-container-org1d0181b" class="outline-3">
+<h3 id="org1d0181b"><span class="section-number-3">1.7</span> registers: better shortcuts</h3>
+</div>
+<div id="outline-container-org5aa0a81" class="outline-3">
+<h3 id="org5aa0a81"><span class="section-number-3">1.8</span> prepend current project to each item in "Switch to Buffer" selector</h3>
+</div>
+<div id="outline-container-orgb32bb8e" class="outline-3">
+<h3 id="orgb32bb8e"><span class="section-number-3">1.9</span> better git counsel grep `M-P s i` <a href="https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep">https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep</a></h3>
+</div>
+</div>
+<div id="outline-container-org2320d19" class="outline-2">
+<h2 id="org2320d19"><span class="section-number-2">2</span> Operating System</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">defconst</span> <span style="color: #FD971F;">*is-a-mac*</span> (eq system-type 'darwin))
@@ -399,8 +403,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org63d1bdb" class="outline-2">
-<h2 id="org63d1bdb"><span class="section-number-2">3</span> emacs.d</h2>
+<div id="outline-container-orgb273549" class="outline-2">
+<h2 id="orgb273549"><span class="section-number-2">3</span> emacs.d</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 <a href="https://github.com/benwiz/emacs.d">repo</a>
@@ -417,8 +421,8 @@ for the JavaScript code in this tag.
 </pre>
 </div>
 </div>
-<div id="outline-container-org6ca8a22" class="outline-3">
-<h3 id="org6ca8a22"><span class="section-number-3">3.1</span> settings.org HTML Export</h3>
+<div id="outline-container-org085486c" class="outline-3">
+<h3 id="org085486c"><span class="section-number-3">3.1</span> settings.org HTML Export</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 <a href="https://benwiz.com/emacs">html export</a>
@@ -449,8 +453,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org6e39eb0" class="outline-2">
-<h2 id="org6e39eb0"><span class="section-number-2">4</span> Mouse / Touchpad</h2>
+<div id="outline-container-orgf61eff2" class="outline-2">
+<h2 id="orgf61eff2"><span class="section-number-2">4</span> Mouse / Touchpad</h2>
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Shut off mouse clicks because my work computer's trackpad is super annoying, resizing windows with mouse still works</span>
@@ -462,8 +466,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org694bbe6" class="outline-2">
-<h2 id="org694bbe6"><span class="section-number-2">5</span> Default Tweaks</h2>
+<div id="outline-container-orgacf048e" class="outline-2">
+<h2 id="orgacf048e"><span class="section-number-2">5</span> Default Tweaks</h2>
 <div class="outline-text-2" id="text-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">when</span> window-system
@@ -540,8 +544,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org40794fa" class="outline-2">
-<h2 id="org40794fa"><span class="section-number-2">6</span> Package Management</h2>
+<div id="outline-container-org79bfa25" class="outline-2">
+<h2 id="org79bfa25"><span class="section-number-2">6</span> Package Management</h2>
 <div class="outline-text-2" id="text-6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">require</span> '<span style="color: #FF80F4;">package</span>)
@@ -587,8 +591,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org5c44f94" class="outline-2">
-<h2 id="org5c44f94"><span class="section-number-2">7</span> Startup</h2>
+<div id="outline-container-orgdee07a3" class="outline-2">
+<h2 id="orgdee07a3"><span class="section-number-2">7</span> Startup</h2>
 <div class="outline-text-2" id="text-7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">setq</span> desktop-load-locked-desktop t
@@ -619,131 +623,133 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org7098de5" class="outline-2">
-<h2 id="org7098de5"><span class="section-number-2">8</span> Theme, Modeline, and Tabs</h2>
+<div id="outline-container-org0411d16" class="outline-2">
+<h2 id="org0411d16"><span class="section-number-2">8</span> Theme, Modeline, and Tabs</h2>
 <div class="outline-text-2" id="text-8">
 <div class="org-src-container">
-<pre class="src src-emacs-lisp">  (<span style="color: #F92672;">if</span> *is-a-mac*
-      (add-to-list 'custom-theme-load-path <span style="color: #EEDC82;">"/Users/benwiz/.emacs.d/themes"</span>)
-    (add-to-list 'custom-theme-load-path <span style="color: #EEDC82;">"/home/benwiz/.emacs.d/themes"</span>))
+<pre class="src src-emacs-lisp">    (<span style="color: #F92672;">if</span> *is-a-mac*
+        (add-to-list 'custom-theme-load-path <span style="color: #EEDC82;">"/Users/benwiz/.emacs.d/themes"</span>)
+      (add-to-list 'custom-theme-load-path <span style="color: #EEDC82;">"/home/benwiz/.emacs.d/themes"</span>))
 
-  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">emacs27 loads themes immediately, this line prevents that. Presumably there is a good reason</span>
-  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">for that and I should figure out a workaround. Also, this is a private variable so may change</span>
-  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">or go away in the future.</span>
-  (<span style="color: #F92672;">setq</span> custom--inhibit-theme-enable nil)
+    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">emacs27 loads themes immediately, this line prevents that. Presumably there is a good reason</span>
+    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">for that and I should figure out a workaround. Also, this is a private variable so may change</span>
+    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">or go away in the future.</span>
+    (<span style="color: #F92672;">setq</span> custom--inhibit-theme-enable nil)
 
-  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Underline/highlight selected line</span>
-  (global-hl-line-mode 1)
+    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Underline/highlight selected line</span>
+    (global-hl-line-mode 1)
 
-  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Light theme. I like the default theme more than any other light theme I found.</span>
-  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.</span>
-  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #ffa500; font-weight: bold; font-style: italic;">TODO</span><span style="color: #8C8C8C; font-style: italic;"> need to set this following gray font, it is too light currently (make sure to be in light theme when reading this)</span>
-  (set-face-attribute 'default nil <span style="color: #FF80F4;">:family</span> <span style="color: #EEDC82;">"Ubuntu Mono"</span> <span style="color: #FF80F4;">:height</span> 135)
-  (set-face-attribute 'hl-line nil <span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#e3ffe3"</span>)
-  (set-face-attribute 'region nil <span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#E4E4E4"</span>)
-  (set-face-attribute 'font-lock-comment-delimiter-face nil <span style="color: #FF80F4;">:slant</span> 'italic)
-  (set-face-attribute 'font-lock-comment-face nil <span style="color: #FF80F4;">:slant</span> 'italic)
-  (set-face-attribute 'font-lock-constant-face nil <span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#255814"</span>) <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Forest Green is default; DarkGreen is good; hex is darker forest green</span>
-  (set-face-attribute 'font-lock-type-face nil <span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#006060"</span>) <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">DarkCyan (#008b8b) is default, hex is darker version</span>
-  (set-face-attribute 'trailing-whitespace nil <span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#e0eeff"</span>)
-  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #ffa500; font-weight: bold; font-style: italic;">TODO</span><span style="color: #8C8C8C; font-style: italic;"> better isearch colors for light theme</span>
+    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Light theme. I like the default theme more than any other light theme I found.</span>
+    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.</span>
+    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #ffa500; font-weight: bold; font-style: italic;">TODO</span><span style="color: #8C8C8C; font-style: italic;"> need to set this following gray font, it is too light currently (make sure to be in light theme when reading this)</span>
+    (set-face-attribute 'default nil <span style="color: #FF80F4;">:family</span> <span style="color: #EEDC82;">"Ubuntu Mono"</span> <span style="color: #FF80F4;">:height</span> 135)
+    (set-face-attribute 'hl-line nil <span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#e3ffe3"</span>)
+    (set-face-attribute 'region nil <span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#E4E4E4"</span>)
+    (set-face-attribute 'font-lock-comment-delimiter-face nil <span style="color: #FF80F4;">:slant</span> 'italic)
+    (set-face-attribute 'font-lock-comment-face nil <span style="color: #FF80F4;">:slant</span> 'italic)
+    (set-face-attribute 'font-lock-constant-face nil <span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#255814"</span>) <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Forest Green is default; DarkGreen is good; hex is darker forest green</span>
+    (set-face-attribute 'font-lock-type-face nil <span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#006060"</span>) <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">DarkCyan (#008b8b) is default, hex is darker version</span>
+    (set-face-attribute 'trailing-whitespace nil <span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#e0eeff"</span>)
+    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #ffa500; font-weight: bold; font-style: italic;">TODO</span><span style="color: #8C8C8C; font-style: italic;"> better isearch colors for light theme</span>
 
-  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Dark theme</span>
-  (<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">load-spolsky</span> ()
-    <span style="color: #EEDC82;">"Load Spolsky."</span>
-    (load-theme 'spolsky t)
-    (custom-theme-set-faces
-     'spolsky
-     `(default ((t (<span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#F2F2F2"</span> <span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#161A1F"</span>))))
-     `(hl-line ((t (<span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#1E252F"</span> <span style="color: #FF80F4;">:underline</span> nil))))
-     `(font-lock-comment-delimiter-face ((t (<span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#8C8C8C"</span> <span style="color: #FF80F4;">:slant</span> italic))))
-     `(font-lock-comment-face ((t (<span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#8C8C8C"</span> <span style="color: #FF80F4;">:slant</span> italic))))
-     `(trailing-whitespace ((t (<span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#5a708c"</span>))))
-     `(lsp-face-highlight-textual ((t (<span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#353535"</span>)))) <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">"#323E30" ;; "#555" is same as selection color, the other one is half way between hl-line and trailing-whitespace</span>
-     `(org-level-4 ((t (<span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#EEEEBF"</span>))))
-     `(isearch ((t (<span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#222222"</span> <span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#b5ff80"</span>)))) <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">selected isearch results </span><span style="color: #ffa500; font-weight: bold; font-style: italic;">TODO</span><span style="color: #8C8C8C; font-style: italic;"> cursor picks up background color and becomes very ugly</span>
-     `(lazy-highlight ((t (<span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#222222"</span> <span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#FF80F4"</span>)))) <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">other isearch results</span>
-     ))
+    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Dark theme</span>
+    (<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">load-spolsky</span> ()
+      <span style="color: #EEDC82;">"Load Spolsky."</span>
+      (load-theme 'spolsky t)
+      (custom-theme-set-faces
+       'spolsky
+       `(default ((t (<span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#F2F2F2"</span> <span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#161A1F"</span>))))
+       `(hl-line ((t (<span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#1E252F"</span> <span style="color: #FF80F4;">:underline</span> nil))))
+       `(font-lock-comment-delimiter-face ((t (<span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#8C8C8C"</span> <span style="color: #FF80F4;">:slant</span> italic))))
+       `(font-lock-comment-face ((t (<span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#8C8C8C"</span> <span style="color: #FF80F4;">:slant</span> italic))))
+       `(trailing-whitespace ((t (<span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#5a708c"</span>))))
+       `(lsp-face-highlight-textual ((t (<span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#353535"</span>)))) <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">"#323E30" ;; "#555" is same as selection color, the other one is half way between hl-line and trailing-whitespace</span>
+       `(org-level-4 ((t (<span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#EEEEBF"</span>))))
+       `(isearch ((t (<span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#222222"</span> <span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#b5ff80"</span>)))) <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">selected isearch results </span><span style="color: #ffa500; font-weight: bold; font-style: italic;">TODO</span><span style="color: #8C8C8C; font-style: italic;"> cursor picks up background color and becomes very ugly</span>
+       `(lazy-highlight ((t (<span style="color: #FF80F4;">:foreground</span> <span style="color: #EEDC82;">"#222222"</span> <span style="color: #FF80F4;">:background</span> <span style="color: #EEDC82;">"#FF80F4"</span>)))) <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">other isearch results</span>
+       ))
 
-  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Start in spolsky</span>
-  (add-hook 'after-make-frame-functions (<span style="color: #F92672;">lambda</span> (frame) (load-spolsky)))
-  (load-spolsky)
+    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Start in spolsky</span>
+    (add-hook 'after-make-frame-functions (<span style="color: #F92672;">lambda</span> (frame) (load-spolsky)))
+    (load-spolsky)
 
-  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Toggle themes</span>
-  (<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">toggle-theme</span> ()
-    <span style="color: #EEDC82;">"Toggle Spolsky theme on and off."</span>
-    (<span style="color: #F92672;">interactive</span>)
-    (<span style="color: #F92672;">if</span> (member 'spolsky custom-enabled-themes)
+    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Toggle themes</span>
+    (<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">toggle-theme</span> ()
+      <span style="color: #EEDC82;">"Toggle Spolsky theme on and off."</span>
+      (<span style="color: #F92672;">interactive</span>)
+      (<span style="color: #F92672;">if</span> (member 'spolsky custom-enabled-themes)
+          (<span style="color: #F92672;">progn</span>
+           (f-write-text <span style="color: #EEDC82;">"light"</span> 'utf-8 <span style="color: #EEDC82;">".theme"</span>)
+           (disable-theme 'spolsky))
         (<span style="color: #F92672;">progn</span>
-         (f-write-text <span style="color: #EEDC82;">"light"</span> 'utf-8 <span style="color: #EEDC82;">".theme"</span>)
-         (disable-theme 'spolsky))
-      (<span style="color: #F92672;">progn</span>
-       (f-write-text <span style="color: #EEDC82;">"dark"</span> 'utf-8 <span style="color: #EEDC82;">".theme"</span>)
-       (load-spolsky) <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(enable-theme 'spolsky) ;; This should work (and did work I think) because spolsky has been loaded before</span>
-       )))
-  (global-unset-key (kbd <span style="color: #EEDC82;">"&lt;f10&gt;"</span>))
-  (global-set-key (kbd <span style="color: #EEDC82;">"&lt;f10&gt;"</span>) 'toggle-theme)
+         (f-write-text <span style="color: #EEDC82;">"dark"</span> 'utf-8 <span style="color: #EEDC82;">".theme"</span>)
+         (load-spolsky) <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(enable-theme 'spolsky) ;; This should work (and did work I think) because spolsky has been loaded before</span>
+         )))
+    (global-unset-key (kbd <span style="color: #EEDC82;">"&lt;f10&gt;"</span>))
+    (global-set-key (kbd <span style="color: #EEDC82;">"&lt;f10&gt;"</span>) 'toggle-theme)
 
-  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Modeline</span>
-  (<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">all-the-icons</span>)
-  (<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">doom-modeline</span>
-    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #ffa500; font-weight: bold; font-style: italic;">NOTE</span><span style="color: #8C8C8C; font-style: italic;"> Must run `M-x all-the-icons-install-fonts` to install icons</span>
-    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">https://github.com/seagle0128/doom-modeline#customize</span>
-    <span style="color: #FF80F4;">:hook</span> (after-init . doom-modeline-mode)
-    <span style="color: #FF80F4;">:config</span>
-    (<span style="color: #F92672;">setq</span> doom-modeline-minor-modes nil)
-    (<span style="color: #F92672;">setq</span> doom-modeline-buffer-state-icon t)
-    (<span style="color: #F92672;">setq</span> doom-modeline-buffer-encoding nil)
-    (<span style="color: #F92672;">setq</span> doom-modeline-vcs-max-length 20)
-    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(setq doom-modeline-persp-name t)</span>
-    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(setq doom-modeline-display-default-persp-name t)</span>
-    (<span style="color: #F92672;">setq</span> doom-modeline-env-version t)
-    )
-
-  (<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">pomodoro</span>
-    <span style="color: #FF80F4;">:config</span>
-    (<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">pomodoro-add-to-mode-line*</span> ()
-      <span style="color: #EEDC82;">"My version of pomodoro-add-to-mode-line"</span>
-      (<span style="color: #F92672;">if</span> (not (member '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
-          (<span style="color: #F92672;">setq-default</span> mode-line-format (cons '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format)))
-      <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">For development, removing it from list is helpful</span>
-      <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(setq-default mode-line-format (remove '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))</span>
+    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Modeline</span>
+    (<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">all-the-icons</span>)
+    (<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">doom-modeline</span>
+      <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #ffa500; font-weight: bold; font-style: italic;">NOTE</span><span style="color: #8C8C8C; font-style: italic;"> Must run `M-x all-the-icons-install-fonts` to install icons</span>
+      <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">https://github.com/seagle0128/doom-modeline#customize</span>
+      <span style="color: #FF80F4;">:hook</span> (after-init . doom-modeline-mode)
+      <span style="color: #FF80F4;">:config</span>
+      (<span style="color: #F92672;">setq</span> doom-modeline-minor-modes nil)
+      (<span style="color: #F92672;">setq</span> doom-modeline-buffer-state-icon t)
+      (<span style="color: #F92672;">setq</span> doom-modeline-buffer-encoding nil)
+      (<span style="color: #F92672;">setq</span> doom-modeline-vcs-max-length 20)
+      <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(setq doom-modeline-persp-name t)</span>
+      <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(setq doom-modeline-display-default-persp-name t)</span>
+      (<span style="color: #F92672;">setq</span> doom-modeline-env-version t)
       )
-    (pomodoro-add-to-mode-line*)
-    )
 
-  (<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">redtick</span>)
-
-  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Tabs</span>
-(<span style="color: #F92672;">setq</span> tab-bar-new-tab-choice <span style="color: #EEDC82;">"*scratch*"</span>
-      tab-bar-show nil
-      <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">desktop-auto-save-timeout nil</span>
-      <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">desktop-save 'ask-if-new</span>
-      <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">desktop-dirname "./"</span>
-      <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">desktop-path (list desktop-dirname)</span>
-      <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">desktop-load-locked-desktop 'ask</span>
-      <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">desktop-restore-forces-onscreen nil</span>
+    (<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">pomodoro</span>
+      <span style="color: #FF80F4;">:config</span>
+      (<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">pomodoro-add-to-mode-line*</span> ()
+        <span style="color: #EEDC82;">"My version of pomodoro-add-to-mode-line"</span>
+        (<span style="color: #F92672;">if</span> (not (member '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
+            (<span style="color: #F92672;">setq-default</span> mode-line-format (cons '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format)))
+        <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">For development, removing it from list is helpful</span>
+        <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(setq-default mode-line-format (remove '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))</span>
+        )
+      (pomodoro-add-to-mode-line*)
       )
-<span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(add-hook 'desktop-after-read-hook</span>
-<span style="color: #8C8C8C; font-style: italic;">;;           </span><span style="color: #8C8C8C; font-style: italic;">(lambda ()</span>
-<span style="color: #8C8C8C; font-style: italic;">;;             </span><span style="color: #8C8C8C; font-style: italic;">(frameset-restore</span>
-<span style="color: #8C8C8C; font-style: italic;">;;              </span><span style="color: #8C8C8C; font-style: italic;">desktop-saved-frameset</span>
-<span style="color: #8C8C8C; font-style: italic;">;;              </span><span style="color: #8C8C8C; font-style: italic;">:reuse-frames (eq desktop-restore-reuses-frames t)</span>
-<span style="color: #8C8C8C; font-style: italic;">;;              </span><span style="color: #8C8C8C; font-style: italic;">:cleanup-frames (not (eq desktop-restore-reuses-frames 'keep))</span>
-<span style="color: #8C8C8C; font-style: italic;">;;              </span><span style="color: #8C8C8C; font-style: italic;">:force-display desktop-restore-in-current-display</span>
-<span style="color: #8C8C8C; font-style: italic;">;;              </span><span style="color: #8C8C8C; font-style: italic;">:force-onscreen desktop-restore-forces-onscreen)))</span>
-(<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">current-tab-name</span> ()
-  (alist-get 'name (tab-bar--current-tab)))
+
+    (<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">redtick</span>)
+
+    <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">Tabs</span>
+<span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #ffa500; font-weight: bold; font-style: italic;">TODO</span><span style="color: #8C8C8C; font-style: italic;"> create the tabs programatically</span>
+  (<span style="color: #F92672;">setq</span> tab-bar-new-tab-choice <span style="color: #EEDC82;">"*scratch*"</span>
+        tab-bar-show nil
+        <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">desktop-auto-save-timeout nil</span>
+        <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">desktop-save 'ask-if-new</span>
+        <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">desktop-dirname "./"</span>
+        <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">desktop-path (list desktop-dirname)</span>
+        <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">desktop-load-locked-desktop 'ask</span>
+        <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">desktop-restore-forces-onscreen nil</span>
+        )
+  <span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(add-hook 'desktop-after-read-hook</span>
+  <span style="color: #8C8C8C; font-style: italic;">;;           </span><span style="color: #8C8C8C; font-style: italic;">(lambda ()</span>
+  <span style="color: #8C8C8C; font-style: italic;">;;             </span><span style="color: #8C8C8C; font-style: italic;">(frameset-restore</span>
+  <span style="color: #8C8C8C; font-style: italic;">;;              </span><span style="color: #8C8C8C; font-style: italic;">desktop-saved-frameset</span>
+  <span style="color: #8C8C8C; font-style: italic;">;;              </span><span style="color: #8C8C8C; font-style: italic;">:reuse-frames (eq desktop-restore-reuses-frames t)</span>
+  <span style="color: #8C8C8C; font-style: italic;">;;              </span><span style="color: #8C8C8C; font-style: italic;">:cleanup-frames (not (eq desktop-restore-reuses-frames 'keep))</span>
+  <span style="color: #8C8C8C; font-style: italic;">;;              </span><span style="color: #8C8C8C; font-style: italic;">:force-display desktop-restore-in-current-display</span>
+  <span style="color: #8C8C8C; font-style: italic;">;;              </span><span style="color: #8C8C8C; font-style: italic;">:force-onscreen desktop-restore-forces-onscreen)))</span>
+  (<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">current-tab-name</span> ()
+    (alist-get 'name (tab-bar--current-tab)))
+
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-orgcbd77ae" class="outline-2">
-<h2 id="orgcbd77ae"><span class="section-number-2">9</span> Tools and Bindings (not text editing related)</h2>
+<div id="outline-container-org4b11dfd" class="outline-2">
+<h2 id="org4b11dfd"><span class="section-number-2">9</span> Tools and Bindings (not text editing related)</h2>
 <div class="outline-text-2" id="text-9">
 </div>
-<div id="outline-container-org65023da" class="outline-3">
-<h3 id="org65023da"><span class="section-number-3">9.1</span> Env Vars</h3>
+<div id="outline-container-org08e280e" class="outline-3">
+<h3 id="org08e280e"><span class="section-number-3">9.1</span> Env Vars</h3>
 <div class="outline-text-3" id="text-9-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">if</span> (file-exists-p <span style="color: #EEDC82;">"~/.emacs.d/emacs.env"</span>)
@@ -758,8 +764,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org79e2265" class="outline-3">
-<h3 id="org79e2265"><span class="section-number-3">9.2</span> Built-in Packages</h3>
+<div id="outline-container-org9ae715a" class="outline-3">
+<h3 id="org9ae715a"><span class="section-number-3">9.2</span> Built-in Packages</h3>
 <div class="outline-text-3" id="text-9-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">require</span> '<span style="color: #FF80F4;">misc</span>)
@@ -809,8 +815,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org836d211" class="outline-3">
-<h3 id="org836d211"><span class="section-number-3">9.3</span> Local Packages</h3>
+<div id="outline-container-orgeedf202" class="outline-3">
+<h3 id="orgeedf202"><span class="section-number-3">9.3</span> Local Packages</h3>
 <div class="outline-text-3" id="text-9-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">when</span> (<span style="color: #F92672;">and</span> (file-directory-p <span style="color: #EEDC82;">"~/code/bela-mode.el/"</span>)
@@ -823,8 +829,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org77fc403" class="outline-3">
-<h3 id="org77fc403"><span class="section-number-3">9.4</span> Git</h3>
+<div id="outline-container-orgda58e8d" class="outline-3">
+<h3 id="orgda58e8d"><span class="section-number-3">9.4</span> Git</h3>
 <div class="outline-text-3" id="text-9-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">magit</span>
@@ -847,8 +853,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org5c0888f" class="outline-3">
-<h3 id="org5c0888f"><span class="section-number-3">9.5</span> Misc. Packages</h3>
+<div id="outline-container-org10652ef" class="outline-3">
+<h3 id="org10652ef"><span class="section-number-3">9.5</span> Misc. Packages</h3>
 <div class="outline-text-3" id="text-9-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">restart-emacs</span>)
@@ -921,8 +927,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org4304d0e" class="outline-3">
-<h3 id="org4304d0e"><span class="section-number-3">9.6</span> EXWM - in case I ever return to it, do not delete!</h3>
+<div id="outline-container-org14e2872" class="outline-3">
+<h3 id="org14e2872"><span class="section-number-3">9.6</span> EXWM - in case I ever return to it, do not delete!</h3>
 <div class="outline-text-3" id="text-9-6">
 <p>
 startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
@@ -1009,8 +1015,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org3799007" class="outline-3">
-<h3 id="org3799007"><span class="section-number-3">9.7</span> Ivy, Swiper, Counsel, Projectile</h3>
+<div id="outline-container-org59b12b8" class="outline-3">
+<h3 id="org59b12b8"><span class="section-number-3">9.7</span> Ivy, Swiper, Counsel, Projectile</h3>
 <div class="outline-text-3" id="text-9-7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">ivy</span>
@@ -1082,8 +1088,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orgae19d3a" class="outline-3">
-<h3 id="orgae19d3a"><span class="section-number-3">9.8</span> Multicursor</h3>
+<div id="outline-container-org10aa440" class="outline-3">
+<h3 id="org10aa440"><span class="section-number-3">9.8</span> Multicursor</h3>
 <div class="outline-text-3" id="text-9-8">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">mc-mark-next-like-this-then-cycle-forward</span> (arg)
@@ -1127,8 +1133,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org3275ad5" class="outline-3">
-<h3 id="org3275ad5"><span class="section-number-3">9.9</span> Terminal</h3>
+<div id="outline-container-orgb0d72f9" class="outline-3">
+<h3 id="orgb0d72f9"><span class="section-number-3">9.9</span> Terminal</h3>
 <div class="outline-text-3" id="text-9-9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(use-package term</span>
@@ -1175,8 +1181,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orgaa1c66f" class="outline-2">
-<h2 id="orgaa1c66f"><span class="section-number-2">10</span> dir-locals</h2>
+<div id="outline-container-orgba29f92" class="outline-2">
+<h2 id="orgba29f92"><span class="section-number-2">10</span> dir-locals</h2>
 <div class="outline-text-2" id="text-10">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">my-reload-dir-locals-for-all-buffer-in-this-directory</span> ()
@@ -1192,12 +1198,12 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orgf239d47" class="outline-2">
-<h2 id="orgf239d47"><span class="section-number-2">11</span> Programming / Text Editing</h2>
+<div id="outline-container-org0e528a6" class="outline-2">
+<h2 id="org0e528a6"><span class="section-number-2">11</span> Programming / Text Editing</h2>
 <div class="outline-text-2" id="text-11">
 </div>
-<div id="outline-container-org18f6e07" class="outline-3">
-<h3 id="org18f6e07"><span class="section-number-3">11.1</span> All</h3>
+<div id="outline-container-orgb9c2c3d" class="outline-3">
+<h3 id="orgb9c2c3d"><span class="section-number-3">11.1</span> All</h3>
 <div class="outline-text-3" id="text-11-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">ws-butler</span>
@@ -1262,8 +1268,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org036db19" class="outline-3">
-<h3 id="org036db19"><span class="section-number-3">11.2</span> Paredit</h3>
+<div id="outline-container-org80ec391" class="outline-3">
+<h3 id="org80ec391"><span class="section-number-3">11.2</span> Paredit</h3>
 <div class="outline-text-3" id="text-11-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">defun</span> <span style="color: #A6E22E;">paredit-delete-indentation</span> (<span style="color: #66D9EF;">&amp;optional</span> arg)
@@ -1316,8 +1322,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org82d1b46" class="outline-3">
-<h3 id="org82d1b46"><span class="section-number-3">11.3</span> LSP</h3>
+<div id="outline-container-org4ac4464" class="outline-3">
+<h3 id="org4ac4464"><span class="section-number-3">11.3</span> LSP</h3>
 <div class="outline-text-3" id="text-11-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(setq lsp-keymap-prefix "C-l")</span>
@@ -1366,8 +1372,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orgebf1ea0" class="outline-3">
-<h3 id="orgebf1ea0"><span class="section-number-3">11.4</span> Org</h3>
+<div id="outline-container-org4fe2bc3" class="outline-3">
+<h3 id="org4fe2bc3"><span class="section-number-3">11.4</span> Org</h3>
 <div class="outline-text-3" id="text-11-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(use-package org-tempo)</span>
@@ -1396,8 +1402,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org1872364" class="outline-3">
-<h3 id="org1872364"><span class="section-number-3">11.5</span> Markdown</h3>
+<div id="outline-container-org3cde5e7" class="outline-3">
+<h3 id="org3cde5e7"><span class="section-number-3">11.5</span> Markdown</h3>
 <div class="outline-text-3" id="text-11-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">markdown-mode</span>
@@ -1413,8 +1419,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org6253f10" class="outline-3">
-<h3 id="org6253f10"><span class="section-number-3">11.6</span> Bash</h3>
+<div id="outline-container-orga92fbb6" class="outline-3">
+<h3 id="orga92fbb6"><span class="section-number-3">11.6</span> Bash</h3>
 <div class="outline-text-3" id="text-11-6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(add-to-list 'auto-mode-alist '(<span style="color: #EEDC82;">"\\.env\\'"</span> . sh-mode))
@@ -1422,8 +1428,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org89b191f" class="outline-3">
-<h3 id="org89b191f"><span class="section-number-3">11.7</span> Emacs Lisp</h3>
+<div id="outline-container-orgcdcad9d" class="outline-3">
+<h3 id="orgcdcad9d"><span class="section-number-3">11.7</span> Emacs Lisp</h3>
 <div class="outline-text-3" id="text-11-7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
@@ -1431,8 +1437,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org97f579d" class="outline-3">
-<h3 id="org97f579d"><span class="section-number-3">11.8</span> Yaml</h3>
+<div id="outline-container-org043e129" class="outline-3">
+<h3 id="org043e129"><span class="section-number-3">11.8</span> Yaml</h3>
 <div class="outline-text-3" id="text-11-8">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">yaml-mode</span>
@@ -1441,8 +1447,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org0fd53ed" class="outline-3">
-<h3 id="org0fd53ed"><span class="section-number-3">11.9</span> JavaScript</h3>
+<div id="outline-container-org68ea4f8" class="outline-3">
+<h3 id="org68ea4f8"><span class="section-number-3">11.9</span> JavaScript</h3>
 <div class="outline-text-3" id="text-11-9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #F92672;">use-package</span> <span style="color: #FF80F4;">rjsx-mode</span>
@@ -1485,8 +1491,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orged095a7" class="outline-3">
-<h3 id="orged095a7"><span class="section-number-3">11.10</span> Go</h3>
+<div id="outline-container-orge18fb1a" class="outline-3">
+<h3 id="orge18fb1a"><span class="section-number-3">11.10</span> Go</h3>
 <div class="outline-text-3" id="text-11-10">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(use-package go-projectile</span>
@@ -1586,8 +1592,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org8892e76" class="outline-3">
-<h3 id="org8892e76"><span class="section-number-3">11.11</span> Rust</h3>
+<div id="outline-container-orgb69d11a" class="outline-3">
+<h3 id="orgb69d11a"><span class="section-number-3">11.11</span> Rust</h3>
 <div class="outline-text-3" id="text-11-11">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(use-package toml-mode)</span>
@@ -1615,8 +1621,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orgd883bb9" class="outline-3">
-<h3 id="orgd883bb9"><span class="section-number-3">11.12</span> GLSL</h3>
+<div id="outline-container-org0f4229d" class="outline-3">
+<h3 id="org0f4229d"><span class="section-number-3">11.12</span> GLSL</h3>
 <div class="outline-text-3" id="text-11-12">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(use-package glsl-mode)</span>
@@ -1624,8 +1630,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orge355995" class="outline-3">
-<h3 id="orge355995"><span class="section-number-3">11.13</span> Common Lisp</h3>
+<div id="outline-container-orgfe948f0" class="outline-3">
+<h3 id="orgfe948f0"><span class="section-number-3">11.13</span> Common Lisp</h3>
 <div class="outline-text-3" id="text-11-13">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #8C8C8C; font-style: italic;">;; </span><span style="color: #8C8C8C; font-style: italic;">(use-package slime-company)</span>
@@ -1649,8 +1655,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orga12aad8" class="outline-3">
-<h3 id="orga12aad8"><span class="section-number-3">11.14</span> Clojure</h3>
+<div id="outline-container-orgc21f3c0" class="outline-3">
+<h3 id="orgc21f3c0"><span class="section-number-3">11.14</span> Clojure</h3>
 <div class="outline-text-3" id="text-11-14">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(add-to-list 'exec-path <span style="color: #EEDC82;">"/usr/local/bin/"</span>)
@@ -1767,7 +1773,7 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Ben Wiz</p>
-<p class="date">Created: 2022-03-31 Thu 07:11</p>
+<p class="date">Created: 2022-03-31 Thu 07:15</p>
 </div>
 </body>
 </html>
