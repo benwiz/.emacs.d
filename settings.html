@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-04-01 Fri 09:25 -->
+<!-- 2022-04-01 Fri 09:26 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>settings.org | Ben Wiz</title>
@@ -221,6 +221,18 @@
  pre.src {background-color: white; color: black;}</style>
 <style type="text/css">
  pre.src-emacs-lisp:before {background-color: black; color: white;}</style>
+<style type="text/css">
+ pre.src {background-color: white; color: black;}</style>
+<style type="text/css">
+ pre.src-emacs-lisp:before {background-color: black; color: white;}</style>
+<style type="text/css">
+ pre.src {background-color: white; color: black;}</style>
+<style type="text/css">
+ pre.src-emacs-lisp:before {background-color: black; color: white;}</style>
+<style type="text/css">
+ pre.src {background-color: white; color: black;}</style>
+<style type="text/css">
+ pre.src-emacs-lisp:before {background-color: black; color: white;}</style>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -275,136 +287,133 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgded2f3a">1. To Do</a>
+<li><a href="#org7fe89a9">1. To Do</a>
 <ul>
-<li><a href="#org71edad1">1.1. look into tabs for emacs</a></li>
-<li><a href="#orgc202a1d">1.2. Set up dashboard</a>
+<li><a href="#orgc99fa41">1.1. look into tabs for emacs</a></li>
+<li><a href="#org0db78cc">1.2. Set up dashboard</a>
 <ul>
-<li><a href="#orgcd72e89">1.2.1. list the windows in each tab</a></li>
-<li><a href="#orgbaa0976">1.2.2. news</a></li>
+<li><a href="#orgf68e063">1.2.1. list the windows in each tab</a></li>
+<li><a href="#org44f627b">1.2.2. news</a></li>
 </ul>
 </li>
-<li><a href="#org7ac4514">1.3. better jump-to-char-in-line, maybe just write it myself. more vim-like.</a></li>
-<li><a href="#orge6b362a">1.4. better keybindings for delete to/until both forward and backward. more vim-like. Keybindings should probably be related to C-k, M-k</a></li>
-<li><a href="#org934d432">1.5. continue setting up lsp-mode and turn on lsp-ui and lsp-ivy</a></li>
-<li><a href="#org9e9089a">1.6. paredit</a>
+<li><a href="#org36e2da6">1.3. better jump-to-char-in-line, maybe just write it myself. more vim-like.</a></li>
+<li><a href="#org35445c8">1.4. better keybindings for delete to/until both forward and backward. more vim-like. Keybindings should probably be related to C-k, M-k</a></li>
+<li><a href="#orga2d5e6e">1.5. continue setting up lsp-mode and turn on lsp-ui and lsp-ivy</a></li>
+<li><a href="#orgfa41b12">1.6. paredit</a>
 <ul>
-<li><a href="#orgf55b841">1.6.1. my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)</a></li>
-<li><a href="#org001d9de">1.6.2. paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.</a></li>
-<li><a href="#orgb32dd53">1.6.3. paredit kill needs to kill any created whitepsace</a></li>
-<li><a href="#org8447e8a">1.6.4. go to beginning or end of top level form (maybe, C-M-S-u)</a></li>
+<li><a href="#org47c5bde">1.6.1. my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)</a></li>
+<li><a href="#org7d44502">1.6.2. paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.</a></li>
+<li><a href="#org5186b74">1.6.3. paredit kill needs to kill any created whitepsace</a></li>
+<li><a href="#org759a6d9">1.6.4. go to beginning or end of top level form (maybe, C-M-S-u)</a></li>
 </ul>
 </li>
-<li><a href="#orge883216">1.7. registers: better shortcuts</a></li>
-<li><a href="#orgda75168">1.8. prepend current project to each item in "Switch to Buffer" selector</a></li>
-<li><a href="#org6aec0d8">1.9. better git counsel grep `M-P s i` https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep</a></li>
+<li><a href="#org42b8fa7">1.7. registers: better shortcuts</a></li>
+<li><a href="#orgc67978f">1.8. prepend current project to each item in "Switch to Buffer" selector</a></li>
+<li><a href="#org80514b7">1.9. better git counsel grep `M-P s i` https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep</a></li>
 </ul>
 </li>
-<li><a href="#org5511420">2. Operating System</a></li>
-<li><a href="#org752aef6">3. emacs.d</a>
+<li><a href="#org91bec52">2. Operating System</a></li>
+<li><a href="#org03d7775">3. emacs.d</a>
 <ul>
-<li><a href="#org3195955">3.1. settings.org HTML Export</a></li>
+<li><a href="#org6ed8824">3.1. settings.org HTML Export</a></li>
 </ul>
 </li>
-<li><a href="#org2711cb8">4. Mouse / Touchpad</a></li>
-<li><a href="#orgfe99a7d">5. Default Tweaks</a></li>
-<li><a href="#org5b3f1ac">6. Package Management</a></li>
-<li><a href="#org18e600f">7. Startup</a></li>
-<li><a href="#orgaee2cc4">8. Theme, Modeline, and Tabs</a></li>
-<li><a href="#orgab3d500">9. Tools and Bindings (not text editing related)</a>
+<li><a href="#orgaa491bb">4. Mouse / Touchpad</a></li>
+<li><a href="#orga25c525">5. Default Tweaks</a></li>
+<li><a href="#org5a93772">6. Package Management</a></li>
+<li><a href="#org03acd17">7. Startup</a></li>
+<li><a href="#org0429991">8. Theme, Modeline, and Tabs</a></li>
+<li><a href="#org19f2ed5">9. Tools and Bindings (not text editing related)</a>
 <ul>
-<li><a href="#org2593995">9.1. Env Vars</a></li>
-<li><a href="#orgadbee84">9.2. Built-in Packages</a></li>
-<li><a href="#org97ff987">9.3. Local Packages</a></li>
-<li><a href="#orge4cc919">9.4. Git</a></li>
-<li><a href="#org5af9ce9">9.5. Misc. Packages</a></li>
-<li><a href="#org3658a1e">9.6. EXWM - in case I ever return to it, do not delete!</a></li>
-<li><a href="#org27ece1c">9.7. Ivy, Swiper, Counsel, Projectile</a></li>
-<li><a href="#org88cc449">9.8. Multicursor</a></li>
-<li><a href="#orgad8faac">9.9. Terminal</a></li>
+<li><a href="#org48571e1">9.1. Env Vars</a></li>
+<li><a href="#orgd0d4c70">9.2. Built-in Packages</a></li>
+<li><a href="#orgd138e17">9.3. Local Packages</a></li>
+<li><a href="#org004709d">9.4. Git</a></li>
+<li><a href="#org46311cf">9.5. Misc. Packages</a></li>
+<li><a href="#org5771203">9.6. EXWM - in case I ever return to it, do not delete!</a></li>
+<li><a href="#orgeb6cc92">9.7. Ivy, Swiper, Counsel, Projectile</a></li>
+<li><a href="#org07243a1">9.8. Multicursor</a></li>
+<li><a href="#org5c48fd4">9.9. Terminal</a></li>
 </ul>
 </li>
-<li><a href="#org58a50f8">10. dir-locals</a></li>
-<li><a href="#orgfba66e0">11. Programming / Text Editing</a>
+<li><a href="#org78c1a5a">10. dir-locals</a></li>
+<li><a href="#orgf7b744e">11. Programming / Text Editing</a>
 <ul>
-<li><a href="#org9d0030d">11.1. All</a></li>
-<li><a href="#org92ad04d">11.2. Paredit</a></li>
-<li><a href="#orgfc03054">11.3. LSP</a></li>
-<li><a href="#org646fa96">11.4. Org</a></li>
-<li><a href="#org8763894">11.5. Markdown</a></li>
-<li><a href="#org47e3d3f">11.6. Bash</a></li>
-<li><a href="#org2bff572">11.7. Emacs Lisp</a></li>
-<li><a href="#org6981b2e">11.8. Yaml</a></li>
-<li><a href="#org7cb7a55">11.9. JavaScript</a></li>
-<li><a href="#org9ea8ee7">11.10. Go</a></li>
-<li><a href="#orgb545218">11.11. Rust</a></li>
-<li><a href="#org2abbd4d">11.12. GLSL</a></li>
-<li><a href="#orgf631227">11.13. Common Lisp</a></li>
-<li><a href="#orgd2e728f">11.14. Clojure</a></li>
+<li><a href="#org4e9f215">11.1. All</a></li>
+<li><a href="#orgc028868">11.2. Paredit</a></li>
+<li><a href="#orgf2af9df">11.3. LSP</a></li>
+<li><a href="#org7c6e10d">11.4. Org</a></li>
+<li><a href="#org8aecd35">11.5. Markdown</a></li>
+<li><a href="#orga813b45">11.6. Bash</a></li>
+<li><a href="#orgfa7e205">11.7. Emacs Lisp</a></li>
+<li><a href="#org8e31d64">11.8. Yaml</a></li>
+<li><a href="#org97d9481">11.9. JavaScript</a></li>
+<li><a href="#org6d6fbce">11.10. Go</a></li>
+<li><a href="#org8f4e9fe">11.11. Rust</a></li>
+<li><a href="#org4754835">11.12. GLSL</a></li>
+<li><a href="#org51cb340">11.13. Common Lisp</a></li>
+<li><a href="#org6fefb99">11.14. Clojure</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<p>
--<b>- eval: (add-hook 'after-save-hook 'org-html-export-to-html t t); -</b>-
-</p>
-<div id="outline-container-orgded2f3a" class="outline-2">
-<h2 id="orgded2f3a"><span class="section-number-2">1</span> To Do</h2>
+<div id="outline-container-org7fe89a9" class="outline-2">
+<h2 id="org7fe89a9"><span class="section-number-2">1</span> To Do</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org71edad1" class="outline-3">
-<h3 id="org71edad1"><span class="section-number-3">1.1</span> look into tabs for emacs</h3>
+<div id="outline-container-orgc99fa41" class="outline-3">
+<h3 id="orgc99fa41"><span class="section-number-3">1.1</span> look into tabs for emacs</h3>
 </div>
-<div id="outline-container-orgc202a1d" class="outline-3">
-<h3 id="orgc202a1d"><span class="section-number-3">1.2</span> Set up dashboard</h3>
+<div id="outline-container-org0db78cc" class="outline-3">
+<h3 id="org0db78cc"><span class="section-number-3">1.2</span> Set up dashboard</h3>
 <div class="outline-text-3" id="text-1-2">
 </div>
-<div id="outline-container-orgcd72e89" class="outline-4">
-<h4 id="orgcd72e89"><span class="section-number-4">1.2.1</span> list the windows in each tab</h4>
+<div id="outline-container-orgf68e063" class="outline-4">
+<h4 id="orgf68e063"><span class="section-number-4">1.2.1</span> list the windows in each tab</h4>
 </div>
-<div id="outline-container-orgbaa0976" class="outline-4">
-<h4 id="orgbaa0976"><span class="section-number-4">1.2.2</span> news</h4>
+<div id="outline-container-org44f627b" class="outline-4">
+<h4 id="org44f627b"><span class="section-number-4">1.2.2</span> news</h4>
 </div>
 </div>
-<div id="outline-container-org7ac4514" class="outline-3">
-<h3 id="org7ac4514"><span class="section-number-3">1.3</span> better jump-to-char-in-line, maybe just write it myself. more vim-like.</h3>
+<div id="outline-container-org36e2da6" class="outline-3">
+<h3 id="org36e2da6"><span class="section-number-3">1.3</span> better jump-to-char-in-line, maybe just write it myself. more vim-like.</h3>
 </div>
-<div id="outline-container-orge6b362a" class="outline-3">
-<h3 id="orge6b362a"><span class="section-number-3">1.4</span> better keybindings for delete to/until both forward and backward. more vim-like. Keybindings should probably be related to C-k, M-k</h3>
+<div id="outline-container-org35445c8" class="outline-3">
+<h3 id="org35445c8"><span class="section-number-3">1.4</span> better keybindings for delete to/until both forward and backward. more vim-like. Keybindings should probably be related to C-k, M-k</h3>
 </div>
-<div id="outline-container-org934d432" class="outline-3">
-<h3 id="org934d432"><span class="section-number-3">1.5</span> continue setting up lsp-mode and turn on lsp-ui and lsp-ivy</h3>
+<div id="outline-container-orga2d5e6e" class="outline-3">
+<h3 id="orga2d5e6e"><span class="section-number-3">1.5</span> continue setting up lsp-mode and turn on lsp-ui and lsp-ivy</h3>
 </div>
-<div id="outline-container-org9e9089a" class="outline-3">
-<h3 id="org9e9089a"><span class="section-number-3">1.6</span> paredit</h3>
+<div id="outline-container-orgfa41b12" class="outline-3">
+<h3 id="orgfa41b12"><span class="section-number-3">1.6</span> paredit</h3>
 <div class="outline-text-3" id="text-1-6">
 </div>
-<div id="outline-container-orgf55b841" class="outline-4">
-<h4 id="orgf55b841"><span class="section-number-4">1.6.1</span> my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)</h4>
+<div id="outline-container-org47c5bde" class="outline-4">
+<h4 id="org47c5bde"><span class="section-number-4">1.6.1</span> my custom kill symbol `M-k` should not go back a symbol if previous char is a space (maybe other special chars too)</h4>
 </div>
-<div id="outline-container-org001d9de" class="outline-4">
-<h4 id="org001d9de"><span class="section-number-4">1.6.2</span> paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.</h4>
+<div id="outline-container-org7d44502" class="outline-4">
+<h4 id="org7d44502"><span class="section-number-4">1.6.2</span> paredit-wrap-* should wrap from beginning of current symbol, not the middle of it.</h4>
 </div>
-<div id="outline-container-orgb32dd53" class="outline-4">
-<h4 id="orgb32dd53"><span class="section-number-4">1.6.3</span> paredit kill needs to kill any created whitepsace</h4>
+<div id="outline-container-org5186b74" class="outline-4">
+<h4 id="org5186b74"><span class="section-number-4">1.6.3</span> paredit kill needs to kill any created whitepsace</h4>
 </div>
-<div id="outline-container-org8447e8a" class="outline-4">
-<h4 id="org8447e8a"><span class="section-number-4">1.6.4</span> go to beginning or end of top level form (maybe, C-M-S-u)</h4>
-</div>
-</div>
-<div id="outline-container-orge883216" class="outline-3">
-<h3 id="orge883216"><span class="section-number-3">1.7</span> registers: better shortcuts</h3>
-</div>
-<div id="outline-container-orgda75168" class="outline-3">
-<h3 id="orgda75168"><span class="section-number-3">1.8</span> prepend current project to each item in "Switch to Buffer" selector</h3>
-</div>
-<div id="outline-container-org6aec0d8" class="outline-3">
-<h3 id="org6aec0d8"><span class="section-number-3">1.9</span> better git counsel grep `M-P s i` <a href="https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep">https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep</a></h3>
+<div id="outline-container-org759a6d9" class="outline-4">
+<h4 id="org759a6d9"><span class="section-number-4">1.6.4</span> go to beginning or end of top level form (maybe, C-M-S-u)</h4>
 </div>
 </div>
-<div id="outline-container-org5511420" class="outline-2">
-<h2 id="org5511420"><span class="section-number-2">2</span> Operating System</h2>
+<div id="outline-container-org42b8fa7" class="outline-3">
+<h3 id="org42b8fa7"><span class="section-number-3">1.7</span> registers: better shortcuts</h3>
+</div>
+<div id="outline-container-orgc67978f" class="outline-3">
+<h3 id="orgc67978f"><span class="section-number-3">1.8</span> prepend current project to each item in "Switch to Buffer" selector</h3>
+</div>
+<div id="outline-container-org80514b7" class="outline-3">
+<h3 id="org80514b7"><span class="section-number-3">1.9</span> better git counsel grep `M-P s i` <a href="https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep">https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep</a></h3>
+</div>
+</div>
+<div id="outline-container-org91bec52" class="outline-2">
+<h2 id="org91bec52"><span class="section-number-2">2</span> Operating System</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">defconst</span> <span style="color: #a0522d;">*is-a-mac*</span> (eq system-type 'darwin))
@@ -415,8 +424,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org752aef6" class="outline-2">
-<h2 id="org752aef6"><span class="section-number-2">3</span> emacs.d</h2>
+<div id="outline-container-org03d7775" class="outline-2">
+<h2 id="org03d7775"><span class="section-number-2">3</span> emacs.d</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 <a href="https://github.com/benwiz/emacs.d">repo</a>
@@ -433,40 +442,41 @@ for the JavaScript code in this tag.
 </pre>
 </div>
 </div>
-<div id="outline-container-org3195955" class="outline-3">
-<h3 id="org3195955"><span class="section-number-3">3.1</span> settings.org HTML Export</h3>
+<div id="outline-container-org6ed8824" class="outline-3">
+<h3 id="org6ed8824"><span class="section-number-3">3.1</span> settings.org HTML Export</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 <a href="https://benwiz.com/emacs">html export</a>
 </p>
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">See top of file for eval that updates the html file</span>
-(<span style="color: #a020f0;">use-package</span> <span style="color: #255814;">htmlize</span>)
-(<span style="color: #a020f0;">setq</span> org-html-validation-link <span style="color: #8b2252;">""</span>)
+<pre class="src src-emacs-lisp"><span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">Place the following at the very top of this org file: `-*- eval: (add-hook 'after-save-hook 'org-html-export-to-html t t); -*-`</span>
+<span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">;; See top of file for eval that updates the html file</span>
+<span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">(use-package htmlize)</span>
+<span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">(setq org-html-validation-link "")</span>
 
 
-<span style="color: #b22222; font-style: italic;">;; </span><span style="color: #ffa500; font-weight: bold; font-style: italic;">FIXME</span><span style="color: #b22222; font-style: italic;"> there is a bug here, these endlessly appends to the head, it need to not do this forever</span>
-(<span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">org-inline-css-hook</span> (exporter)
-  <span style="color: #8b2252;">"Insert custom inline css to automatically set the</span>
-<span style="color: #8b2252;">  background of code to whatever theme I'm using's background"</span>
-  (<span style="color: #a020f0;">when</span> (eq exporter 'html)
-    (<span style="color: #a020f0;">let*</span> ((my-pre-bg (face-background 'default))
-           (my-pre-fg (face-foreground 'default)))
-      (<span style="color: #a020f0;">setq</span> org-html-head-extra
-            (concat org-html-head-extra
-                    (format <span style="color: #8b2252;">"&lt;style type=\"text/css\"&gt;\n pre.src {background-color: %s; color: %s;}&lt;/style&gt;\n"</span>
-                            my-pre-bg my-pre-fg)
-                    (format <span style="color: #8b2252;">"&lt;style type=\"text/css\"&gt;\n pre.src-emacs-lisp:before {background-color: %s; color: %s;}&lt;/style&gt;\n"</span>
-                            my-pre-fg my-pre-bg))))))
+<span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">;; </span><span style="color: #ffa500; font-weight: bold; font-style: italic;">FIXME</span><span style="color: #b22222; font-style: italic;"> there is a bug here, these endlessly appends to the head, it need to not do this forever</span>
+<span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">(defun org-inline-css-hook (exporter)</span>
+<span style="color: #b22222; font-style: italic;">;;   </span><span style="color: #b22222; font-style: italic;">"Insert custom inline css to automatically set the</span>
+<span style="color: #b22222; font-style: italic;">;;   </span><span style="color: #b22222; font-style: italic;">background of code to whatever theme I'm using's background"</span>
+<span style="color: #b22222; font-style: italic;">;;   </span><span style="color: #b22222; font-style: italic;">(when (eq exporter 'html)</span>
+<span style="color: #b22222; font-style: italic;">;;     </span><span style="color: #b22222; font-style: italic;">(let* ((my-pre-bg (face-background 'default))</span>
+<span style="color: #b22222; font-style: italic;">;;            </span><span style="color: #b22222; font-style: italic;">(my-pre-fg (face-foreground 'default)))</span>
+<span style="color: #b22222; font-style: italic;">;;       </span><span style="color: #b22222; font-style: italic;">(setq org-html-head-extra</span>
+<span style="color: #b22222; font-style: italic;">;;             </span><span style="color: #b22222; font-style: italic;">(concat org-html-head-extra</span>
+<span style="color: #b22222; font-style: italic;">;;                     </span><span style="color: #b22222; font-style: italic;">(format "&lt;style type=\"text/css\"&gt;\n pre.src {background-color: %s; color: %s;}&lt;/style&gt;\n"</span>
+<span style="color: #b22222; font-style: italic;">;;                             </span><span style="color: #b22222; font-style: italic;">my-pre-bg my-pre-fg)</span>
+<span style="color: #b22222; font-style: italic;">;;                     </span><span style="color: #b22222; font-style: italic;">(format "&lt;style type=\"text/css\"&gt;\n pre.src-emacs-lisp:before {background-color: %s; color: %s;}&lt;/style&gt;\n"</span>
+<span style="color: #b22222; font-style: italic;">;;                             </span><span style="color: #b22222; font-style: italic;">my-pre-fg my-pre-bg))))))</span>
 
-(add-hook 'org-export-before-processing-hook 'org-inline-css-hook)
+<span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">(add-hook 'org-export-before-processing-hook 'org-inline-css-hook)</span>
 </pre>
 </div>
 </div>
 </div>
 </div>
-<div id="outline-container-org2711cb8" class="outline-2">
-<h2 id="org2711cb8"><span class="section-number-2">4</span> Mouse / Touchpad</h2>
+<div id="outline-container-orgaa491bb" class="outline-2">
+<h2 id="orgaa491bb"><span class="section-number-2">4</span> Mouse / Touchpad</h2>
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">Shut off mouse clicks because my work computer's trackpad is super annoying, resizing windows with mouse still works</span>
@@ -478,8 +488,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-orgfe99a7d" class="outline-2">
-<h2 id="orgfe99a7d"><span class="section-number-2">5</span> Default Tweaks</h2>
+<div id="outline-container-orga25c525" class="outline-2">
+<h2 id="orga25c525"><span class="section-number-2">5</span> Default Tweaks</h2>
 <div class="outline-text-2" id="text-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">when</span> window-system
@@ -556,8 +566,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org5b3f1ac" class="outline-2">
-<h2 id="org5b3f1ac"><span class="section-number-2">6</span> Package Management</h2>
+<div id="outline-container-org5a93772" class="outline-2">
+<h2 id="org5a93772"><span class="section-number-2">6</span> Package Management</h2>
 <div class="outline-text-2" id="text-6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">require</span> '<span style="color: #255814;">package</span>)
@@ -603,8 +613,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org18e600f" class="outline-2">
-<h2 id="org18e600f"><span class="section-number-2">7</span> Startup</h2>
+<div id="outline-container-org03acd17" class="outline-2">
+<h2 id="org03acd17"><span class="section-number-2">7</span> Startup</h2>
 <div class="outline-text-2" id="text-7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">setq</span> desktop-load-locked-desktop t
@@ -635,8 +645,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-orgaee2cc4" class="outline-2">
-<h2 id="orgaee2cc4"><span class="section-number-2">8</span> Theme, Modeline, and Tabs</h2>
+<div id="outline-container-org0429991" class="outline-2">
+<h2 id="org0429991"><span class="section-number-2">8</span> Theme, Modeline, and Tabs</h2>
 <div class="outline-text-2" id="text-8">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">if</span> *is-a-mac*
@@ -756,12 +766,12 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-orgab3d500" class="outline-2">
-<h2 id="orgab3d500"><span class="section-number-2">9</span> Tools and Bindings (not text editing related)</h2>
+<div id="outline-container-org19f2ed5" class="outline-2">
+<h2 id="org19f2ed5"><span class="section-number-2">9</span> Tools and Bindings (not text editing related)</h2>
 <div class="outline-text-2" id="text-9">
 </div>
-<div id="outline-container-org2593995" class="outline-3">
-<h3 id="org2593995"><span class="section-number-3">9.1</span> Env Vars</h3>
+<div id="outline-container-org48571e1" class="outline-3">
+<h3 id="org48571e1"><span class="section-number-3">9.1</span> Env Vars</h3>
 <div class="outline-text-3" id="text-9-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">if</span> (file-exists-p <span style="color: #8b2252;">"~/.emacs.d/emacs.env"</span>)
@@ -776,8 +786,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-orgadbee84" class="outline-3">
-<h3 id="orgadbee84"><span class="section-number-3">9.2</span> Built-in Packages</h3>
+<div id="outline-container-orgd0d4c70" class="outline-3">
+<h3 id="orgd0d4c70"><span class="section-number-3">9.2</span> Built-in Packages</h3>
 <div class="outline-text-3" id="text-9-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">require</span> '<span style="color: #255814;">misc</span>)
@@ -827,8 +837,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org97ff987" class="outline-3">
-<h3 id="org97ff987"><span class="section-number-3">9.3</span> Local Packages</h3>
+<div id="outline-container-orgd138e17" class="outline-3">
+<h3 id="orgd138e17"><span class="section-number-3">9.3</span> Local Packages</h3>
 <div class="outline-text-3" id="text-9-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">when</span> (<span style="color: #a020f0;">and</span> (file-directory-p <span style="color: #8b2252;">"~/code/bela-mode.el/"</span>)
@@ -841,8 +851,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-orge4cc919" class="outline-3">
-<h3 id="orge4cc919"><span class="section-number-3">9.4</span> Git</h3>
+<div id="outline-container-org004709d" class="outline-3">
+<h3 id="org004709d"><span class="section-number-3">9.4</span> Git</h3>
 <div class="outline-text-3" id="text-9-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">use-package</span> <span style="color: #255814;">magit</span>
@@ -865,8 +875,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org5af9ce9" class="outline-3">
-<h3 id="org5af9ce9"><span class="section-number-3">9.5</span> Misc. Packages</h3>
+<div id="outline-container-org46311cf" class="outline-3">
+<h3 id="org46311cf"><span class="section-number-3">9.5</span> Misc. Packages</h3>
 <div class="outline-text-3" id="text-9-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">use-package</span> <span style="color: #255814;">restart-emacs</span>)
@@ -939,8 +949,8 @@ for the JavaScript code in this tag.
 </div>
 </div>
 </div>
-<div id="outline-container-org3658a1e" class="outline-3">
-<h3 id="org3658a1e"><span class="section-number-3">9.6</span> EXWM - in case I ever return to it, do not delete!</h3>
+<div id="outline-container-org5771203" class="outline-3">
+<h3 id="org5771203"><span class="section-number-3">9.6</span> EXWM - in case I ever return to it, do not delete!</h3>
 <div class="outline-text-3" id="text-9-6">
 <p>
 startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
@@ -1027,8 +1037,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org27ece1c" class="outline-3">
-<h3 id="org27ece1c"><span class="section-number-3">9.7</span> Ivy, Swiper, Counsel, Projectile</h3>
+<div id="outline-container-orgeb6cc92" class="outline-3">
+<h3 id="orgeb6cc92"><span class="section-number-3">9.7</span> Ivy, Swiper, Counsel, Projectile</h3>
 <div class="outline-text-3" id="text-9-7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">use-package</span> <span style="color: #255814;">ivy</span>
@@ -1100,8 +1110,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org88cc449" class="outline-3">
-<h3 id="org88cc449"><span class="section-number-3">9.8</span> Multicursor</h3>
+<div id="outline-container-org07243a1" class="outline-3">
+<h3 id="org07243a1"><span class="section-number-3">9.8</span> Multicursor</h3>
 <div class="outline-text-3" id="text-9-8">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">mc-mark-next-like-this-then-cycle-forward</span> (arg)
@@ -1145,8 +1155,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orgad8faac" class="outline-3">
-<h3 id="orgad8faac"><span class="section-number-3">9.9</span> Terminal</h3>
+<div id="outline-container-org5c48fd4" class="outline-3">
+<h3 id="org5c48fd4"><span class="section-number-3">9.9</span> Terminal</h3>
 <div class="outline-text-3" id="text-9-9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">(use-package term</span>
@@ -1193,8 +1203,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org58a50f8" class="outline-2">
-<h2 id="org58a50f8"><span class="section-number-2">10</span> dir-locals</h2>
+<div id="outline-container-org78c1a5a" class="outline-2">
+<h2 id="org78c1a5a"><span class="section-number-2">10</span> dir-locals</h2>
 <div class="outline-text-2" id="text-10">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">my-reload-dir-locals-for-all-buffer-in-this-directory</span> ()
@@ -1210,12 +1220,12 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orgfba66e0" class="outline-2">
-<h2 id="orgfba66e0"><span class="section-number-2">11</span> Programming / Text Editing</h2>
+<div id="outline-container-orgf7b744e" class="outline-2">
+<h2 id="orgf7b744e"><span class="section-number-2">11</span> Programming / Text Editing</h2>
 <div class="outline-text-2" id="text-11">
 </div>
-<div id="outline-container-org9d0030d" class="outline-3">
-<h3 id="org9d0030d"><span class="section-number-3">11.1</span> All</h3>
+<div id="outline-container-org4e9f215" class="outline-3">
+<h3 id="org4e9f215"><span class="section-number-3">11.1</span> All</h3>
 <div class="outline-text-3" id="text-11-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">use-package</span> <span style="color: #255814;">ws-butler</span>
@@ -1280,8 +1290,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org92ad04d" class="outline-3">
-<h3 id="org92ad04d"><span class="section-number-3">11.2</span> Paredit</h3>
+<div id="outline-container-orgc028868" class="outline-3">
+<h3 id="orgc028868"><span class="section-number-3">11.2</span> Paredit</h3>
 <div class="outline-text-3" id="text-11-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">paredit-delete-indentation</span> (<span style="color: #006060;">&amp;optional</span> arg)
@@ -1334,8 +1344,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orgfc03054" class="outline-3">
-<h3 id="orgfc03054"><span class="section-number-3">11.3</span> LSP</h3>
+<div id="outline-container-orgf2af9df" class="outline-3">
+<h3 id="orgf2af9df"><span class="section-number-3">11.3</span> LSP</h3>
 <div class="outline-text-3" id="text-11-3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">(setq lsp-keymap-prefix "C-l")</span>
@@ -1384,8 +1394,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org646fa96" class="outline-3">
-<h3 id="org646fa96"><span class="section-number-3">11.4</span> Org</h3>
+<div id="outline-container-org7c6e10d" class="outline-3">
+<h3 id="org7c6e10d"><span class="section-number-3">11.4</span> Org</h3>
 <div class="outline-text-3" id="text-11-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">(use-package org-tempo)</span>
@@ -1414,8 +1424,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org8763894" class="outline-3">
-<h3 id="org8763894"><span class="section-number-3">11.5</span> Markdown</h3>
+<div id="outline-container-org8aecd35" class="outline-3">
+<h3 id="org8aecd35"><span class="section-number-3">11.5</span> Markdown</h3>
 <div class="outline-text-3" id="text-11-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">use-package</span> <span style="color: #255814;">markdown-mode</span>
@@ -1431,8 +1441,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org47e3d3f" class="outline-3">
-<h3 id="org47e3d3f"><span class="section-number-3">11.6</span> Bash</h3>
+<div id="outline-container-orga813b45" class="outline-3">
+<h3 id="orga813b45"><span class="section-number-3">11.6</span> Bash</h3>
 <div class="outline-text-3" id="text-11-6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(add-to-list 'auto-mode-alist '(<span style="color: #8b2252;">"\\.env\\'"</span> . sh-mode))
@@ -1440,8 +1450,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org2bff572" class="outline-3">
-<h3 id="org2bff572"><span class="section-number-3">11.7</span> Emacs Lisp</h3>
+<div id="outline-container-orgfa7e205" class="outline-3">
+<h3 id="orgfa7e205"><span class="section-number-3">11.7</span> Emacs Lisp</h3>
 <div class="outline-text-3" id="text-11-7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
@@ -1449,8 +1459,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org6981b2e" class="outline-3">
-<h3 id="org6981b2e"><span class="section-number-3">11.8</span> Yaml</h3>
+<div id="outline-container-org8e31d64" class="outline-3">
+<h3 id="org8e31d64"><span class="section-number-3">11.8</span> Yaml</h3>
 <div class="outline-text-3" id="text-11-8">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">use-package</span> <span style="color: #255814;">yaml-mode</span>
@@ -1459,8 +1469,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org7cb7a55" class="outline-3">
-<h3 id="org7cb7a55"><span class="section-number-3">11.9</span> JavaScript</h3>
+<div id="outline-container-org97d9481" class="outline-3">
+<h3 id="org97d9481"><span class="section-number-3">11.9</span> JavaScript</h3>
 <div class="outline-text-3" id="text-11-9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #a020f0;">use-package</span> <span style="color: #255814;">rjsx-mode</span>
@@ -1503,8 +1513,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org9ea8ee7" class="outline-3">
-<h3 id="org9ea8ee7"><span class="section-number-3">11.10</span> Go</h3>
+<div id="outline-container-org6d6fbce" class="outline-3">
+<h3 id="org6d6fbce"><span class="section-number-3">11.10</span> Go</h3>
 <div class="outline-text-3" id="text-11-10">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">(use-package go-projectile</span>
@@ -1604,8 +1614,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orgb545218" class="outline-3">
-<h3 id="orgb545218"><span class="section-number-3">11.11</span> Rust</h3>
+<div id="outline-container-org8f4e9fe" class="outline-3">
+<h3 id="org8f4e9fe"><span class="section-number-3">11.11</span> Rust</h3>
 <div class="outline-text-3" id="text-11-11">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">(use-package toml-mode)</span>
@@ -1633,8 +1643,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-org2abbd4d" class="outline-3">
-<h3 id="org2abbd4d"><span class="section-number-3">11.12</span> GLSL</h3>
+<div id="outline-container-org4754835" class="outline-3">
+<h3 id="org4754835"><span class="section-number-3">11.12</span> GLSL</h3>
 <div class="outline-text-3" id="text-11-12">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">(use-package glsl-mode)</span>
@@ -1642,8 +1652,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orgf631227" class="outline-3">
-<h3 id="orgf631227"><span class="section-number-3">11.13</span> Common Lisp</h3>
+<div id="outline-container-org51cb340" class="outline-3">
+<h3 id="org51cb340"><span class="section-number-3">11.13</span> Common Lisp</h3>
 <div class="outline-text-3" id="text-11-13">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222; font-style: italic;">;; </span><span style="color: #b22222; font-style: italic;">(use-package slime-company)</span>
@@ -1667,8 +1677,8 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 </div>
 </div>
-<div id="outline-container-orgd2e728f" class="outline-3">
-<h3 id="orgd2e728f"><span class="section-number-3">11.14</span> Clojure</h3>
+<div id="outline-container-org6fefb99" class="outline-3">
+<h3 id="org6fefb99"><span class="section-number-3">11.14</span> Clojure</h3>
 <div class="outline-text-3" id="text-11-14">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(add-to-list 'exec-path <span style="color: #8b2252;">"/usr/local/bin/"</span>)
@@ -1785,7 +1795,7 @@ startx ~/.emacs.d/exwm<sub>initrc</sub> &#x2013; /usr/bin/Xephyr :4 -screen 1885
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Ben Wiz</p>
-<p class="date">Created: 2022-04-01 Fri 09:25</p>
+<p class="date">Created: 2022-04-01 Fri 09:26</p>
 </div>
 </body>
 </html>

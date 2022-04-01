@@ -1,4 +1,3 @@
--*- eval: (add-hook 'after-save-hook 'org-html-export-to-html t t); -*-
 #+TITLE: settings.org | Ben Wiz
 * To Do
 ** look into tabs for emacs
@@ -38,26 +37,27 @@
 ** settings.org HTML Export
 [[https://benwiz.com/emacs][html export]]
 #+BEGIN_SRC emacs-lisp
-  ;; See top of file for eval that updates the html file
-  (use-package htmlize)
-  (setq org-html-validation-link "")
+  ;; Place the following at the very top of this org file: `-*- eval: (add-hook 'after-save-hook 'org-html-export-to-html t t); -*-`
+  ;; ;; See top of file for eval that updates the html file
+  ;; (use-package htmlize)
+  ;; (setq org-html-validation-link "")
 
 
-  ;; FIXME there is a bug here, these endlessly appends to the head, it need to not do this forever
-  (defun org-inline-css-hook (exporter)
-    "Insert custom inline css to automatically set the
-    background of code to whatever theme I'm using's background"
-    (when (eq exporter 'html)
-      (let* ((my-pre-bg (face-background 'default))
-             (my-pre-fg (face-foreground 'default)))
-        (setq org-html-head-extra
-              (concat org-html-head-extra
-                      (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
-                              my-pre-bg my-pre-fg)
-                      (format "<style type=\"text/css\">\n pre.src-emacs-lisp:before {background-color: %s; color: %s;}</style>\n"
-                              my-pre-fg my-pre-bg))))))
+  ;; ;; FIXME there is a bug here, these endlessly appends to the head, it need to not do this forever
+  ;; (defun org-inline-css-hook (exporter)
+  ;;   "Insert custom inline css to automatically set the
+  ;;   background of code to whatever theme I'm using's background"
+  ;;   (when (eq exporter 'html)
+  ;;     (let* ((my-pre-bg (face-background 'default))
+  ;;            (my-pre-fg (face-foreground 'default)))
+  ;;       (setq org-html-head-extra
+  ;;             (concat org-html-head-extra
+  ;;                     (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
+  ;;                             my-pre-bg my-pre-fg)
+  ;;                     (format "<style type=\"text/css\">\n pre.src-emacs-lisp:before {background-color: %s; color: %s;}</style>\n"
+  ;;                             my-pre-fg my-pre-bg))))))
 
-  (add-hook 'org-export-before-processing-hook 'org-inline-css-hook)
+  ;; (add-hook 'org-export-before-processing-hook 'org-inline-css-hook)
 #+END_SRC
 * Mouse / Touchpad
   #+begin_src emacs-lisp
