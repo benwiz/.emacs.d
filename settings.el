@@ -173,119 +173,120 @@
 
 (add-to-list 'after-make-frame-functions #'jbw/after-make-frame)
 (add-to-list 'delete-frame-functions #'jbw/delete-frame)
-(add-hook 'desktop-after-read-hook 'jbw/desktop-after-read-hook) ;; TODO it seems like this is running too soon, before the desktop loads
+;; (add-hook 'desktop-after-read-hook 'jbw/desktop-after-read-hook) ;; TODO it seems like this is running too soon, before the desktop loads
 
 (if *is-a-mac*
-      (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
-    (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
+        (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
+      (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
 
-  ;; emacs27 loads themes immediately, this line prevents that. Presumably there is a good reason
-  ;; for that and I should figure out a workaround. Also, this is a private variable so may change
-  ;; or go away in the future.
-  (setq custom--inhibit-theme-enable nil)
+    ;; emacs27 loads themes immediately, this line prevents that. Presumably there is a good reason
+    ;; for that and I should figure out a workaround. Also, this is a private variable so may change
+    ;; or go away in the future.
+    (setq custom--inhibit-theme-enable nil)
 
-  ;; Underline/highlight selected line
-  (global-hl-line-mode 1)
+    ;; Underline/highlight selected line
+    (global-hl-line-mode 1)
 
-  ;; Light theme. I like the default theme more than any other light theme I found.
-  ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.
-  ;; TODO need to set this following gray font, it is too light currently (make sure to be in light theme when reading this)
-  (set-face-attribute 'default nil :family "Ubuntu Mono" :height 135)
-  (set-face-attribute 'hl-line nil :background "#e3ffe3")
-  (set-face-attribute 'region nil :background "#E4E4E4")
-  (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
-  (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-  (set-face-attribute 'font-lock-constant-face nil :foreground "#255814") ;; Forest Green is default; DarkGreen is good; hex is darker forest green
-  (set-face-attribute 'font-lock-type-face nil :foreground "#006060") ;; DarkCyan (#008b8b) is default, hex is darker version
-  (set-face-attribute 'trailing-whitespace nil :background "#e0eeff")
-  ;; TODO better isearch colors for light theme
+    ;; Light theme. I like the default theme more than any other light theme I found.
+    ;; The following are global customizations I intend to apply to the default theme. There could be a more constrained way which would be better.
+    ;; TODO need to set this following gray font, it is too light currently (make sure to be in light theme when reading this)
+    (set-face-attribute 'default nil :family "Ubuntu Mono" :height 135)
+    (set-face-attribute 'hl-line nil :background "#e3ffe3")
+    (set-face-attribute 'region nil :background "#E4E4E4")
+    (set-face-attribute 'font-lock-comment-delimiter-face nil :slant 'italic)
+    (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
+    (set-face-attribute 'font-lock-constant-face nil :foreground "#255814") ;; Forest Green is default; DarkGreen is good; hex is darker forest green
+    (set-face-attribute 'font-lock-type-face nil :foreground "#006060") ;; DarkCyan (#008b8b) is default, hex is darker version
+    (set-face-attribute 'trailing-whitespace nil :background "#e0eeff")
+    ;; TODO better isearch colors for light theme
 
-  ;; Dark theme
-  (defun load-spolsky ()
-    "Load Spolsky."
-    (load-theme 'spolsky t)
-    (custom-theme-set-faces
-     'spolsky
-     `(default ((t (:foreground "#F2F2F2" :background "#161A1F"))))
-     `(hl-line ((t (:background "#1E252F" :underline nil))))
-     `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
-     `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
-     `(trailing-whitespace ((t (:background "#5a708c"))))
-     `(lsp-face-highlight-textual ((t (:background "#353535")))) ;; "#323E30" ;; "#555" is same as selection color, the other one is half way between hl-line and trailing-whitespace
-     `(org-level-4 ((t (:foreground "#EEEEBF"))))
-     `(isearch ((t (:foreground "#222222" :background "#b5ff80")))) ;; selected isearch results TODO cursor picks up background color and becomes very ugly
-     `(lazy-highlight ((t (:foreground "#222222" :background "#FF80F4")))) ;; other isearch results
-     ))
+    ;; Dark theme
+    (defun load-spolsky ()
+      "Load Spolsky."
+      (load-theme 'spolsky t)
+      (custom-theme-set-faces
+       'spolsky
+       `(default ((t (:foreground "#F2F2F2" :background "#161A1F"))))
+       `(hl-line ((t (:background "#1E252F" :underline nil))))
+       `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
+       `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
+       `(trailing-whitespace ((t (:background "#5a708c"))))
+       `(lsp-face-highlight-textual ((t (:background "#353535")))) ;; "#323E30" ;; "#555" is same as selection color, the other one is half way between hl-line and trailing-whitespace
+       `(org-level-4 ((t (:foreground "#EEEEBF"))))
+       `(isearch ((t (:foreground "#222222" :background "#b5ff80")))) ;; selected isearch results TODO cursor picks up background color and becomes very ugly
+       `(lazy-highlight ((t (:foreground "#222222" :background "#FF80F4")))) ;; other isearch results
+       ))
 
-  ;; Start in spolsky
-  (add-hook 'after-make-frame-functions (lambda (frame) (load-spolsky)))
-  (load-spolsky)
+    ;; Start in spolsky
+    (add-hook 'after-make-frame-functions (lambda (frame) (load-spolsky)))
+    (load-spolsky)
 
-  ;; Toggle themes
-  (defun toggle-theme ()
-    "Toggle Spolsky theme on and off."
-    (interactive)
-    (if (member 'spolsky custom-enabled-themes)
+    ;; Toggle themes
+    (defun toggle-theme ()
+      "Toggle Spolsky theme on and off."
+      (interactive)
+      (if (member 'spolsky custom-enabled-themes)
+          (progn
+           (f-write-text "light" 'utf-8 "~/.theme")
+           (disable-theme 'spolsky))
         (progn
-         (f-write-text "light" 'utf-8 ".theme")
-         (disable-theme 'spolsky))
-      (progn
-       (f-write-text "dark" 'utf-8 ".theme")
-       (load-spolsky) ;; (enable-theme 'spolsky) ;; This should work (and did work I think) because spolsky has been loaded before
-       )))
-  (global-unset-key (kbd "<f10>"))
-  (global-set-key (kbd "<f10>") 'toggle-theme)
+         (f-write-text "dark" 'utf-8 "~/.theme")
+         (load-spolsky) ;; (enable-theme 'spolsky) ;; This should work (and did work I think) because spolsky has been loaded before
+         )))
+    (global-unset-key (kbd "<f10>"))
+    (global-set-key (kbd "<f10>") 'toggle-theme)
 
-  ;; Modeline
-  (use-package all-the-icons)
-  (use-package doom-modeline
-    ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
-    ;; https://github.com/seagle0128/doom-modeline#customize
-    :hook (after-init . doom-modeline-mode)
-    :config
-    (setq doom-modeline-minor-modes nil)
-    (setq doom-modeline-buffer-state-icon t)
-    (setq doom-modeline-buffer-encoding nil)
-    (setq doom-modeline-vcs-max-length 20)
-    ;; (setq doom-modeline-persp-name t)
-    ;; (setq doom-modeline-display-default-persp-name t)
-    (setq doom-modeline-env-version t)
-    )
-
-  (use-package pomodoro
-    :config
-    (defun pomodoro-add-to-mode-line* ()
-      "My version of pomodoro-add-to-mode-line"
-      (if (not (member '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
-          (setq-default mode-line-format (cons '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format)))
-      ;; For development, removing it from list is helpful
-      ;; (setq-default mode-line-format (remove '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
+    ;; Modeline
+    (use-package all-the-icons)
+    (use-package doom-modeline
+      ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
+      ;; https://github.com/seagle0128/doom-modeline#customize
+      :hook (after-init . doom-modeline-mode)
+      :config
+      (setq doom-modeline-minor-modes nil)
+      (setq doom-modeline-buffer-state-icon t)
+      (setq doom-modeline-buffer-encoding nil)
+      (setq doom-modeline-vcs-max-length 20)
+      ;; (setq doom-modeline-persp-name t)
+      ;; (setq doom-modeline-display-default-persp-name t)
+      (setq doom-modeline-env-version t)
       )
-    (pomodoro-add-to-mode-line*)
-    )
 
-  (use-package redtick)
-
-  ;; Tabs
-(setq tab-bar-new-tab-choice "*scratch*"
-      tab-bar-show nil
-      ;; desktop-auto-save-timeout nil
-      ;; desktop-save 'ask-if-new
-      ;; desktop-dirname "./"
-      ;; desktop-path (list desktop-dirname)
-      ;; desktop-load-locked-desktop 'ask
-      ;; desktop-restore-forces-onscreen nil
+    (use-package pomodoro
+      :config
+      (defun pomodoro-add-to-mode-line* ()
+        "My version of pomodoro-add-to-mode-line"
+        (if (not (member '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
+            (setq-default mode-line-format (cons '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format)))
+        ;; For development, removing it from list is helpful
+        ;; (setq-default mode-line-format (remove '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
+        )
+      (pomodoro-add-to-mode-line*)
       )
-;; (add-hook 'desktop-after-read-hook
-;;           (lambda ()
-;;             (frameset-restore
-;;              desktop-saved-frameset
-;;              :reuse-frames (eq desktop-restore-reuses-frames t)
-;;              :cleanup-frames (not (eq desktop-restore-reuses-frames 'keep))
-;;              :force-display desktop-restore-in-current-display
-;;              :force-onscreen desktop-restore-forces-onscreen)))
-(defun current-tab-name ()
-  (alist-get 'name (tab-bar--current-tab)))
+
+    (use-package redtick)
+
+    ;; Tabs
+;; TODO create the tabs programatically
+  (setq tab-bar-new-tab-choice "*scratch*"
+        tab-bar-show nil
+        ;; desktop-auto-save-timeout nil
+        ;; desktop-save 'ask-if-new
+        ;; desktop-dirname "./"
+        ;; desktop-path (list desktop-dirname)
+        ;; desktop-load-locked-desktop 'ask
+        ;; desktop-restore-forces-onscreen nil
+        )
+  ;; (add-hook 'desktop-after-read-hook
+  ;;           (lambda ()
+  ;;             (frameset-restore
+  ;;              desktop-saved-frameset
+  ;;              :reuse-frames (eq desktop-restore-reuses-frames t)
+  ;;              :cleanup-frames (not (eq desktop-restore-reuses-frames 'keep))
+  ;;              :force-display desktop-restore-in-current-display
+  ;;              :force-onscreen desktop-restore-forces-onscreen)))
+  (defun current-tab-name ()
+    (alist-get 'name (tab-bar--current-tab)))
 
 (if (file-exists-p "~/.emacs.d/emacs.env")
     (use-package load-env-vars
