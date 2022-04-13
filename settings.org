@@ -395,14 +395,15 @@
 ** Git
  #+BEGIN_SRC emacs-lisp
    (defun jbw/git-commit-setup ()
-     (when (string-equal (nth 0 (last (split-string (pwd) "/") 2)) "master-at-arms2")
-       (insert
-        (concat
-         (nth 0 (split-string
-                 (shell-command-to-string
-                  "git diff --name-only --cached")
-                 "/"))
-         ": "))))
+     ;; (message (concat "AA 2:" (last (substring (shell-command-to-string "basename `git rev-parse --show-toplevel`") 0 -1))))
+     ;; TODO limit to only master-at-arms2
+     (insert
+      (concat
+       (nth 0 (split-string
+               (shell-command-to-string
+                "git diff --name-only --cached")
+               "/"))
+       ": ")))
 
      (use-package magit
        :init

@@ -349,25 +349,34 @@
     :init (setq bela-scripts-dir "~/code/Bela/scripts/")))
 
 (defun jbw/git-commit-setup ()
-  (insert "#123 "))
+  (message "AA 2:" default-directory)
+  (when (string-equal (nth 0 (last (split-string default-directory "/") 2)) "master-at-arms2")
+    (insert
+     (concat
+      (nth 0 (split-string
+              (shell-command-to-string
+               "git diff --name-only --cached")
+              "/"))
+      ": "))))
 
-(use-package magit
-  :config
-  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
-  (add-hook 'git-commit-setup-hook 'my-git-commit-setup))
+  (use-package magit
+    :init
+    (add-hook 'git-commit-setup-hook 'jbw/git-commit-setup)
+    :config
+    (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
-(use-package git-link
-  :config
-  (global-set-key (kbd "C-c g l") 'git-link))
+  (use-package git-link
+    :config
+    (global-set-key (kbd "C-c g l") 'git-link))
 
-(use-package switch-buffer-functions) ;; although this is not explicitly git, my only use case currently is diff-hl
-(use-package diff-hl
-  :after (switch-buffer-functions)
-  :config
-  ;; do not use diff-hl-flydiff-mode for fear of speed issues
-  (diff-hl-margin-mode)
-  (add-hook 'switch-buffer-functions (lambda (prev curr) (diff-hl-update))) ;; update diff when switching buffers
-  (global-diff-hl-mode))
+  (use-package switch-buffer-functions) ;; although this is not explicitly git, my only use case currently is diff-hl
+  (use-package diff-hl
+    :after (switch-buffer-functions)
+    :config
+    ;; do not use diff-hl-flydiff-mode for fear of speed issues
+    (diff-hl-margin-mode)
+    (add-hook 'switch-buffer-functions (lambda (prev curr) (diff-hl-update))) ;; update diff when switching buffers
+    (global-diff-hl-mode))
 
 (use-package restart-emacs)
 (use-package dictionary)
