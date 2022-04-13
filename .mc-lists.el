@@ -34,6 +34,7 @@
         move-to-window-line-top-bottom
         org-cycle
         org-delete-char
+        org-force-self-insert
         org-metaright
         org-self-insert-command
         org-todo
