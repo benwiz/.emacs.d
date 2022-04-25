@@ -172,9 +172,10 @@
   (when (string= "light" (f-read ".theme" 'utf-8))
     (toggle-theme)))
 
-(add-to-list 'after-make-frame-functions #'jbw/after-make-frame)
-(add-to-list 'delete-frame-functions #'jbw/delete-frame)
-;; (add-hook 'desktop-after-read-hook 'jbw/desktop-after-read-hook) ;; TODO it seems like this is running too soon, before the desktop loads
+;; Decided I didn't like all the windows re-opening because I always had to confirm unsafe vars. If I every resolve that with emacs daemon I'd go back to the desktop loading.
+;; (add-to-list 'after-make-frame-functions #'jbw/after-make-frame)
+;; (add-to-list 'delete-frame-functions #'jbw/delete-frame)
+(add-hook 'desktop-after-read-hook 'jbw/desktop-after-read-hook)
 
 (if *is-a-mac*
     (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
@@ -349,15 +350,15 @@
     :init (setq bela-scripts-dir "~/code/Bela/scripts/")))
 
 (defun jbw/git-commit-setup ()
-  (message "AA 2:" default-directory)
-  (when (string-equal (nth 0 (last (split-string default-directory "/") 2)) "master-at-arms2")
-    (insert
-     (concat
-      (nth 0 (split-string
-              (shell-command-to-string
-               "git diff --name-only --cached")
-              "/"))
-      ": "))))
+  ;; (message (concat "AA 2:" (last (substring (shell-command-to-string "basename `git rev-parse --show-toplevel`") 0 -1))))
+  ;; TODO limit to only master-at-arms2
+  (insert
+   (concat
+    (nth 0 (split-string
+            (shell-command-to-string
+             "git diff --name-only --cached")
+            "/"))
+    ": ")))
 
   (use-package magit
     :init
@@ -856,6 +857,8 @@ current buffer's, reload dir-locals."
   :init (setq markdown-command "pandoc --standalone --from gfm Form-Curator.md --highlight-style kate"))
 
 (use-package markdown-toc)
+
+(add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-tail-mode))
 
 (add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
 

@@ -31,6 +31,7 @@
         magit-status
         mark-sexp
         markdown-outdent-or-delete
+        mode-line-other-buffer
         move-to-window-line-top-bottom
         org-cycle
         org-delete-char

@@ -205,9 +205,10 @@
     (when (string= "light" (f-read ".theme" 'utf-8))
       (toggle-theme)))
 
-  (add-to-list 'after-make-frame-functions #'jbw/after-make-frame)
-  (add-to-list 'delete-frame-functions #'jbw/delete-frame)
-  ;; (add-hook 'desktop-after-read-hook 'jbw/desktop-after-read-hook) ;; TODO it seems like this is running too soon, before the desktop loads
+  ;; Decided I didn't like all the windows re-opening because I always had to confirm unsafe vars. If I every resolve that with emacs daemon I'd go back to the desktop loading.
+  ;; (add-to-list 'after-make-frame-functions #'jbw/after-make-frame)
+  ;; (add-to-list 'delete-frame-functions #'jbw/delete-frame)
+  ;; (add-hook 'desktop-after-read-hook 'jbw/desktop-after-read-hook) ;; I had a note here before about something not working, trying to execute too soon.
 #+END_SRC
 * Theme, Modeline, and Tabs
 #+BEGIN_SRC emacs-lisp
@@ -928,6 +929,10 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
     :init (setq markdown-command "pandoc --standalone --from gfm Form-Curator.md --highlight-style kate"))
 
   (use-package markdown-toc)
+#+END_SRC
+** Log Files
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-tail-mode))
 #+END_SRC
 ** Bash
 #+BEGIN_SRC emacs-lisp
