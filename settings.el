@@ -175,7 +175,7 @@
 ;; Decided I didn't like all the windows re-opening because I always had to confirm unsafe vars. If I every resolve that with emacs daemon I'd go back to the desktop loading.
 ;; (add-to-list 'after-make-frame-functions #'jbw/after-make-frame)
 ;; (add-to-list 'delete-frame-functions #'jbw/delete-frame)
-(add-hook 'desktop-after-read-hook 'jbw/desktop-after-read-hook)
+;; (add-hook 'desktop-after-read-hook 'jbw/desktop-after-read-hook) ;; I had a note here before about something not working, trying to execute too soon.
 
 (if *is-a-mac*
     (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
@@ -1148,3 +1148,5 @@ Then the Clojure buffer is activated as if nothing happened."
     (insert " ; ")))
 
 (advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
+
+(use-package php-mode)

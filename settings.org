@@ -1,5 +1,6 @@
 #+TITLE: settings.org | Ben Wiz
 * To Do
+** clojure lsp
 ** look into tabs for emacs
 ** Set up dashboard
 *** list the windows in each tab
@@ -1242,4 +1243,8 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
       (insert " ; ")))
 
   (advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
+#+END_SRC
+** PHP
+#+BEGIN_SRC emacs-lisp
+(use-package php-mode)
 #+END_SRC
