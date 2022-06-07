@@ -365,7 +365,7 @@
   (global-set-key (kbd "C-c w") 'widen)
   (global-set-key (kbd "C-l") (lambda ()
                                 (interactive)
-                                (recenter-top-bottom (/ (window-height) 4))))
+                                (recenter-top-bottom (round (* 0.37 (window-height))))))
 
   (use-package dired
     :ensure nil ;; dired is not package.el
