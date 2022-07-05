@@ -738,7 +738,7 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
           (when (equal default-directory dir))
           (my-reload-dir-locals-for-current-buffer)))))
 #+END_SRC
-* Programming / Text Editing
+* File Types
 ** All
 #+BEGIN_SRC emacs-lisp
   (use-package ws-butler
@@ -799,6 +799,10 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 
   ;; (use-package symbol-overlay)
 
+#+END_SRC
+** PDF
+#+BEGIN_SRC emacs-lisp
+(add-hook 'doc-view-mode-hook 'auto-revert-mode)
 #+END_SRC
 ** Paredit
 #+BEGIN_SRC emacs-lisp
