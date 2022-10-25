@@ -19,6 +19,7 @@
         company-indent-or-complete-common
         counsel-yank-pop
         dabbrev-expand
+        diff-hl-previous-hunk
         down-list
         electric-newline-and-maybe-indent
         forward-sexp
@@ -32,6 +33,8 @@
         mark-sexp
         markdown-outdent-or-delete
         mode-line-other-buffer
+        mouse-buffer-menu
+        mouse-drag-region-rectangle
         move-to-window-line-top-bottom
         org-cycle
         org-delete-char

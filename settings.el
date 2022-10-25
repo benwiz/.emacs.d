@@ -34,11 +34,11 @@
 
 ;; (add-hook 'org-export-before-processing-hook 'org-inline-css-hook)
 
-;; Shut off mouse clicks because my work computer's trackpad is super annoying, resizing windows with mouse still works
-(global-unset-key (kbd "<down-mouse-1>"))
-(global-unset-key (kbd "<mouse-1>"))
-(global-unset-key (kbd "<down-mouse-3>"))
-(global-unset-key (kbd "<mouse-3>"))
+;; ;; Shut off mouse clicks because my work computer's trackpad is super annoying, resizing windows with mouse still works
+;; (global-unset-key (kbd "<down-mouse-1>"))
+;; (global-unset-key (kbd "<mouse-1>"))
+;; (global-unset-key (kbd "<down-mouse-3>"))
+;; (global-unset-key (kbd "<mouse-3>"))
 
 (when window-system
   (blink-cursor-mode 0)                           ; Disable the cursor blinking
@@ -92,9 +92,9 @@
 (show-paren-mode)                                 ; Show matching parenthesis
 (desktop-save-mode 0)                             ; Don't save buffer and window state
 
-;(if (eq window-system 'ns)
-;  (add-to-list 'default-frame-alist '(maximized .))
-;  (add-to-list 'default-frame-alist '(fullscreen .)))
+;;(if (eq window-system 'ns)
+;;  (add-to-list 'default-frame-alist '(maximized .))
+;;  (add-to-list 'default-frame-alist '(fullscreen .)))
 (add-hook 'after-make-frame-functions
           (lambda (frame)
             (set-frame-parameter frame 'fullscreen 'fullboth)
@@ -243,7 +243,7 @@
 (use-package doom-modeline
   ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
   ;; https://github.com/seagle0128/doom-modeline#customize
-  :hook (after-init . doom-modeline-mode)
+  :hook (window-setup . doom-modeline-mode) ;; (after-init . doom-modeline-mode)
   :config
   (setq doom-modeline-minor-modes nil)
   (setq doom-modeline-buffer-state-icon t)
@@ -254,19 +254,19 @@
   (setq doom-modeline-env-version t)
   )
 
-(use-package pomodoro
-  :config
-  (defun pomodoro-add-to-mode-line* ()
-    "My version of pomodoro-add-to-mode-line"
-    (if (not (member '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
-        (setq-default mode-line-format (cons '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format)))
-    ;; For development, removing it from list is helpful
-    ;; (setq-default mode-line-format (remove '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
-    )
-  (pomodoro-add-to-mode-line*)
-  )
+;; (use-package pomodoro
+;;   :config
+;;   (defun pomodoro-add-to-mode-line* ()
+;;     "My version of pomodoro-add-to-mode-line"
+;;     (if (not (member '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
+;;         (setq-default mode-line-format (cons '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format)))
+;;     ;; For development, removing it from list is helpful
+;;     ;; (setq-default mode-line-format (remove '(pomodoro-mode-line-string pomodoro-mode-line-string) mode-line-format))
+;;     )
+;;   (pomodoro-add-to-mode-line*)
+;;   )
 
-(use-package redtick)
+;; (use-package redtick)
 
 ;; Tabs
 ;; TODO create the tabs programatically
@@ -401,7 +401,8 @@
 
 (use-package undo-tree
   :config
-  (global-undo-tree-mode))
+  (global-undo-tree-mode)
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
 
 ;; (use-package restclient
 ;;   :mode ("\\.http\\'" . restclient-mode))
@@ -668,6 +669,8 @@
 
 ;;   (setq multi-term-buffer-name "term"))
 
+(use-package request)
+
 (defun my-reload-dir-locals-for-all-buffer-in-this-directory ()
   "For every buffer with the same `default-directory` as the
 current buffer's, reload dir-locals."
@@ -736,6 +739,8 @@ current buffer's, reload dir-locals."
 
 ;; (use-package symbol-overlay)
 
+(add-hook 'doc-view-mode-hook 'auto-revert-mode)
+
 (defun paredit-delete-indentation (&optional arg)
   "Handle joining lines that end in a comment."
   (interactive "*P")
@@ -782,48 +787,44 @@ current buffer's, reload dir-locals."
 
 (global-set-key (kbd "M-k") 'kill-symbol)
 
-;; (setq lsp-keymap-prefix "C-l")
-;; (use-package lsp-mode
-;;   ;; :hook ((clojure-mode . lsp)
-;;   ;;        (clojurec-mode . lsp)
-;;   ;;        (clojurescript-mode . lsp)
-;;   ;;        (c++-mode . lsp)
-;;   ;;        ;; (python-mode . lsp)
-;;   ;;        ;; (javascript-mode . lsp)
-;;   ;;        ;; (java-mode . lsp)
-;;   ;;        ;; (c++-mode . lsp)
-;;   ;;        )
-;;   ;; :commands lsp
-;;   :config
-;;   (setq lsp-modeline-code-actions-segments '(icon)
-;;         lsp-modeline-diagnostics-enable nil
-;;         lsp-enable-file-watchers nil
-;;         lsp-enable-indentation nil
-;;         lsp-enable-on-type-formatting nil
-;;         ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
-;;         gc-cons-threshold 100000000
-;;         read-process-output-max (* 1024 1024)
-;;         lsp-completion-provider :capf))
-;; (use-package lsp-ui
-;;   :commands lsp-ui-mode
-;;   :config
-;;   (setq lsp-ui-doc-enable nil
-;;         lsp-ui-sideline-show-code-actions nil))
-;; (use-package lsp-ivy
-;;   :commands lsp-ivy-workspace-symbol
-;;   :config
-;;   (define-key lsp-command-map "i"
-;;     (lambda ()
-;;       (interactive)
-;;       (setq current-prefix-arg '(4))
-;;       (call-interactively 'lsp-ivy-workspace-symbol))))
-;; (use-package company-lsp
-;;   :commands company-lsp)
+(setq lsp-keymap-prefix "C-i")
 
-;; ;; NOTE modify like below to defer
-;; ;; (use-package lsp-mode
-;; ;;     :hook (XXX-mode . lsp-deferred)
-;; ;;     :commands (lsp lsp-deferred))
+(use-package lsp-mode
+  :hook (;; (clojure-mode . lsp)
+         ;; (clojurec-mode . lsp)
+         ;; (clojurescript-mode . lsp)
+         ;; (c++-mode . lsp)
+         ;; (python-mode . lsp)
+         ;; (javascript-mode . lsp)
+         ;; (java-mode . lsp)
+         ;; (c++-mode . lsp)
+         )
+  :commands lsp
+  :config
+  (setq lsp-modeline-code-actions-segments '(icon)
+        lsp-modeline-diagnostics-enable nil
+        lsp-enable-file-watchers nil
+        lsp-enable-indentation nil
+        lsp-enable-on-type-formatting nil
+        ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
+        gc-cons-threshold 100000000
+        read-process-output-max (* 1024 1024)
+        lsp-completion-provider :capf))
+
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-doc-enable nil
+        lsp-ui-sideline-show-code-actions nil))
+
+(use-package lsp-ivy
+  :commands lsp-ivy-workspace-symbol
+  :config
+  (define-key lsp-command-map "i"
+    (lambda ()
+      (interactive)
+      (setq current-prefix-arg '(4))
+      (call-interactively 'lsp-ivy-workspace-symbol))))
 
 ;; (use-package org-tempo)
 (define-key org-mode-map (kbd "M-n") 'org-todo)
@@ -1094,6 +1095,10 @@ Then the Clojure buffer is activated as if nothing happened."
   (cider-switch-to-last-clojure-buffer)
   (message ""))
 
+(defun ha/cider-append-comment ()
+  (when (null (nth 8 (syntax-ppss)))
+    (insert " ; ")))
+
 (use-package cider
   :commands (cider cider-connect cider-jack-in cider-jack-in-clj cider-jack-in-cljs)
 
@@ -1118,12 +1123,12 @@ Then the Clojure buffer is activated as if nothing happened."
   (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
 
   :bind (:map cider-mode-map
-         ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
-         ("C-c C-p"     . cider-pprint-eval-last-sexp-to-comment)
-         ("C-c C-<tab>" . cider-format-edn-region))
-        (:map cider-repl-mode-map
-              ("C-c C-l"     . cider-repl-clear-buffer)
+              ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
+              ("C-c C-p"     . cider-pprint-eval-last-sexp-to-comment)
               ("C-c C-<tab>" . cider-format-edn-region))
+  (:map cider-repl-mode-map
+        ("C-c C-l"     . cider-repl-clear-buffer)
+        ("C-c C-<tab>" . cider-format-edn-region))
 
   :config
   (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
@@ -1132,20 +1137,16 @@ Then the Clojure buffer is activated as if nothing happened."
   (add-to-list 'exec-path "/home/benwiz/.nvm/versions/node/v14.4.0/bin")
   (setq exec-path (append '("/Users/benwiz/.yarn/bin") exec-path))
   (setq cider-cljs-repl-types '((nashorn "(do (require 'cljs.repl.nashorn) (cider.piggieback/cljs-repl (cljs.repl.nashorn/repl-env)))" cider-check-nashorn-requirements)
-                              (figwheel "(do (require 'figwheel-sidecar.repl-api) (figwheel-sidecar.repl-api/start-figwheel!) (figwheel-sidecar.repl-api/cljs-repl))" cider-check-figwheel-requirements)
-                              (figwheel-main cider-figwheel-main-init-form cider-check-figwheel-main-requirements)
-                              (figwheel-connected "(figwheel-sidecar.repl-api/cljs-repl)" cider-check-figwheel-requirements)
-                              (node "(do (require 'cljs.repl.node) (cider.piggieback/cljs-repl (cljs.repl.node/repl-env)))" cider-check-node-requirements)
-                              (weasel "(do (require 'weasel.repl.websocket) (cider.piggieback/cljs-repl (weasel.repl.websocket/repl-env :ip \"127.0.0.1\" :port 9001)))" cider-check-weasel-requirements)
-                              (boot "(do (require 'adzerk.boot-cljs-repl) (adzerk.boot-cljs-repl/start-repl))" cider-check-boot-requirements)
-                              (app cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements) ;; this is what is being added
-                              (shadow cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements)
-                              (shadow-select cider-shadow-select-cljs-init-form cider-check-shadow-cljs-requirements)
-                              (custom cider-custom-cljs-repl-init-form nil))))
-
-(defun ha/cider-append-comment ()
-  (when (null (nth 8 (syntax-ppss)))
-    (insert " ; ")))
+                                (figwheel "(do (require 'figwheel-sidecar.repl-api) (figwheel-sidecar.repl-api/start-figwheel!) (figwheel-sidecar.repl-api/cljs-repl))" cider-check-figwheel-requirements)
+                                (figwheel-main cider-figwheel-main-init-form cider-check-figwheel-main-requirements)
+                                (figwheel-connected "(figwheel-sidecar.repl-api/cljs-repl)" cider-check-figwheel-requirements)
+                                (node "(do (require 'cljs.repl.node) (cider.piggieback/cljs-repl (cljs.repl.node/repl-env)))" cider-check-node-requirements)
+                                (weasel "(do (require 'weasel.repl.websocket) (cider.piggieback/cljs-repl (weasel.repl.websocket/repl-env :ip \"127.0.0.1\" :port 9001)))" cider-check-weasel-requirements)
+                                (boot "(do (require 'adzerk.boot-cljs-repl) (adzerk.boot-cljs-repl/start-repl))" cider-check-boot-requirements)
+                                (app cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements) ;; this is what is being added
+                                (shadow cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements)
+                                (shadow-select cider-shadow-select-cljs-init-form cider-check-shadow-cljs-requirements)
+                                (custom cider-custom-cljs-repl-init-form nil))))
 
 (advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
 
