@@ -181,10 +181,12 @@
     (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
   (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
 
-;; emacs27 loads themes immediately, this line prevents that. Presumably there is a good reason
-;; for that and I should figure out a workaround. Also, this is a private variable so may change
-;; or go away in the future.
-(setq custom--inhibit-theme-enable nil)
+;; Try to speed up font lock, I have identified it using the profiler as the major bottleneck in my lag
+(setq jit-lock-stealth-time 16
+      ;; jit-lock-defer-contextually t ;; this is something to look into, I copied the `t` from the wiki but it isn't the default
+      ;; jit-lock-stealth-nice 0.5
+      )
+(setq-default font-lock-multiline 'undecided)
 
 ;; Underline/highlight selected line
 (global-hl-line-mode 1)
@@ -206,18 +208,20 @@
 (defun load-spolsky ()
   "Load Spolsky."
   (load-theme 'spolsky t)
-  (custom-theme-set-faces
-   'spolsky
-   `(default ((t (:foreground "#F2F2F2" :background "#161A1F"))))
-   `(hl-line ((t (:background "#1E252F" :underline nil))))
-   `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
-   `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
-   `(trailing-whitespace ((t (:background "#5a708c"))))
-   `(lsp-face-highlight-textual ((t (:background "#353535")))) ;; "#323E30" ;; "#555" is same as selection color, the other one is half way between hl-line and trailing-whitespace
-   `(org-level-4 ((t (:foreground "#EEEEBF"))))
-   `(isearch ((t (:foreground "#222222" :background "#b5ff80")))) ;; selected isearch results TODO cursor picks up background color and becomes very ugly
-   `(lazy-highlight ((t (:foreground "#222222" :background "#FF80F4")))) ;; other isearch results
-   ))
+  (let ((custom--inhibit-theme-enable nil)) ;; https://emacs.stackexchange.com/questions/48365/custom-theme-set-faces-does-not-work-in-emacs-27
+    (custom-theme-set-faces
+     'spolsky
+     `(default ((t (:foreground "#F2F2F2" :background "#161A1F"))))
+     `(hl-line ((t (:background "#222e3a" :underline nil :overline nil)))) ;; 7b96b1
+     `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
+     `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
+     `(trailing-whitespace ((t (:background "#5a708c"))))
+     `(lsp-face-highlight-textual ((t (:background "#353535")))) ;; "#323E30" ;; "#555" is same as selection color, the other one is half way between hl-line and trailing-whitespace
+     `(org-level-4 ((t (:foreground "#EEEEBF"))))
+     `(isearch ((t (:foreground "#222222" :background "#b5ff80")))) ;; selected isearch results TODO cursor picks up background color and becomes very ugly
+     `(lazy-highlight ((t (:foreground "#222222" :background "#FF80F4")))) ;; other isearch results
+     ))
+  )
 
 ;; Start in spolsky
 (add-hook 'after-make-frame-functions (lambda (frame) (load-spolsky)))
@@ -360,24 +364,24 @@
             "/"))
     ": ")))
 
-  (use-package magit
-    :init
-    (add-hook 'git-commit-setup-hook 'jbw/git-commit-setup)
-    :config
-    (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+(use-package magit
+  ;; :init
+  ;; (add-hook 'git-commit-setup-hook 'jbw/git-commit-setup)
+  :config
+  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
-  (use-package git-link
-    :config
-    (global-set-key (kbd "C-c g l") 'git-link))
+(use-package git-link
+  :config
+  (global-set-key (kbd "C-c g l") 'git-link))
 
-  (use-package switch-buffer-functions) ;; although this is not explicitly git, my only use case currently is diff-hl
-  (use-package diff-hl
-    :after (switch-buffer-functions)
-    :config
-    ;; do not use diff-hl-flydiff-mode for fear of speed issues
-    (diff-hl-margin-mode)
-    (add-hook 'switch-buffer-functions (lambda (prev curr) (diff-hl-update))) ;; update diff when switching buffers
-    (global-diff-hl-mode))
+(use-package switch-buffer-functions) ;; although this is not explicitly git, my only use case currently is diff-hl
+(use-package diff-hl
+  :after (switch-buffer-functions)
+  :config
+  ;; do not use diff-hl-flydiff-mode for fear of speed issues
+  (diff-hl-margin-mode)
+  (add-hook 'switch-buffer-functions (lambda (prev curr) (diff-hl-update))) ;; update diff when switching buffers
+  (global-diff-hl-mode))
 
 (use-package restart-emacs)
 (use-package dictionary)
@@ -671,6 +675,10 @@
 
 (use-package request)
 
+(use-package eldoc
+  :init
+  )
+
 (defun my-reload-dir-locals-for-all-buffer-in-this-directory ()
   "For every buffer with the same `default-directory` as the
 current buffer's, reload dir-locals."
@@ -681,6 +689,19 @@ current buffer's, reload dir-locals."
         (when (equal default-directory dir))
         (my-reload-dir-locals-for-current-buffer)))))
 
+;; I sometimes notice that the safe-local-variables does not persist
+;; so add it all here
+(setq safe-local-variable-values
+      (append safe-local-variable-values
+              '((cider-shadow-default-options . ":app")
+                (eval add-hook 'cider-connected-hook
+                      (lambda nil
+                        (shell-command "./git-version.sh"))
+                      nil t)
+                (cider-default-cljs-repl . shadow)
+                (cider-preferred-build-tool . shadow-cljs)
+                (eval add-hook 'after-save-hook 'org-html-export-to-html t t))))
+
 (use-package ws-butler
   :hook (prog-mode . ws-butler-mode)
   :config (ws-butler-global-mode 1))
@@ -690,7 +711,8 @@ current buffer's, reload dir-locals."
   (editorconfig-mode 1))
 
 (use-package flycheck
-  :init (global-flycheck-mode))
+  ;; :init (global-flycheck-mode) ;; no longer want this becasue of eglot
+  )
 
 (use-package expand-region
   :config
@@ -702,6 +724,10 @@ current buffer's, reload dir-locals."
   (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
   ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
   )
+
+(use-package eglot
+  :init
+  (add-hook 'language-mode-hook #'eglot-ensure))
 
 (use-package hideshow
   :bind (("C-\\" . hs-toggle-hiding)
@@ -787,45 +813,6 @@ current buffer's, reload dir-locals."
 
 (global-set-key (kbd "M-k") 'kill-symbol)
 
-(setq lsp-keymap-prefix "C-i")
-
-(use-package lsp-mode
-  :hook (;; (clojure-mode . lsp)
-         ;; (clojurec-mode . lsp)
-         ;; (clojurescript-mode . lsp)
-         ;; (c++-mode . lsp)
-         ;; (python-mode . lsp)
-         ;; (javascript-mode . lsp)
-         ;; (java-mode . lsp)
-         ;; (c++-mode . lsp)
-         )
-  :commands lsp
-  :config
-  (setq lsp-modeline-code-actions-segments '(icon)
-        lsp-modeline-diagnostics-enable nil
-        lsp-enable-file-watchers nil
-        lsp-enable-indentation nil
-        lsp-enable-on-type-formatting nil
-        ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
-        gc-cons-threshold 100000000
-        read-process-output-max (* 1024 1024)
-        lsp-completion-provider :capf))
-
-(use-package lsp-ui
-  :commands lsp-ui-mode
-  :config
-  (setq lsp-ui-doc-enable nil
-        lsp-ui-sideline-show-code-actions nil))
-
-(use-package lsp-ivy
-  :commands lsp-ivy-workspace-symbol
-  :config
-  (define-key lsp-command-map "i"
-    (lambda ()
-      (interactive)
-      (setq current-prefix-arg '(4))
-      (call-interactively 'lsp-ivy-workspace-symbol))))
-
 ;; (use-package org-tempo)
 (define-key org-mode-map (kbd "M-n") 'org-todo)
 ;; (define-key global-map (kbd "C-c l") 'org-store-link)
@@ -881,7 +868,7 @@ current buffer's, reload dir-locals."
 
   (add-hook 'rjsx-mode-hook
             (lambda ()
-              (flycheck-select-checker "javascript-eslint")
+              ;; (flycheck-select-checker "javascript-eslint")
               (electric-pair-mode 1)))
 
   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
@@ -1043,20 +1030,11 @@ current buffer's, reload dir-locals."
 ;;   (define-key slime-mode-map (kbd "C-c C-x j j") 'slime-connect-localhost-4005)
 ;;   (define-key slime-mode-map (kbd "C-c C-e") 'slime-eval-last-expression))
 
+;; TODO these exec paths probably should be at a much more primitive place in this settings.org
 (add-to-list 'exec-path "/usr/local/bin/")
 (add-to-list 'exec-path "/home/benwiz/bin/")
-(use-package clojure-snippets)
-(use-package flycheck-clj-kondo) ;; NOTE .clj-kondo/ is in .emacs.d/ for version control, it must be symlinked to home `ln -s ~/.emacs.d/.clj-kondo/ ~/.clj-kondo/`
 
-;; (use-package clj-refactor
-;;   :init (add-hook 'clojure-mode-hook (lambda ()
-;;     (yas-minor-mode 1)
-;;     (clj-refactor-mode 1)
-;;     (cljr-add-keybindings-with-prefix "C-c C-m"))))
-
-;; (use-package anakondo
-;;   :ensure t
-;;   :commands anakondo-minor-mode)
+;; TODO Configure clojure-lsp, using as a starting point ~/.emacs.d/.clj-kondo/
 
 (defun insert-discard ()
   "Insert #_ at current location."
@@ -1075,11 +1053,8 @@ current buffer's, reload dir-locals."
        clojure-align-forms-automatically t)
  :config
  (add-hook 'clojure-mode-hook 'paredit-mode)
- ;; (add-hook 'clojure-mode-hook #'anakondo-minor-mode)
- ;; (add-hook 'clojurescript-mode-hook #'anakondo-minor-mode)
- ;; (add-hook 'clojurec-mode-hook #'anakondo-minor-mode)
- (require 'flycheck-clj-kondo)
- )
+ (add-hook 'clojure-mode-hook 'eglot-ensure)
+ (add-hook 'clojurescript-mode-hook 'eglot-ensure))
 
 (defun cider-send-and-evaluate-sexp ()
   "Sends the sexp located before the point or

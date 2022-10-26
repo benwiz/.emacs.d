@@ -1,6 +1,8 @@
 #+TITLE: settings.org | Ben Wiz
 * To Do
 ** clojure lsp
+*** customize eldoc
+*** cusotmize/learn xref
 ** look into tabs for emacs
 ** Set up dashboard
 *** list the windows in each tab
@@ -216,10 +218,12 @@
       (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
     (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
 
-  ;; emacs27 loads themes immediately, this line prevents that. Presumably there is a good reason
-  ;; for that and I should figure out a workaround. Also, this is a private variable so may change
-  ;; or go away in the future.
-  (setq custom--inhibit-theme-enable nil)
+  ;; Try to speed up font lock, I have identified it using the profiler as the major bottleneck in my lag
+  (setq jit-lock-stealth-time 16
+        ;; jit-lock-defer-contextually t ;; this is something to look into, I copied the `t` from the wiki but it isn't the default
+        ;; jit-lock-stealth-nice 0.5
+        )
+  (setq-default font-lock-multiline 'undecided)
 
   ;; Underline/highlight selected line
   (global-hl-line-mode 1)
@@ -241,18 +245,20 @@
   (defun load-spolsky ()
     "Load Spolsky."
     (load-theme 'spolsky t)
-    (custom-theme-set-faces
-     'spolsky
-     `(default ((t (:foreground "#F2F2F2" :background "#161A1F"))))
-     `(hl-line ((t (:background "#1E252F" :underline nil))))
-     `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
-     `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
-     `(trailing-whitespace ((t (:background "#5a708c"))))
-     `(lsp-face-highlight-textual ((t (:background "#353535")))) ;; "#323E30" ;; "#555" is same as selection color, the other one is half way between hl-line and trailing-whitespace
-     `(org-level-4 ((t (:foreground "#EEEEBF"))))
-     `(isearch ((t (:foreground "#222222" :background "#b5ff80")))) ;; selected isearch results TODO cursor picks up background color and becomes very ugly
-     `(lazy-highlight ((t (:foreground "#222222" :background "#FF80F4")))) ;; other isearch results
-     ))
+    (let ((custom--inhibit-theme-enable nil)) ;; https://emacs.stackexchange.com/questions/48365/custom-theme-set-faces-does-not-work-in-emacs-27
+      (custom-theme-set-faces
+       'spolsky
+       `(default ((t (:foreground "#F2F2F2" :background "#161A1F"))))
+       `(hl-line ((t (:background "#222e3a" :underline nil :overline nil)))) ;; 7b96b1
+       `(font-lock-comment-delimiter-face ((t (:foreground "#8C8C8C" :slant italic))))
+       `(font-lock-comment-face ((t (:foreground "#8C8C8C" :slant italic))))
+       `(trailing-whitespace ((t (:background "#5a708c"))))
+       `(lsp-face-highlight-textual ((t (:background "#353535")))) ;; "#323E30" ;; "#555" is same as selection color, the other one is half way between hl-line and trailing-whitespace
+       `(org-level-4 ((t (:foreground "#EEEEBF"))))
+       `(isearch ((t (:foreground "#222222" :background "#b5ff80")))) ;; selected isearch results TODO cursor picks up background color and becomes very ugly
+       `(lazy-highlight ((t (:foreground "#222222" :background "#FF80F4")))) ;; other isearch results
+       ))
+    )
 
   ;; Start in spolsky
   (add-hook 'after-make-frame-functions (lambda (frame) (load-spolsky)))
@@ -326,7 +332,7 @@
     (alist-get 'name (tab-bar--current-tab)))
 
 #+END_SRC
-* Tools and Bindings (not text editing related)
+* Tools and Bindings (not text editing related, check  File Type > All)
 ** Env Vars
 #+BEGIN_SRC emacs-lisp
   (if (file-exists-p "~/.emacs.d/emacs.env")
@@ -730,6 +736,12 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 #+BEGIN_SRC emacs-lisp
   (use-package request)
 #+END_SRC
+** Eldoc
+#+BEGIN_SRC emacs-lisp
+  (use-package eldoc
+    :init
+    )
+#+END_SRC
 * dir-locals
 #+BEGIN_SRC emacs-lisp
   (defun my-reload-dir-locals-for-all-buffer-in-this-directory ()
@@ -741,67 +753,85 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
         (with-current-buffer buffer
           (when (equal default-directory dir))
           (my-reload-dir-locals-for-current-buffer)))))
+
+  ;; I sometimes notice that the safe-local-variables does not persist
+  ;; so add it all here
+  (setq safe-local-variable-values
+        (append safe-local-variable-values
+                '((cider-shadow-default-options . ":app")
+                  (eval add-hook 'cider-connected-hook
+                        (lambda nil
+                          (shell-command "./git-version.sh"))
+                        nil t)
+                  (cider-default-cljs-repl . shadow)
+                  (cider-preferred-build-tool . shadow-cljs)
+                  (eval add-hook 'after-save-hook 'org-html-export-to-html t t))))
 #+END_SRC
 * File Types
 ** All
 #+BEGIN_SRC emacs-lisp
-  (use-package ws-butler
-    :hook (prog-mode . ws-butler-mode)
-    :config (ws-butler-global-mode 1))
+    (use-package ws-butler
+      :hook (prog-mode . ws-butler-mode)
+      :config (ws-butler-global-mode 1))
 
-  (use-package editorconfig
-    :config
-    (editorconfig-mode 1))
+    (use-package editorconfig
+      :config
+      (editorconfig-mode 1))
 
-  (use-package flycheck
-    :init (global-flycheck-mode))
+    (use-package flycheck
+      ;; :init (global-flycheck-mode) ;; no longer want this becasue of eglot
+      )
 
-  (use-package expand-region
-    :config
-    (global-set-key (kbd "C-=") 'er/expand-region))
+    (use-package expand-region
+      :config
+      (global-set-key (kbd "C-=") 'er/expand-region))
 
-  (use-package company
-    :init (global-company-mode)
-    :config
-    (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
-    ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
-    )
+    (use-package company
+      :init (global-company-mode)
+      :config
+      (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+      ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
+      )
 
-  (use-package hideshow
-    :bind (("C-\\" . hs-toggle-hiding)
-           ("M-+" . hs-show-all)
-           ("M--" . hs-hide-all))
-    :init (add-hook #'prog-mode-hook #'hs-minor-mode)
-    :diminish hs-minor-mode
-    :config
-    ;; Add `json-mode' and `javascript-mode' to the list
-    (setq hs-special-modes-alist
-          (mapcar 'purecopy
-                  '((c-mode "{" "}" "/[*/]" nil nil)
-                    (c++-mode "{" "}" "/[*/]" nil nil)
-                    (java-mode "{" "}" "/[*/]" nil nil)
-                    (js-mode "{" "}" "/[*/]" nil)
-                    (json-mode "{" "}" "/[*/]" nil)
-                    (javascript-mode  "{" "}" "/[*/]" nil)))))
+    (use-package eglot
+      :init
+      (add-hook 'language-mode-hook #'eglot-ensure))
 
-  (defun duplicate-line()
-    (interactive)
-    (move-beginning-of-line 1)
-    (kill-line)
-    (yank)
-    (open-line 1)
-    (next-line 1)
-    (yank))
-  (global-set-key (kbd "C-c D") 'duplicate-line)
+    (use-package hideshow
+      :bind (("C-\\" . hs-toggle-hiding)
+             ("M-+" . hs-show-all)
+             ("M--" . hs-hide-all))
+      :init (add-hook #'prog-mode-hook #'hs-minor-mode)
+      :diminish hs-minor-mode
+      :config
+      ;; Add `json-mode' and `javascript-mode' to the list
+      (setq hs-special-modes-alist
+            (mapcar 'purecopy
+                    '((c-mode "{" "}" "/[*/]" nil nil)
+                      (c++-mode "{" "}" "/[*/]" nil nil)
+                      (java-mode "{" "}" "/[*/]" nil nil)
+                      (js-mode "{" "}" "/[*/]" nil)
+                      (json-mode "{" "}" "/[*/]" nil)
+                      (javascript-mode  "{" "}" "/[*/]" nil)))))
 
-  ;; (use-package highlight-indent-guides
-  ;;     :hook (python-mode . highlight-indent-guides-mode)
-  ;;     :config
-  ;;     (setq highlight-indent-guides-method 'character)
-  ;;     (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
-  ;;     (setq highlight-indent-guides-auto-character-face-perc 20))
+    (defun duplicate-line()
+      (interactive)
+      (move-beginning-of-line 1)
+      (kill-line)
+      (yank)
+      (open-line 1)
+      (next-line 1)
+      (yank))
+    (global-set-key (kbd "C-c D") 'duplicate-line)
 
-  ;; (use-package symbol-overlay)
+    ;; (use-package highlight-indent-guides
+    ;;     :hook (python-mode . highlight-indent-guides-mode)
+    ;;     :config
+    ;;     (setq highlight-indent-guides-method 'character)
+    ;;     (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
+    ;;     (setq highlight-indent-guides-auto-character-face-perc 20))
+
+    ;; (use-package symbol-overlay)
 
 #+END_SRC
 ** PDF
@@ -855,48 +885,6 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
     (kill-sexp))
 
   (global-set-key (kbd "M-k") 'kill-symbol)
-
-#+END_SRC
-** LSP
-#+BEGIN_SRC emacs-lisp
-  (setq lsp-keymap-prefix "C-i")
-
-  (use-package lsp-mode
-    :hook (;; (clojure-mode . lsp)
-           ;; (clojurec-mode . lsp)
-           ;; (clojurescript-mode . lsp)
-           ;; (c++-mode . lsp)
-           ;; (python-mode . lsp)
-           ;; (javascript-mode . lsp)
-           ;; (java-mode . lsp)
-           ;; (c++-mode . lsp)
-           )
-    :commands lsp
-    :config
-    (setq lsp-modeline-code-actions-segments '(icon)
-          lsp-modeline-diagnostics-enable nil
-          lsp-enable-file-watchers nil
-          lsp-enable-indentation nil
-          lsp-enable-on-type-formatting nil
-          ;; Optimiazations lsp-mode https://emacs-lsp.github.io/lsp-mode/page/performance/
-          gc-cons-threshold 100000000
-          read-process-output-max (* 1024 1024)
-          lsp-completion-provider :capf))
-
-  (use-package lsp-ui
-    :commands lsp-ui-mode
-    :config
-    (setq lsp-ui-doc-enable nil
-          lsp-ui-sideline-show-code-actions nil))
-
-  (use-package lsp-ivy
-    :commands lsp-ivy-workspace-symbol
-    :config
-    (define-key lsp-command-map "i"
-      (lambda ()
-        (interactive)
-        (setq current-prefix-arg '(4))
-        (call-interactively 'lsp-ivy-workspace-symbol))))
 #+END_SRC
 ** Org
  #+BEGIN_SRC emacs-lisp
@@ -967,7 +955,7 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 
     (add-hook 'rjsx-mode-hook
               (lambda ()
-                (flycheck-select-checker "javascript-eslint")
+                ;; (flycheck-select-checker "javascript-eslint")
                 (electric-pair-mode 1)))
 
     (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
@@ -1141,20 +1129,11 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 #+END_SRC
 ** Clojure
 #+BEGIN_SRC emacs-lisp
+  ;; TODO these exec paths probably should be at a much more primitive place in this settings.org
   (add-to-list 'exec-path "/usr/local/bin/")
   (add-to-list 'exec-path "/home/benwiz/bin/")
-  (use-package clojure-snippets)
-  (use-package flycheck-clj-kondo) ;; NOTE .clj-kondo/ is in .emacs.d/ for version control, it must be symlinked to home `ln -s ~/.emacs.d/.clj-kondo/ ~/.clj-kondo/`
 
-  ;; (use-package clj-refactor
-  ;;   :init (add-hook 'clojure-mode-hook (lambda ()
-  ;;     (yas-minor-mode 1)
-  ;;     (clj-refactor-mode 1)
-  ;;     (cljr-add-keybindings-with-prefix "C-c C-m"))))
-
-  ;; (use-package anakondo
-  ;;   :ensure t
-  ;;   :commands anakondo-minor-mode)
+  ;; TODO Configure clojure-lsp, using as a starting point ~/.emacs.d/.clj-kondo/
 
   (defun insert-discard ()
     "Insert #_ at current location."
@@ -1173,11 +1152,8 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
          clojure-align-forms-automatically t)
    :config
    (add-hook 'clojure-mode-hook 'paredit-mode)
-   ;; (add-hook 'clojure-mode-hook #'anakondo-minor-mode)
-   ;; (add-hook 'clojurescript-mode-hook #'anakondo-minor-mode)
-   ;; (add-hook 'clojurec-mode-hook #'anakondo-minor-mode)
-   (require 'flycheck-clj-kondo)
-   )
+   (add-hook 'clojure-mode-hook 'eglot-ensure)
+   (add-hook 'clojurescript-mode-hook 'eglot-ensure))
 
   (defun cider-send-and-evaluate-sexp ()
     "Sends the sexp located before the point or
