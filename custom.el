@@ -65,6 +65,8 @@
            nil t)
      (cider-default-cljs-repl . shadow)
      (cider-preferred-build-tool . shadow-cljs)
+     (cider-clojure-cli-global-options . "-A:dev:defaultmemory:valcache")
+     (cider-preferred-build-tool . clojure-cli)
      (eval add-hook 'after-save-hook 'org-html-export-to-html t t))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

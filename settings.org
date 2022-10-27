@@ -770,68 +770,87 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 * File Types
 ** All
 #+BEGIN_SRC emacs-lisp
-    (use-package ws-butler
-      :hook (prog-mode . ws-butler-mode)
-      :config (ws-butler-global-mode 1))
+  ;; So I was able to build ~/.tree-sitter/bin/tree_sitter_clojure_binding.node but I can't figure out how to use it
+  ;; (tree-sitter-require 'clojure) causes a crash, it should be a .so file. using tree-sitter cli the .node file works.
+  ;; actually this may have worked: gcc -shared obj.target/tree_sitter_clojure_binding/bindings/node/binding.o -o clojure.so
+  ;; supposedly tree-ssitter-hl-mode overrides many of the font-lock features, so I'm hoping that minimizing font-lock
+  ;; actions helps with my highlighting bottleneck while typing fast.
+  ;; TODO look into using eglot for code highlighting instead of tree-sitter or jit-lock
+  (use-package tree-sitter
+    :hook ((clojure-mode . tree-sitter-mode)
+           (clojure-script . tree-sitter-mode)
+           (tree-sitter-mode . tree-sitter-hl-mode))
+    :config
+    (setq tree-sitter-major-mode-language-alist ;; directory stored in tree-sitter-load-path
+          (append tree-sitter-major-mode-language-alist
+                  '((clojure-mode . clojure)
+                    (clojurescript-mode . clojure)))))
 
-    (use-package editorconfig
-      :config
-      (editorconfig-mode 1))
+  (use-package tree-sitter-langs)
 
-    (use-package flycheck
-      ;; :init (global-flycheck-mode) ;; no longer want this becasue of eglot
-      )
+  (use-package ws-butler
+    :hook (prog-mode . ws-butler-mode)
+    :config (ws-butler-global-mode 1))
 
-    (use-package expand-region
-      :config
-      (global-set-key (kbd "C-=") 'er/expand-region))
+  (use-package editorconfig
+    :config
+    (editorconfig-mode 1))
 
-    (use-package company
-      :init (global-company-mode)
-      :config
-      (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
-      ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
-      )
+  (use-package flycheck
+    ;; :init (global-flycheck-mode) ;; no longer want this becasue of eglot
+    )
 
-    (use-package eglot
-      :init
-      (add-hook 'language-mode-hook #'eglot-ensure))
+  (use-package expand-region
+    :config
+    (global-set-key (kbd "C-=") 'er/expand-region))
 
-    (use-package hideshow
-      :bind (("C-\\" . hs-toggle-hiding)
-             ("M-+" . hs-show-all)
-             ("M--" . hs-hide-all))
-      :init (add-hook #'prog-mode-hook #'hs-minor-mode)
-      :diminish hs-minor-mode
-      :config
-      ;; Add `json-mode' and `javascript-mode' to the list
-      (setq hs-special-modes-alist
-            (mapcar 'purecopy
-                    '((c-mode "{" "}" "/[*/]" nil nil)
-                      (c++-mode "{" "}" "/[*/]" nil nil)
-                      (java-mode "{" "}" "/[*/]" nil nil)
-                      (js-mode "{" "}" "/[*/]" nil)
-                      (json-mode "{" "}" "/[*/]" nil)
-                      (javascript-mode  "{" "}" "/[*/]" nil)))))
+  (use-package company
+    :init (global-company-mode)
+    :config
+    (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+    ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
+    )
 
-    (defun duplicate-line()
-      (interactive)
-      (move-beginning-of-line 1)
-      (kill-line)
-      (yank)
-      (open-line 1)
-      (next-line 1)
-      (yank))
-    (global-set-key (kbd "C-c D") 'duplicate-line)
+  (use-package eglot
+    :init
+    ;; I don't think this hook is working, I added clojure hooks elsewhere
+    (add-hook 'language-mode-hook #'eglot-ensure))
 
-    ;; (use-package highlight-indent-guides
-    ;;     :hook (python-mode . highlight-indent-guides-mode)
-    ;;     :config
-    ;;     (setq highlight-indent-guides-method 'character)
-    ;;     (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
-    ;;     (setq highlight-indent-guides-auto-character-face-perc 20))
+  (use-package hideshow
+    :bind (("C-\\" . hs-toggle-hiding)
+           ("M-+" . hs-show-all)
+           ("M--" . hs-hide-all))
+    :init (add-hook #'prog-mode-hook #'hs-minor-mode)
+    :diminish hs-minor-mode
+    :config
+    ;; Add `json-mode' and `javascript-mode' to the list
+    (setq hs-special-modes-alist
+          (mapcar 'purecopy
+                  '((c-mode "{" "}" "/[*/]" nil nil)
+                    (c++-mode "{" "}" "/[*/]" nil nil)
+                    (java-mode "{" "}" "/[*/]" nil nil)
+                    (js-mode "{" "}" "/[*/]" nil)
+                    (json-mode "{" "}" "/[*/]" nil)
+                    (javascript-mode  "{" "}" "/[*/]" nil)))))
 
-    ;; (use-package symbol-overlay)
+  (defun duplicate-line()
+    (interactive)
+    (move-beginning-of-line 1)
+    (kill-line)
+    (yank)
+    (open-line 1)
+    (next-line 1)
+    (yank))
+  (global-set-key (kbd "C-c D") 'duplicate-line)
+
+  ;; (use-package highlight-indent-guides
+  ;;     :hook (python-mode . highlight-indent-guides-mode)
+  ;;     :config
+  ;;     (setq highlight-indent-guides-method 'character)
+  ;;     (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
+  ;;     (setq highlight-indent-guides-auto-character-face-perc 20))
+
+  ;; (use-package symbol-overlay)
 
 #+END_SRC
 ** PDF
@@ -900,6 +919,7 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
          org-enforce-todo-dependencies t
          org-archive-location "archive/%s_archive::")
 
+   (setq org-startup-folded t)
 
    (defun org-archive-done-tasks ()
      (interactive)

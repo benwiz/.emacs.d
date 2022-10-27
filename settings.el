@@ -702,6 +702,21 @@ current buffer's, reload dir-locals."
                 (cider-preferred-build-tool . shadow-cljs)
                 (eval add-hook 'after-save-hook 'org-html-export-to-html t t))))
 
+;; So I was able to build ~/.tree-sitter/bin/tree_sitter_clojure_binding.node but I can't figure out how to use it
+;; (tree-sitter-require 'clojure) causes a crash, it should be a .so file. using tree-sitter cli the .node file works.
+;; actually this may have worked: gcc -shared obj.target/tree_sitter_clojure_binding/bindings/node/binding.o -o clojure.so
+(use-package tree-sitter
+  :hook ((clojure-mode . tree-sitter-mode)
+         (clojure-script . tree-sitter-mode)
+         (tree-sitter-mode . tree-sitter-hl-mode))
+  :config
+  (setq tree-sitter-major-mode-language-alist ;; directory stored in tree-sitter-load-path
+        (append tree-sitter-major-mode-language-alist
+                '((clojure-mode . clojure)
+                  (clojurescript-mode . clojure)))))
+
+(use-package tree-sitter-langs)
+
 (use-package ws-butler
   :hook (prog-mode . ws-butler-mode)
   :config (ws-butler-global-mode 1))
@@ -727,6 +742,7 @@ current buffer's, reload dir-locals."
 
 (use-package eglot
   :init
+  ;; I don't think this hook is working, I added clojure hooks elsewhere
   (add-hook 'language-mode-hook #'eglot-ensure))
 
 (use-package hideshow
@@ -825,6 +841,7 @@ current buffer's, reload dir-locals."
       org-enforce-todo-dependencies t
       org-archive-location "archive/%s_archive::")
 
+(setq org-startup-folded t)
 
 (defun org-archive-done-tasks ()
   (interactive)
