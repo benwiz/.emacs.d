@@ -585,7 +585,7 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
   ;;   ;; (wm-xmodmap)
   ;;   )
 #+END_SRC
-** Ivy, Swiper, Counsel, Projectile
+** Ivy, Swiper, Counsel, Projectile, and Project.el
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
     :init
@@ -662,8 +662,8 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
         nil)))
 
   (use-package project
+    :bind-keymap ("M-p" . project-prefix-map)
     :config
-    (define-key projectile-mode-map (kbd "M-p") ') ;; TODO probably should revert to the default `C-x p`
     (setq project-vc-merge-submodules nil)
     (add-hook 'project-find-functions #'project-override))
 

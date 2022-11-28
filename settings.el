@@ -584,14 +584,14 @@
 
 (use-package projectile
   :config
-  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  ;; (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
   ;; TODO may want to add ".gitignore" to this list
   (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
         projectile-project-root-files-functions #'(projectile-root-top-down
                                                    projectile-root-top-down-recurring
                                                    projectile-root-bottom-up
-                                                   projectile-root-local))
+
+                                 projectile-root-local))
   (projectile-mode 1))
 
 (use-package counsel-projectile
@@ -600,9 +600,17 @@
 
 ;; Hopefully replacing projectile with built-in project.el
 
+(defun project-override (dir)
+  (let ((override (locate-dominating-file dir ".dir-locals.el"))) ;; TODO dir-locals probably isn't the best solution
+    (if override
+        (cons 'vc override)
+      nil)))
+
 (use-package project
+  :bind-keymap ("M-p" . project-prefix-map)
   :config
-  (setq project-vc-merge-submodules nil))
+  (setq project-vc-merge-submodules nil)
+  (add-hook 'project-find-functions #'project-override))
 
 (defun mc-mark-next-like-this-then-cycle-forward (arg)
   "Mark next like this then cycle forward, take interactive ARG."
@@ -843,28 +851,30 @@ current buffer's, reload dir-locals."
 (global-set-key (kbd "M-k") 'kill-symbol)
 
 ;; (use-package org-tempo)
-(define-key org-mode-map (kbd "M-n") 'org-todo)
-;; (define-key global-map (kbd "C-c l") 'org-store-link)
-(define-key global-map (kbd "C-c a") 'org-agenda)
-(setq org-agenda-files (list "~/org/work.org"
-                             "~/org/school.org"
-                             "~/org/guitar.org"
-                             "~/org/learn.org")
-      org-log-done t
-      org-enforce-todo-dependencies t
-      org-archive-location "archive/%s_archive::")
+ (define-key org-mode-map (kbd "M-n") 'org-todo)
+ ;; (define-key global-map (kbd "C-c l") 'org-store-link)
+ (define-key global-map (kbd "C-c a") 'org-agenda)
+ (setq org-agenda-files (list "~/org/work.org"
+                              "~/org/school.org"
+                              "~/org/guitar.org"
+                              "~/org/learn.org")
+       org-log-done t
+       org-enforce-todo-dependencies t
+       org-archive-location "archive/%s_archive::"
+       org-startup-folded t
+       )
 
-(setq org-startup-folded t)
+ (defun org-archive-done-tasks ()
+   (interactive)
+   (org-map-entries
+    (lambda ()
+      (org-archive-subtree)
+      (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
+    "/DONE" 'tree))
 
-(defun org-archive-done-tasks ()
-  (interactive)
-  (org-map-entries
-   (lambda ()
-     (org-archive-subtree)
-     (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
-   "/DONE" 'tree))
+ (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
 
-(define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
+(use-package poly-org)
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
