@@ -36,3 +36,7 @@ secret.el
 /tramp
 /srecode-map.el
 /.emacs.desktop.lock
+/.lsp/
+/.cache/
+/eln-cache/
+/request/

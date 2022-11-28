@@ -220,6 +220,7 @@
 
   ;; Try to speed up font lock, I have identified it using the profiler as the major bottleneck in my lag
   (setq jit-lock-stealth-time 16
+        ;; jit-lock-defer-time nil
         ;; jit-lock-defer-contextually t ;; this is something to look into, I copied the `t` from the wiki but it isn't the default
         ;; jit-lock-stealth-nice 0.5
         )
@@ -456,7 +457,9 @@
   (use-package undo-tree
     :config
     (global-undo-tree-mode)
-    (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
+    (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+    ;; persisting undo-tree history was really really slow, like absurdly slow, so stop persisting until I sort that out
+    (setq undo-tree-auto-save-history nil))
 
   ;; (use-package restclient
   ;;   :mode ("\\.http\\'" . restclient-mode))
@@ -636,19 +639,35 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 
   (use-package projectile
     :config
-    (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
-    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    ;; (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
     ;; TODO may want to add ".gitignore" to this list
     (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
           projectile-project-root-files-functions #'(projectile-root-top-down
                                                      projectile-root-top-down-recurring
                                                      projectile-root-bottom-up
-                                                     projectile-root-local))
+
+                                   projectile-root-local))
     (projectile-mode 1))
 
   (use-package counsel-projectile
     :config
     (counsel-projectile-mode))
+
+  ;; Hopefully replacing projectile with built-in project.el
+
+  (defun project-override (dir)
+    (let ((override (locate-dominating-file dir ".dir-locals.el"))) ;; TODO dir-locals probably isn't the best solution
+      (if override
+          (cons 'vc override)
+        nil)))
+
+  (use-package project
+    :config
+    (define-key projectile-mode-map (kbd "M-p") ') ;; TODO probably should revert to the default `C-x p`
+    (setq project-vc-merge-submodules nil)
+    (add-hook 'project-find-functions #'project-override))
+
+
 #+END_SRC
 ** Multicursor
 #+BEGIN_SRC emacs-lisp
@@ -776,17 +795,18 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
   ;; supposedly tree-ssitter-hl-mode overrides many of the font-lock features, so I'm hoping that minimizing font-lock
   ;; actions helps with my highlighting bottleneck while typing fast.
   ;; TODO look into using eglot for code highlighting instead of tree-sitter or jit-lock
-  (use-package tree-sitter
-    :hook ((clojure-mode . tree-sitter-mode)
-           (clojure-script . tree-sitter-mode)
-           (tree-sitter-mode . tree-sitter-hl-mode))
-    :config
-    (setq tree-sitter-major-mode-language-alist ;; directory stored in tree-sitter-load-path
-          (append tree-sitter-major-mode-language-alist
-                  '((clojure-mode . clojure)
-                    (clojurescript-mode . clojure)))))
-
-  (use-package tree-sitter-langs)
+  ;; NOTE just don't worry about this, it is built-in native in emacs29
+  ;; (use-package tree-sitter
+  ;;   :hook ((clojure-mode . tree-sitter-mode)
+  ;;          (clojure-script . tree-sitter-mode)
+  ;;          (tree-sitter-mode . tree-sitter-hl-mode))
+  ;;   :config
+  ;;   (setq tree-sitter-major-mode-language-alist ;; directory stored in tree-sitter-load-path
+  ;;         (append tree-sitter-major-mode-language-alist
+  ;;                 '((clojure-mode . clojure)
+  ;;                   (clojurescript-mode . clojure)))))
+  ;;
+  ;; (use-package tree-sitter-langs)
 
   (use-package ws-butler
     :hook (prog-mode . ws-butler-mode)
@@ -907,29 +927,32 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 #+END_SRC
 ** Org
  #+BEGIN_SRC emacs-lisp
-   ;; (use-package org-tempo)
-   (define-key org-mode-map (kbd "M-n") 'org-todo)
-   ;; (define-key global-map (kbd "C-c l") 'org-store-link)
-   (define-key global-map (kbd "C-c a") 'org-agenda)
-   (setq org-agenda-files (list "~/org/work.org"
-                                "~/org/school.org"
-                                "~/org/guitar.org"
-                                "~/org/learn.org")
-         org-log-done t
-         org-enforce-todo-dependencies t
-         org-archive-location "archive/%s_archive::")
+    ;; (use-package org-tempo)
+    (define-key org-mode-map (kbd "M-n") 'org-todo)
+    ;; (define-key global-map (kbd "C-c l") 'org-store-link)
+    (define-key global-map (kbd "C-c a") 'org-agenda)
+    (setq org-agenda-files (list "~/org/work.org"
+                                 "~/org/school.org"
+                                 "~/org/guitar.org"
+                                 "~/org/learn.org")
+          org-log-done t
+          org-enforce-todo-dependencies t
+          org-archive-location "archive/%s_archive::"
+          org-startup-folded t
+          )
 
-   (setq org-startup-folded t)
+    (defun org-archive-done-tasks ()
+      (interactive)
+      (org-map-entries
+       (lambda ()
+         (org-archive-subtree)
+         (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
+       "/DONE" 'tree))
 
-   (defun org-archive-done-tasks ()
-     (interactive)
-     (org-map-entries
-      (lambda ()
-        (org-archive-subtree)
-        (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
-      "/DONE" 'tree))
+    (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
 
-   (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
+   (use-package poly-org)
+
  #+END_SRC
 ** Markdown
 #+BEGIN_SRC emacs-lisp

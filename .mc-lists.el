@@ -19,6 +19,7 @@
         company-indent-or-complete-common
         counsel-yank-pop
         dabbrev-expand
+        default-indent-new-line
         diff-hl-previous-hunk
         down-list
         electric-newline-and-maybe-indent

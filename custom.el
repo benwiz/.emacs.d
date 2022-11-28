@@ -56,7 +56,7 @@
  '(jabber-mode-line-mode nil)
  '(linum-format " %7i ")
  '(package-selected-packages
-   '(htmlize yaml-mode ws-butler use-package undo-tree switch-buffer-functions scratch restclient restart-emacs redtick pomodoro paradox markdown-mode magit load-env-vars gnu-elpa-keyring-update git-link flycheck-clj-kondo fic-mode exwm expand-region exec-path-from-shell editorconfig doom-modeline diff-hl dictionary counsel-projectile company clojure-snippets clj-refactor auto-package-update))
+   '(poly-org poly-markdown htmlize yaml-mode ws-butler use-package undo-tree switch-buffer-functions scratch restclient restart-emacs redtick pomodoro paradox markdown-mode magit load-env-vars gnu-elpa-keyring-update git-link flycheck-clj-kondo fic-mode exwm expand-region exec-path-from-shell editorconfig doom-modeline diff-hl dictionary counsel-projectile company clojure-snippets clj-refactor auto-package-update))
  '(safe-local-variable-values
    '((cider-shadow-default-options . ":app")
      (eval add-hook 'cider-connected-hook
@@ -65,8 +65,6 @@
            nil t)
      (cider-default-cljs-repl . shadow)
      (cider-preferred-build-tool . shadow-cljs)
-     (cider-clojure-cli-global-options . "-A:dev:defaultmemory:valcache")
-     (cider-preferred-build-tool . clojure-cli)
      (eval add-hook 'after-save-hook 'org-html-export-to-html t t))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

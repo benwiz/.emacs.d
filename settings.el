@@ -183,6 +183,7 @@
 
 ;; Try to speed up font lock, I have identified it using the profiler as the major bottleneck in my lag
 (setq jit-lock-stealth-time 16
+      ;; jit-lock-defer-time nil
       ;; jit-lock-defer-contextually t ;; this is something to look into, I copied the `t` from the wiki but it isn't the default
       ;; jit-lock-stealth-nice 0.5
       )
@@ -406,7 +407,9 @@
 (use-package undo-tree
   :config
   (global-undo-tree-mode)
-  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+  ;; persisting undo-tree history was really really slow, like absurdly slow, so stop persisting until I sort that out
+  (setq undo-tree-auto-save-history nil))
 
 ;; (use-package restclient
 ;;   :mode ("\\.http\\'" . restclient-mode))
@@ -595,6 +598,12 @@
   :config
   (counsel-projectile-mode))
 
+;; Hopefully replacing projectile with built-in project.el
+
+(use-package project
+  :config
+  (setq project-vc-merge-submodules nil))
+
 (defun mc-mark-next-like-this-then-cycle-forward (arg)
   "Mark next like this then cycle forward, take interactive ARG."
   (interactive "p")
@@ -705,17 +714,21 @@ current buffer's, reload dir-locals."
 ;; So I was able to build ~/.tree-sitter/bin/tree_sitter_clojure_binding.node but I can't figure out how to use it
 ;; (tree-sitter-require 'clojure) causes a crash, it should be a .so file. using tree-sitter cli the .node file works.
 ;; actually this may have worked: gcc -shared obj.target/tree_sitter_clojure_binding/bindings/node/binding.o -o clojure.so
-(use-package tree-sitter
-  :hook ((clojure-mode . tree-sitter-mode)
-         (clojure-script . tree-sitter-mode)
-         (tree-sitter-mode . tree-sitter-hl-mode))
-  :config
-  (setq tree-sitter-major-mode-language-alist ;; directory stored in tree-sitter-load-path
-        (append tree-sitter-major-mode-language-alist
-                '((clojure-mode . clojure)
-                  (clojurescript-mode . clojure)))))
-
-(use-package tree-sitter-langs)
+;; supposedly tree-ssitter-hl-mode overrides many of the font-lock features, so I'm hoping that minimizing font-lock
+;; actions helps with my highlighting bottleneck while typing fast.
+;; TODO look into using eglot for code highlighting instead of tree-sitter or jit-lock
+;; NOTE just don't worry about this, it is built-in native in emacs29
+;; (use-package tree-sitter
+;;   :hook ((clojure-mode . tree-sitter-mode)
+;;          (clojure-script . tree-sitter-mode)
+;;          (tree-sitter-mode . tree-sitter-hl-mode))
+;;   :config
+;;   (setq tree-sitter-major-mode-language-alist ;; directory stored in tree-sitter-load-path
+;;         (append tree-sitter-major-mode-language-alist
+;;                 '((clojure-mode . clojure)
+;;                   (clojurescript-mode . clojure)))))
+;;
+;; (use-package tree-sitter-langs)
 
 (use-package ws-butler
   :hook (prog-mode . ws-butler-mode)
