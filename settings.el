@@ -555,7 +555,9 @@
 
 (defun swiper--from-isearch ()
   "Invoke `swiper' from isearch.
-     https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da61c948a6fd/helm-swoop.el#L657-668 "
+     https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da61c948a6fd/helm-swoop.el#L657-668
+
+i.e. Move seamlessly from isearch to swiper search."
   (interactive)
   (let (($query (if isearch-regexp
                     isearch-string
@@ -742,9 +744,9 @@ current buffer's, reload dir-locals."
   :hook (prog-mode . ws-butler-mode)
   :config (ws-butler-global-mode 1))
 
-(use-package editorconfig
-  :config
-  (editorconfig-mode 1))
+;; (use-package editorconfig
+;;   :config
+;;   (editorconfig-mode 1))
 
 (use-package flycheck
   ;; :init (global-flycheck-mode) ;; no longer want this becasue of eglot
