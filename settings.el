@@ -586,7 +586,7 @@ i.e. Move seamlessly from isearch to swiper search."
 
 (use-package projectile
   :config
-  ;; (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
   ;; TODO may want to add ".gitignore" to this list
   (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
         projectile-project-root-files-functions #'(projectile-root-top-down
@@ -603,16 +603,23 @@ i.e. Move seamlessly from isearch to swiper search."
 ;; Hopefully replacing projectile with built-in project.el
 
 (defun project-override (dir)
-  (let ((override (locate-dominating-file dir ".dir-locals.el"))) ;; TODO dir-locals probably isn't the best solution
+   ;; TODO dir-locals probably isn't the best solution, maybe should do dedicated .project
+  (let ((override (or (locate-dominating-file dir "deps.edn")
+                      (locate-dominating-file dir ".dir-locals.el"))))
     (if override
         (cons 'vc override)
       nil)))
 
+;; TODO after project-switch-projects call project-switch-to-buffer
 (use-package project
-  :bind-keymap ("M-p" . project-prefix-map)
+  ;; :bind-keymap ("M-p" . project-prefix-map)
   :config
   (setq project-vc-merge-submodules nil)
-  (add-hook 'project-find-functions #'project-override))
+  (add-hook 'project-find-functions #'project-override 100)
+  ;; important for not trying vc where there is no git file, the try vc should fail better
+  (setq project-find-functions (reverse project-find-functions)
+        ;; project-switch-commands #'project-switch-to-buffer ;; TODO rather, I'd like to show the 5 most recently opened buffers from this project
+        ))
 
 (defun mc-mark-next-like-this-then-cycle-forward (arg)
   "Mark next like this then cycle forward, take interactive ARG."
@@ -852,31 +859,32 @@ current buffer's, reload dir-locals."
 
 (global-set-key (kbd "M-k") 'kill-symbol)
 
-;; (use-package org-tempo)
- (define-key org-mode-map (kbd "M-n") 'org-todo)
- ;; (define-key global-map (kbd "C-c l") 'org-store-link)
- (define-key global-map (kbd "C-c a") 'org-agenda)
- (setq org-agenda-files (list "~/org/work.org"
-                              "~/org/school.org"
-                              "~/org/guitar.org"
-                              "~/org/learn.org")
-       org-log-done t
-       org-enforce-todo-dependencies t
-       org-archive-location "archive/%s_archive::"
-       org-startup-folded t
-       )
+;; Note using poly-org because it overrides M-n and I can't figure out how to change that, it should be simple
+;; (use-package poly-org)
 
- (defun org-archive-done-tasks ()
-   (interactive)
-   (org-map-entries
-    (lambda ()
-      (org-archive-subtree)
-      (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
-    "/DONE" 'tree))
+(use-package org
+   :bind (("M-n" . org-todo))
+   :config
+   ;; (define-key global-map (kbd "C-c l") 'org-store-link)
+   (define-key global-map (kbd "C-c a") 'org-agenda)
+   (setq org-agenda-files (list "~/org/work.org"
+                                "~/org/school.org"
+                                "~/org/guitar.org"
+                                "~/org/learn.org")
+         org-log-done t
+         org-enforce-todo-dependencies t
+         org-archive-location "archive/%s_archive::"
+         org-startup-folded t))
 
- (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
+  (defun org-archive-done-tasks ()
+    (interactive)
+    (org-map-entries
+     (lambda ()
+       (org-archive-subtree)
+       (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
+     "/DONE" 'tree))
 
-(use-package poly-org)
+  (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
