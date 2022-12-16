@@ -860,31 +860,33 @@ current buffer's, reload dir-locals."
 (global-set-key (kbd "M-k") 'kill-symbol)
 
 ;; Note using poly-org because it overrides M-n and I can't figure out how to change that, it should be simple
-;; (use-package poly-org)
+  ;; not sure I like polymode, I may have preferred the old way, really I'd like both. This basically smashes the
+  ;; former into this buffer.
+(use-package poly-org)
 
 (use-package org
-   :bind (("M-n" . org-todo))
-   :config
-   ;; (define-key global-map (kbd "C-c l") 'org-store-link)
-   (define-key global-map (kbd "C-c a") 'org-agenda)
-   (setq org-agenda-files (list "~/org/work.org"
-                                "~/org/school.org"
-                                "~/org/guitar.org"
-                                "~/org/learn.org")
-         org-log-done t
-         org-enforce-todo-dependencies t
-         org-archive-location "archive/%s_archive::"
-         org-startup-folded t))
+  ;; :bind (("M-n" . org-todo)) ;; poly-org screwed this up, just learn the default `C-c C-t`
+  :config
+  ;; (define-key global-map (kbd "C-c l") 'org-store-link)
+  (define-key global-map (kbd "C-c a") 'org-agenda)
+  (setq org-agenda-files (list "~/org/work.org"
+                               "~/org/school.org"
+                               "~/org/guitar.org"
+                               "~/org/learn.org")
+        org-log-done t
+        org-enforce-todo-dependencies t
+        org-archive-location "archive/%s_archive::"
+        org-startup-folded t))
 
-  (defun org-archive-done-tasks ()
-    (interactive)
-    (org-map-entries
-     (lambda ()
-       (org-archive-subtree)
-       (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
-     "/DONE" 'tree))
+(defun org-archive-done-tasks ()
+  (interactive)
+  (org-map-entries
+   (lambda ()
+     (org-archive-subtree)
+     (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
+   "/DONE" 'tree))
 
-  (define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
+(define-key org-mode-map (kbd "C-c C-x C-a") 'org-archive-done-tasks)
 
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)

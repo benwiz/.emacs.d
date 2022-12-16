@@ -3,6 +3,7 @@
 ** clojure lsp
 *** customize eldoc
 *** cusotmize/learn xref
+*** lsp-mode looking better again. check this https://clojure-lsp.io/features/#show-all-workspaceproject-symbols
 ** look into tabs for emacs
 ** Set up dashboard
 *** list the windows in each tab
