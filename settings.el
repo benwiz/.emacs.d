@@ -584,23 +584,23 @@ i.e. Move seamlessly from isearch to swiper search."
   ;; (global-set-key (kbd "C-c a") 'counsel-linux-app)
   )
 
-(use-package projectile
-  :config
-  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
-  ;; TODO may want to add ".gitignore" to this list
-  (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
-        projectile-project-root-files-functions #'(projectile-root-top-down
-                                                   projectile-root-top-down-recurring
-                                                   projectile-root-bottom-up
+;; (use-package projectile
+;;   :config
+;;   (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
+;;   ;; TODO may want to add ".gitignore" to this list
+;;   (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
+;;         projectile-project-root-files-functions #'(projectile-root-top-down
+;;                                                    projectile-root-top-down-recurring
+;;                                                    projectile-root-bottom-up
 
-                                 projectile-root-local))
-  (projectile-mode 1))
+;;                                  projectile-root-local))
+;;   (projectile-mode 1))
 
-(use-package counsel-projectile
-  :config
-  (counsel-projectile-mode))
+;; (use-package counsel-projectile
+;;   :config
+;;   (counsel-projectile-mode))
 
-;; Hopefully replacing projectile with built-in project.el
+;; Hopefully replacing projectile with built-in project.el  TODO still doing git grep w projectile
 
 (defun project-override (dir)
    ;; TODO dir-locals probably isn't the best solution, maybe should do dedicated .project
@@ -705,6 +705,24 @@ i.e. Move seamlessly from isearch to swiper search."
   :init
   )
 
+;; (use-package eaf
+;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
+;;   :custom
+;;   ;; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+;;   (eaf-browser-continue-where-left-off t)
+;;   (eaf-browser-enable-adblocker t)
+;;   (browse-url-browser-function 'eaf-open-browser)
+;;   :config
+;;   ;; (defalias 'browse-web #'eaf-open-browser)
+;;   ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+;;   ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+;;   ;; (eaf-bind-key take_photo "p" eaf-camera-keybinding)
+;;   ;; (eaf-bind-key nil "M-q" eaf-browser-keybinding)
+;;   ;; unbind, see more in the Wiki
+;;   )
+;; (require 'eaf-browser)
+;; (require 'eaf-pdf-viewer)
+
 (defun my-reload-dir-locals-for-all-buffer-in-this-directory ()
   "For every buffer with the same `default-directory` as the
 current buffer's, reload dir-locals."
@@ -770,10 +788,12 @@ current buffer's, reload dir-locals."
   ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
   )
 
+;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
 (use-package eglot
   :init
-  ;; I don't think this hook is working, I added clojure hooks elsewhere
-  (add-hook 'language-mode-hook #'eglot-ensure))
+  ;; (add-hook #'prog-mode-hook #'eglot-ensure)
+  ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
+  )
 
 (use-package hideshow
   :bind (("C-\\" . hs-toggle-hiding)
@@ -1104,9 +1124,10 @@ current buffer's, reload dir-locals."
  (setq clojure-indent-style 'align-arguments
        clojure-align-forms-automatically t)
  :config
- (add-hook 'clojure-mode-hook 'paredit-mode)
- (add-hook 'clojure-mode-hook 'eglot-ensure)
- (add-hook 'clojurescript-mode-hook 'eglot-ensure))
+ ;; (add-hook 'clojure-mode-hook 'paredit-mode)
+ ;; (add-hook 'clojure-mode-hook 'eglot-ensure)
+ ;; (add-hook 'clojurescript-mode-hook 'eglot-ensure)
+ )
 
 (defun cider-send-and-evaluate-sexp ()
   "Sends the sexp located before the point or
@@ -1125,6 +1146,11 @@ Then the Clojure buffer is activated as if nothing happened."
 (defun ha/cider-append-comment ()
   (when (null (nth 8 (syntax-ppss)))
     (insert " ; ")))
+
+(defun benwiz/cider-test-run-ns-tests ()
+  (interactive)
+  (cider-load-buffer)
+  (cider-test-run-ns-tests nil))
 
 (use-package cider
   :commands (cider cider-connect cider-jack-in cider-jack-in-clj cider-jack-in-cljs)
@@ -1152,7 +1178,8 @@ Then the Clojure buffer is activated as if nothing happened."
   :bind (:map cider-mode-map
               ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
               ("C-c C-p"     . cider-pprint-eval-last-sexp-to-comment)
-              ("C-c C-<tab>" . cider-format-edn-region))
+              ("C-c C-<tab>" . cider-format-edn-region)
+              ("C-c C-t n"   . benwiz/cider-test-run-ns-tests))
   (:map cider-repl-mode-map
         ("C-c C-l"     . cider-repl-clear-buffer)
         ("C-c C-<tab>" . cider-format-edn-region))
@@ -1178,3 +1205,5 @@ Then the Clojure buffer is activated as if nothing happened."
 (advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
 
 (use-package php-mode)
+
+(use-package dockerfile-mode)

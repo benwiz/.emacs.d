@@ -1,5 +1,6 @@
-#+TITLE: settings.org | Ben Wiz
+# #+TITLE: settings.org | Ben Wiz
 * To Do
+** project opener should create dedicated tab
 ** clojure lsp
 *** customize eldoc
 *** cusotmize/learn xref
@@ -652,11 +653,11 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
                                    projectile-root-local))
     (projectile-mode 1))
 
-  (use-package counsel-projectile
-    :config
-    (counsel-projectile-mode))
+  ;; (use-package counsel-projectile
+  ;;   :config
+  ;;   (counsel-projectile-mode))
 
-  ;; Hopefully replacing projectile with built-in project.el
+  ;; Hopefully replacing projectile with built-in project.el  TODO still doing git grep w projectile
 
   (defun project-override (dir)
      ;; TODO dir-locals probably isn't the best solution, maybe should do dedicated .project
@@ -771,6 +772,26 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
     :init
     )
 #+END_SRC
+* Emacs Application Framework
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package eaf
+  ;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
+  ;;   :custom
+  ;;   ;; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+  ;;   (eaf-browser-continue-where-left-off t)
+  ;;   (eaf-browser-enable-adblocker t)
+  ;;   (browse-url-browser-function 'eaf-open-browser)
+  ;;   :config
+  ;;   ;; (defalias 'browse-web #'eaf-open-browser)
+  ;;   ;; (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+  ;;   ;; (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+  ;;   ;; (eaf-bind-key take_photo "p" eaf-camera-keybinding)
+  ;;   ;; (eaf-bind-key nil "M-q" eaf-browser-keybinding)
+  ;;   ;; unbind, see more in the Wiki
+  ;;   )
+  ;; (require 'eaf-browser)
+  ;; (require 'eaf-pdf-viewer)
+#+END_SRC
 * dir-locals
 #+BEGIN_SRC emacs-lisp
   (defun my-reload-dir-locals-for-all-buffer-in-this-directory ()
@@ -843,8 +864,10 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 
   (use-package eglot
     :init
-    ;; I don't think this hook is working, I added clojure hooks elsewhere
-    (add-hook 'language-mode-hook #'eglot-ensure))
+    ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
+    (add-hook 'prog-mode-hook #'eglot-ensure)
+    ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
+    )
 
   (use-package hideshow
     :bind (("C-\\" . hs-toggle-hiding)
@@ -1207,9 +1230,10 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
    (setq clojure-indent-style 'align-arguments
          clojure-align-forms-automatically t)
    :config
-   (add-hook 'clojure-mode-hook 'paredit-mode)
-   (add-hook 'clojure-mode-hook 'eglot-ensure)
-   (add-hook 'clojurescript-mode-hook 'eglot-ensure))
+   ;; (add-hook 'clojure-mode-hook 'paredit-mode)
+   ;; (add-hook 'clojure-mode-hook 'eglot-ensure)
+   ;; (add-hook 'clojurescript-mode-hook 'eglot-ensure)
+   )
 
   (defun cider-send-and-evaluate-sexp ()
     "Sends the sexp located before the point or
@@ -1228,6 +1252,11 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
   (defun ha/cider-append-comment ()
     (when (null (nth 8 (syntax-ppss)))
       (insert " ; ")))
+
+  (defun benwiz/cider-test-run-ns-tests ()
+    (interactive)
+    (cider-load-buffer)
+    (cider-test-run-ns-tests nil))
 
   (use-package cider
     :commands (cider cider-connect cider-jack-in cider-jack-in-clj cider-jack-in-cljs)
@@ -1255,7 +1284,8 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
     :bind (:map cider-mode-map
                 ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
                 ("C-c C-p"     . cider-pprint-eval-last-sexp-to-comment)
-                ("C-c C-<tab>" . cider-format-edn-region))
+                ("C-c C-<tab>" . cider-format-edn-region)
+                ("C-c C-t n"   . benwiz/cider-test-run-ns-tests))
     (:map cider-repl-mode-map
           ("C-c C-l"     . cider-repl-clear-buffer)
           ("C-c C-<tab>" . cider-format-edn-region))
@@ -1283,4 +1313,8 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 ** PHP
 #+BEGIN_SRC emacs-lisp
 (use-package php-mode)
+#+END_SRC
+** Dockerfile
+#+BEGIN_SRC emacs-lisp
+(use-package dockerfile-mode)
 #+END_SRC
