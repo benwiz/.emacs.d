@@ -616,7 +616,7 @@
     ;; :bind-keymap ("M-p" . project-prefix-map)
     :config
     (setq project-vc-merge-submodules nil)
-    (add-hook 'project-find-functions #'project-override 90)
+    ;; (add-hook 'project-find-functions #'project-override 90)
     ;; important for not trying vc where there is no git file, the try vc should fail better
     (setq project-find-functions (reverse project-find-functions)
           ;; project-switch-commands #'project-switch-to-buffer ;; TODO rather, I'd like to show the 5 most recently opened buffers from this project
@@ -789,12 +789,12 @@ current buffer's, reload dir-locals."
   ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
   )
 
-(use-package eglot
-  :init
-  ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
-  (add-hook 'prog-mode-hook #'eglot-ensure)
-  ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
-  )
+;; (use-package eglot
+;;   :init
+;;   ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
+;;   (add-hook 'prog-mode-hook #'eglot-ensure)
+;;   ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
+;;   )
 
 (use-package hideshow
   :bind (("C-\\" . hs-toggle-hiding)

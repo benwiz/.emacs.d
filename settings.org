@@ -661,23 +661,26 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
   ;; But I'd like to return to it.
 
 (defun project-override (dir)
+  (message (concat "dir " dir))
   ;; TODO dir-locals probably isn't the best solution, maybe should do dedicated .project
   (let ((override (or (locate-dominating-file dir "deps.edn")
                       (locate-dominating-file dir ".dir-locals.el"))))
-    (if override
-        (cons 'vc override)
-      nil)))
+    (message (concat "override " override))
+    ;; TODO I think this output shape is broken? I've currently set up project-find-functions to use project-projectile as the primary search. Not ideal.
+    (when override (cons 'vc override))))
+
+  (project-override "~/master-at-arms2/jib/")
 
   ;; TODO after project-switch-projects call project-switch-to-buffer
-  (use-package project
-    ;; :bind-keymap ("M-p" . project-prefix-map)
-    :config
-    (setq project-vc-merge-submodules nil)
-    (add-hook 'project-find-functions #'project-override 90)
-    ;; important for not trying vc where there is no git file, the try vc should fail better
-    (setq project-find-functions (reverse project-find-functions)
-          ;; project-switch-commands #'project-switch-to-buffer ;; TODO rather, I'd like to show the 5 most recently opened buffers from this project
-          ))
+(use-package project
+  ;; :bind-keymap ("M-p" . project-prefix-map)
+  :config
+  (setq project-vc-merge-submodules nil)
+  (add-hook 'project-find-functions #'project-override)
+  ;; important for not trying vc where there is no git file, the try vc should fail better
+  (setq project-find-functions '(project-projectile project-try-vc)
+        ;; project-switch-commands #'project-switch-to-buffer ;; TODO rather, I'd like to show the 5 most recently opened buffers from this project
+        ))
 
 
 #+END_SRC
@@ -863,12 +866,12 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
     ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
     )
 
-  (use-package eglot
-    :init
-    ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
-    (add-hook 'prog-mode-hook #'eglot-ensure)
-    ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
-    )
+  ;; (use-package eglot
+  ;;   :init
+  ;;   ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
+  ;;   (add-hook 'prog-mode-hook #'eglot-ensure)
+  ;;   ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
+  ;;   )
 
   (use-package hideshow
     :bind (("C-\\" . hs-toggle-hiding)
