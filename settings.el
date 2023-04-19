@@ -533,93 +533,94 @@
 ;;   )
 
 (use-package ivy
-  :init
-  (setq ivy-use-virtual-buffers t
-        enable-recursive-minibuffers t
-        ivy-count-format "(%d/%d) "
-        ivy-use-selectable-prompt t)
-  :config
-  (ivy-mode 1)
-  ;; (require 'mc-hide-unmatched-lines-mode) ;; Idk why this was here, delete if it's been a while
-  (global-set-key (kbd "C-c C-r") 'ivy-resume)
-  (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-  (global-set-key (kbd "C-x C-b") 'ivy-switch-buffer)
-  (global-set-key (kbd "C-c v") 'ivy-push-view)
-  (global-set-key (kbd "C-c V") 'ivy-pop-view))
+    :init
+    (setq ivy-use-virtual-buffers t
+          enable-recursive-minibuffers t
+          ivy-count-format "(%d/%d) "
+          ivy-use-selectable-prompt t)
+    :config
+    (ivy-mode 1)
+    ;; (require 'mc-hide-unmatched-lines-mode) ;; Idk why this was here, delete if it's been a while
+    (global-set-key (kbd "C-c C-r") 'ivy-resume)
+    (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+    (global-set-key (kbd "C-x C-b") 'ivy-switch-buffer)
+    (global-set-key (kbd "C-c v") 'ivy-push-view)
+    (global-set-key (kbd "C-c V") 'ivy-pop-view))
 
-(use-package swiper
-  :init
-  (set-face-attribute 'isearch nil :background "#FF9F93")
-  :config
-  (global-set-key (kbd "M-i") 'swiper-isearch))
+  (use-package swiper
+    :init
+    (set-face-attribute 'isearch nil :background "#FF9F93")
+    :config
+    (global-set-key (kbd "M-i") 'swiper-isearch))
 
-(defun swiper--from-isearch ()
-  "Invoke `swiper' from isearch.
-     https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da61c948a6fd/helm-swoop.el#L657-668
+  (defun swiper--from-isearch ()
+    "Invoke `swiper' from isearch.
+       https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da61c948a6fd/helm-swoop.el#L657-668
 
-i.e. Move seamlessly from isearch to swiper search."
-  (interactive)
-  (let (($query (if isearch-regexp
-                    isearch-string
-                  (regexp-quote isearch-string))))
-    (isearch-exit)
-    (swiper $query)))
-(define-key isearch-mode-map (kbd "M-i") 'swiper--from-isearch)
+  i.e. Move seamlessly from isearch to swiper search."
+    (interactive)
+    (let (($query (if isearch-regexp
+                      isearch-string
+                    (regexp-quote isearch-string))))
+      (isearch-exit)
+      (swiper $query)))
+  (define-key isearch-mode-map (kbd "M-i") 'swiper--from-isearch)
 
-(use-package counsel
-  :config
-  ;; tons more suggested key bindings here https://oremacs.com/swiper
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "M-y") 'counsel-yank-pop)
-  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-  (global-set-key (kbd "<f1> l") 'counsel-find-library)
-  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-  (global-set-key (kbd "<f2> j") 'counsel-set-variable)
-  (global-set-key (kbd "C-c c") 'counsel-compile)
-  ;; (global-set-key (kbd "C-c g") 'counsel-git)
-  (global-set-key (kbd "C-i") 'counsel-git-grep)
-  ;; (global-set-key (kbd "C-c a") 'counsel-linux-app)
-  )
+  (use-package counsel
+    :config
+    ;; tons more suggested key bindings here https://oremacs.com/swiper
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+    (global-set-key (kbd "M-y") 'counsel-yank-pop)
+    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+    (global-set-key (kbd "<f1> l") 'counsel-find-library)
+    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+    (global-set-key (kbd "<f2> j") 'counsel-set-variable)
+    (global-set-key (kbd "C-c c") 'counsel-compile)
+    ;; (global-set-key (kbd "C-c g") 'counsel-git)
+    (global-set-key (kbd "C-i") 'counsel-git-grep)
+    ;; (global-set-key (kbd "C-c a") 'counsel-linux-app)
+    )
 
-;; (use-package projectile
-;;   :config
-;;   (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
-;;   ;; TODO may want to add ".gitignore" to this list
-;;   (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
-;;         projectile-project-root-files-functions #'(projectile-root-top-down
-;;                                                    projectile-root-top-down-recurring
-;;                                                    projectile-root-bottom-up
+  (use-package projectile
+    :config
+    (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
+    ;; TODO may want to add ".gitignore" to this list
+    (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
+          projectile-project-root-files-functions #'(projectile-root-top-down
+                                                     projectile-root-top-down-recurring
+                                                     projectile-root-bottom-up
 
-;;                                  projectile-root-local))
-;;   (projectile-mode 1))
+                                   projectile-root-local))
+    (projectile-mode 1))
 
-;; (use-package counsel-projectile
-;;   :config
-;;   (counsel-projectile-mode))
+  (use-package counsel-projectile
+    :config
+    (counsel-projectile-mode))
 
-;; Hopefully replacing projectile with built-in project.el  TODO still doing git grep w projectile
+  ;; Hopefully replacing projectile with built-in project.el, I had pretty much stopped using projectile but I had wrong type argument, listp error after doing a clean install of emacs28-nativecomp on a fresh ubuntu 22.04 install.
+  ;; But I'd like to return to it.
 
 (defun project-override (dir)
-   ;; TODO dir-locals probably isn't the best solution, maybe should do dedicated .project
+  ;; TODO dir-locals probably isn't the best solution, maybe should do dedicated .project
   (let ((override (or (locate-dominating-file dir "deps.edn")
                       (locate-dominating-file dir ".dir-locals.el"))))
     (if override
         (cons 'vc override)
       nil)))
 
-;; TODO after project-switch-projects call project-switch-to-buffer
-(use-package project
-  ;; :bind-keymap ("M-p" . project-prefix-map)
-  :config
-  (setq project-vc-merge-submodules nil)
-  (add-hook 'project-find-functions #'project-override 100)
-  ;; important for not trying vc where there is no git file, the try vc should fail better
-  (setq project-find-functions (reverse project-find-functions)
-        ;; project-switch-commands #'project-switch-to-buffer ;; TODO rather, I'd like to show the 5 most recently opened buffers from this project
-        ))
+  ;; TODO after project-switch-projects call project-switch-to-buffer
+  (use-package project
+    ;; :bind-keymap ("M-p" . project-prefix-map)
+    :config
+    (setq project-vc-merge-submodules nil)
+    (add-hook 'project-find-functions #'project-override 90)
+    ;; important for not trying vc where there is no git file, the try vc should fail better
+    (setq project-find-functions (reverse project-find-functions)
+          ;; project-switch-commands #'project-switch-to-buffer ;; TODO rather, I'd like to show the 5 most recently opened buffers from this project
+          ))
 
 (defun mc-mark-next-like-this-then-cycle-forward (arg)
   "Mark next like this then cycle forward, take interactive ARG."
@@ -788,10 +789,10 @@ current buffer's, reload dir-locals."
   ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
   )
 
-;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
 (use-package eglot
   :init
-  ;; (add-hook #'prog-mode-hook #'eglot-ensure)
+  ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
+  (add-hook 'prog-mode-hook #'eglot-ensure)
   ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
   )
 
