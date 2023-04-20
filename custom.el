@@ -138,7 +138,9 @@
  '(package-selected-packages
    '(htmlize yaml-mode ws-butler use-package undo-tree switch-buffer-functions scratch restclient restart-emacs redtick pomodoro paradox markdown-mode magit load-env-vars gnu-elpa-keyring-update git-link flycheck-clj-kondo fic-mode exwm expand-region exec-path-from-shell editorconfig doom-modeline diff-hl dictionary counsel-projectile company clojure-snippets clj-refactor auto-package-update))
  '(safe-local-variable-values
-   '((cider-shadow-default-options . ":app")
+   '((cider-clojure-cli-global-options . "-A:dev")
+     (cider-preferred-build-tool . clojure-cli)
+     (cider-shadow-default-options . ":app")
      (eval add-hook 'cider-connected-hook
            (lambda nil
              (shell-command "./git-version.sh"))
