@@ -533,86 +533,185 @@
 ;;   )
 
 (use-package ivy
-  :init
-  (setq ivy-use-virtual-buffers t
-        enable-recursive-minibuffers t
-        ivy-count-format "(%d/%d) "
-        ivy-use-selectable-prompt t)
+    :init
+    (setq ivy-use-virtual-buffers t
+          enable-recursive-minibuffers t
+          ivy-count-format "(%d/%d) "
+          ivy-use-selectable-prompt t)
+    :config
+    (ivy-mode 1)
+    ;; (require 'mc-hide-unmatched-lines-mode) ;; Idk why this was here, delete if it's been a while
+    (global-set-key (kbd "C-c C-r") 'ivy-resume)
+    (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+    (global-set-key (kbd "C-x C-b") 'ivy-switch-buffer)
+    (global-set-key (kbd "C-c v") 'ivy-push-view)
+    (global-set-key (kbd "C-c V") 'ivy-pop-view))
+
+  (use-package swiper
+    :init
+    (set-face-attribute 'isearch nil :background "#FF9F93")
+    :config
+    (global-set-key (kbd "M-i") 'swiper-isearch))
+
+  (defun swiper--from-isearch ()
+    "Invoke `swiper' from isearch.
+       https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da61c948a6fd/helm-swoop.el#L657-668
+
+  i.e. Move seamlessly from isearch to swiper search."
+    (interactive)
+    (let (($query (if isearch-regexp
+                      isearch-string
+                    (regexp-quote isearch-string))))
+      (isearch-exit)
+      (swiper $query)))
+  (define-key isearch-mode-map (kbd "M-i") 'swiper--from-isearch)
+
+  (use-package counsel
+    :config
+    ;; tons more suggested key bindings here https://oremacs.com/swiper
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+    (global-set-key (kbd "M-y") 'counsel-yank-pop)
+    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+    (global-set-key (kbd "<f1> l") 'counsel-find-library)
+    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+    (global-set-key (kbd "<f2> j") 'counsel-set-variable)
+    (global-set-key (kbd "C-c c") 'counsel-compile)
+    ;; (global-set-key (kbd "C-c g") 'counsel-git)
+    (global-set-key (kbd "C-i") 'counsel-git-grep)
+    ;; (global-set-key (kbd "C-c a") 'counsel-linux-app)
+    )
+
+  (use-package projectile
+    :config
+    (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
+    ;; TODO may want to add ".gitignore" to this list
+    (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
+          projectile-project-root-files-functions #'(projectile-root-top-down
+                                                     projectile-root-top-down-recurring
+                                                     projectile-root-bottom-up
+
+                                   projectile-root-local))
+    (projectile-mode 1))
+
+  (use-package counsel-projectile
+    :config
+    (counsel-projectile-mode))
+
+  ;; Hopefully replacing projectile with built-in project.el, I had pretty much stopped using projectile but I had wrong type argument, listp error after doing a clean install of emacs28-nativecomp on a fresh ubuntu 22.04 install.
+  ;; But I'd like to return to it.
+
+  (defun project-override (dir)
+    (message (concat "dir " dir))
+    ;; TODO dir-locals probably isn't the best solution, maybe should do dedicated .project
+    (let ((override (or (locate-dominating-file dir "deps.edn")
+                        (locate-dominating-file dir ".dir-locals.el"))))
+      (message (concat "override " override))
+      ;; TODO I think this output shape is broken? I've currently set up project-find-functions to use project-projectile as the primary search. Not ideal.
+      (when override (cons 'vc (list override)))))
+
+  ;; (project-projectile "~/master-at-arms2/jib/")
+  ;; (project-try-vc "~/master-at-arms2/jib/")
+  ;; (project-override "~/master-at-arms2/jib/")
+
+  ;; TODO after project-switch-projects call project-switch-to-buffer
+(use-package project
+  ;; :bind-keymap ("M-p" . project-prefix-map)
   :config
-  (ivy-mode 1)
-  ;; (require 'mc-hide-unmatched-lines-mode) ;; Idk why this was here, delete if it's been a while
-  (global-set-key (kbd "C-c C-r") 'ivy-resume)
-  (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
-  (global-set-key (kbd "C-x C-b") 'ivy-switch-buffer)
-  (global-set-key (kbd "C-c v") 'ivy-push-view)
-  (global-set-key (kbd "C-c V") 'ivy-pop-view))
+  (setq project-vc-merge-submodules nil)
+  ;; (add-hook 'project-find-functions #'project-override)
+  ;; important for not trying vc where there is no git file, the try vc should fail better
+  (setq project-find-functions '(project-projectile project-try-vc)
+        ;; project-switch-commands #'project-switch-to-buffer ;; TODO rather, I'd like to show the 5 most recently opened buffers from this project
+        ))
 
-(use-package swiper
-  :init
-  (set-face-attribute 'isearch nil :background "#FF9F93")
-  :config
-  (global-set-key (kbd "M-i") 'swiper-isearch))
+(use-package ivy
+    :init
+    (setq ivy-use-virtual-buffers t
+          enable-recursive-minibuffers t
+          ivy-count-format "(%d/%d) "
+          ivy-use-selectable-prompt t)
+    :config
+    (ivy-mode 1)
+    ;; (require 'mc-hide-unmatched-lines-mode) ;; Idk why this was here, delete if it's been a while
+    (global-set-key (kbd "C-c C-r") 'ivy-resume)
+    (global-set-key (kbd "C-x b") 'ivy-switch-buffer)
+    (global-set-key (kbd "C-x C-b") 'ivy-switch-buffer)
+    (global-set-key (kbd "C-c v") 'ivy-push-view)
+    (global-set-key (kbd "C-c V") 'ivy-pop-view))
 
-(defun swiper--from-isearch ()
-  "Invoke `swiper' from isearch.
-     https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da61c948a6fd/helm-swoop.el#L657-668
+  (use-package swiper
+    :init
+    (set-face-attribute 'isearch nil :background "#FF9F93")
+    :config
+    (global-set-key (kbd "M-i") 'swiper-isearch))
 
-i.e. Move seamlessly from isearch to swiper search."
-  (interactive)
-  (let (($query (if isearch-regexp
-                    isearch-string
-                  (regexp-quote isearch-string))))
-    (isearch-exit)
-    (swiper $query)))
-(define-key isearch-mode-map (kbd "M-i") 'swiper--from-isearch)
+  (defun swiper--from-isearch ()
+    "Invoke `swiper' from isearch.
+       https://github.com/ShingoFukuyama/helm-swoop/blob/f67fa8a4fe3b968b7105f8264a96da61c948a6fd/helm-swoop.el#L657-668
 
-(use-package counsel
-  :config
-  ;; tons more suggested key bindings here https://oremacs.com/swiper
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "M-y") 'counsel-yank-pop)
-  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-  (global-set-key (kbd "<f1> l") 'counsel-find-library)
-  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-  (global-set-key (kbd "<f2> j") 'counsel-set-variable)
-  (global-set-key (kbd "C-c c") 'counsel-compile)
-  ;; (global-set-key (kbd "C-c g") 'counsel-git)
-  (global-set-key (kbd "C-i") 'counsel-git-grep)
-  ;; (global-set-key (kbd "C-c a") 'counsel-linux-app)
-  )
+  i.e. Move seamlessly from isearch to swiper search."
+    (interactive)
+    (let (($query (if isearch-regexp
+                      isearch-string
+                    (regexp-quote isearch-string))))
+      (isearch-exit)
+      (swiper $query)))
+  (define-key isearch-mode-map (kbd "M-i") 'swiper--from-isearch)
 
-(use-package projectile
-  :config
-  (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
-  ;; TODO may want to add ".gitignore" to this list
-  (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
-        projectile-project-root-files-functions #'(projectile-root-top-down
-                                                   projectile-root-top-down-recurring
-                                                   projectile-root-bottom-up
+  (use-package counsel
+    :config
+    ;; tons more suggested key bindings here https://oremacs.com/swiper
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+    (global-set-key (kbd "M-y") 'counsel-yank-pop)
+    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+    (global-set-key (kbd "<f1> l") 'counsel-find-library)
+    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+    (global-set-key (kbd "<f2> j") 'counsel-set-variable)
+    (global-set-key (kbd "C-c c") 'counsel-compile)
+    ;; (global-set-key (kbd "C-c g") 'counsel-git)
+    (global-set-key (kbd "C-i") 'counsel-git-grep)
+    ;; (global-set-key (kbd "C-c a") 'counsel-linux-app)
+    )
 
-                                 projectile-root-local))
-  (projectile-mode 1))
+  (use-package projectile
+    :config
+    (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
+    ;; TODO may want to add ".gitignore" to this list
+    (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
+          projectile-project-root-files-functions #'(projectile-root-top-down
+                                                     projectile-root-top-down-recurring
+                                                     projectile-root-bottom-up
 
-(use-package counsel-projectile
-  :config
-  (counsel-projectile-mode))
+                                   projectile-root-local))
+    (projectile-mode 1))
 
-;; Hopefully replacing projectile with built-in project.el, I had pretty much stopped using projectile but I had wrong type argument, listp error after doing a clean install of emacs28-nativecomp on a fresh ubuntu 22.04 install.
-;; But I'd like to return to it.
+  (use-package counsel-projectile
+    :config
+    (counsel-projectile-mode))
 
-(defun project-override (dir)
-  (message (concat "dir " dir))
-  ;; TODO dir-locals probably isn't the best solution, maybe should do dedicated .project
-  (let ((override (or (locate-dominating-file dir "deps.edn")
-                      (locate-dominating-file dir ".dir-locals.el"))))
-    (message (concat "override " override))
-    ;; TODO I think this output shape is broken? I've currently set up project-find-functions to use project-projectile as the primary search. Not ideal.
-    (when override (cons 'vc override))))
+  ;; Hopefully replacing projectile with built-in project.el, I had pretty much stopped using projectile but I had wrong type argument, listp error after doing a clean install of emacs28-nativecomp on a fresh ubuntu 22.04 install.
+  ;; But I'd like to return to it.
 
-;; TODO after project-switch-projects call project-switch-to-buffer
+  (defun project-override (dir)
+    (message (concat "dir " dir))
+    ;; TODO dir-locals probably isn't the best solution, maybe should do dedicated .project
+    (let ((override (or (locate-dominating-file dir "deps.edn")
+                        (locate-dominating-file dir ".dir-locals.el"))))
+      (message (concat "override " override))
+      ;; TODO I think this output shape is broken? I've currently set up project-find-functions to use project-projectile as the primary search. Not ideal.
+      (when override (cons 'vc (list override)))))
+
+  ;; (project-projectile "~/master-at-arms2/jib/")
+  ;; (project-try-vc "~/master-at-arms2/jib/")
+  ;; (project-override "~/master-at-arms2/jib/")
+
+  ;; TODO after project-switch-projects call project-switch-to-buffer
 (use-package project
   ;; :bind-keymap ("M-p" . project-prefix-map)
   :config
@@ -703,10 +802,6 @@ i.e. Move seamlessly from isearch to swiper search."
 
 (use-package request)
 
-(use-package eldoc
-  :init
-  )
-
 ;; (use-package eaf
 ;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
 ;;   :custom
@@ -749,53 +844,56 @@ current buffer's, reload dir-locals."
                 (eval add-hook 'after-save-hook 'org-html-export-to-html t t))))
 
 ;; So I was able to build ~/.tree-sitter/bin/tree_sitter_clojure_binding.node but I can't figure out how to use it
-;; (tree-sitter-require 'clojure) causes a crash, it should be a .so file. using tree-sitter cli the .node file works.
-;; actually this may have worked: gcc -shared obj.target/tree_sitter_clojure_binding/bindings/node/binding.o -o clojure.so
-;; supposedly tree-ssitter-hl-mode overrides many of the font-lock features, so I'm hoping that minimizing font-lock
-;; actions helps with my highlighting bottleneck while typing fast.
-;; TODO look into using eglot for code highlighting instead of tree-sitter or jit-lock
-;; NOTE just don't worry about this, it is built-in native in emacs29
-;; (use-package tree-sitter
-;;   :hook ((clojure-mode . tree-sitter-mode)
-;;          (clojure-script . tree-sitter-mode)
-;;          (tree-sitter-mode . tree-sitter-hl-mode))
-;;   :config
-;;   (setq tree-sitter-major-mode-language-alist ;; directory stored in tree-sitter-load-path
-;;         (append tree-sitter-major-mode-language-alist
-;;                 '((clojure-mode . clojure)
-;;                   (clojurescript-mode . clojure)))))
-;;
-;; (use-package tree-sitter-langs)
+  ;; (tree-sitter-require 'clojure) causes a crash, it should be a .so file. using tree-sitter cli the .node file works.
+  ;; actually this may have worked: gcc -shared obj.target/tree_sitter_clojure_binding/bindings/node/binding.o -o clojure.so
+  ;; supposedly tree-ssitter-hl-mode overrides many of the font-lock features, so I'm hoping that minimizing font-lock
+  ;; actions helps with my highlighting bottleneck while typing fast.
+  ;; TODO look into using eglot for code highlighting instead of tree-sitter or jit-lock
+  ;; NOTE just don't worry about this, it is built-in native in emacs29
+  ;; (use-package tree-sitter
+  ;;   :hook ((clojure-mode . tree-sitter-mode)
+  ;;          (clojure-script . tree-sitter-mode)
+  ;;          (tree-sitter-mode . tree-sitter-hl-mode))
+  ;;   :config
+  ;;   (setq tree-sitter-major-mode-language-alist ;; directory stored in tree-sitter-load-path
+  ;;         (append tree-sitter-major-mode-language-alist
+  ;;                 '((clojure-mode . clojure)
+  ;;                   (clojurescript-mode . clojure)))))
+  ;;
+  ;; (use-package tree-sitter-langs)
 
-(use-package ws-butler
-  :hook (prog-mode . ws-butler-mode)
-  :config (ws-butler-global-mode 1))
+  (use-package ws-butler
+    :hook (prog-mode . ws-butler-mode)
+    :config (ws-butler-global-mode 1))
 
-;; (use-package editorconfig
-;;   :config
-;;   (editorconfig-mode 1))
+  ;; (use-package editorconfig
+  ;;   :config
+  ;;   (editorconfig-mode 1))
 
-(use-package flycheck
-  ;; :init (global-flycheck-mode) ;; no longer want this becasue of eglot
-  )
+  (use-package flycheck
+    ;; :init (global-flycheck-mode) ;; no longer want this becasue of eglot
+    )
 
-(use-package expand-region
-  :config
-  (global-set-key (kbd "C-=") 'er/expand-region))
+  (use-package expand-region
+    :config
+    (global-set-key (kbd "C-=") 'er/expand-region))
 
-(use-package company
-  :init (global-company-mode)
-  :config
-  (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
-  ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
-  )
+  (use-package company
+    :init (global-company-mode)
+    :config
+    (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+    ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
+    )
 
-;; (use-package eglot
-;;   :init
-;;   ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
-;;   (add-hook 'prog-mode-hook #'eglot-ensure)
-;;   ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
-;;   )
+  (global-set-key (kbd "M-'") #'xref-find-references)
+
+  ;; NOTE since upgrading to emacs29 I am trying out not using a hook to better understand my multiple server issue.
+  ;; (use-package eglot
+  ;;   :init
+  ;;   ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
+  ;;   (add-hook 'prog-mode-hook #'eglot-ensure)
+  ;;   ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
+  ;;   )
 
 (use-package hideshow
   :bind (("C-\\" . hs-toggle-hiding)
@@ -814,26 +912,112 @@ current buffer's, reload dir-locals."
                   (json-mode "{" "}" "/[*/]" nil)
                   (javascript-mode  "{" "}" "/[*/]" nil)))))
 
-(defun duplicate-line()
-  (interactive)
-  (move-beginning-of-line 1)
-  (kill-line)
-  (yank)
-  (open-line 1)
-  (next-line 1)
-  (yank))
-(global-set-key (kbd "C-c D") 'duplicate-line)
+  (defun duplicate-line()
+    (interactive)
+    (move-beginning-of-line 1)
+    (kill-line)
+    (yank)
+    (open-line 1)
+    (next-line 1)
+    (yank))
+  (global-set-key (kbd "C-c D") 'duplicate-line)
 
-;; (use-package highlight-indent-guides
-;;     :hook (python-mode . highlight-indent-guides-mode)
-;;     :config
-;;     (setq highlight-indent-guides-method 'character)
-;;     (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
-;;     (setq highlight-indent-guides-auto-character-face-perc 20))
+  ;; (use-package highlight-indent-guides
+  ;;     :hook (python-mode . highlight-indent-guides-mode)
+  ;;     :config
+  ;;     (setq highlight-indent-guides-method 'character)
+  ;;     (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
+  ;;     (setq highlight-indent-guides-auto-character-face-perc 20))
 
-;; (use-package symbol-overlay)
+  ;; (use-package symbol-overlay)
 
-(add-hook 'doc-view-mode-hook 'auto-revert-mode)
+;; So I was able to build ~/.tree-sitter/bin/tree_sitter_clojure_binding.node but I can't figure out how to use it
+  ;; (tree-sitter-require 'clojure) causes a crash, it should be a .so file. using tree-sitter cli the .node file works.
+  ;; actually this may have worked: gcc -shared obj.target/tree_sitter_clojure_binding/bindings/node/binding.o -o clojure.so
+  ;; supposedly tree-ssitter-hl-mode overrides many of the font-lock features, so I'm hoping that minimizing font-lock
+  ;; actions helps with my highlighting bottleneck while typing fast.
+  ;; TODO look into using eglot for code highlighting instead of tree-sitter or jit-lock
+  ;; NOTE just don't worry about this, it is built-in native in emacs29
+  ;; (use-package tree-sitter
+  ;;   :hook ((clojure-mode . tree-sitter-mode)
+  ;;          (clojure-script . tree-sitter-mode)
+  ;;          (tree-sitter-mode . tree-sitter-hl-mode))
+  ;;   :config
+  ;;   (setq tree-sitter-major-mode-language-alist ;; directory stored in tree-sitter-load-path
+  ;;         (append tree-sitter-major-mode-language-alist
+  ;;                 '((clojure-mode . clojure)
+  ;;                   (clojurescript-mode . clojure)))))
+  ;;
+  ;; (use-package tree-sitter-langs)
+
+  (use-package ws-butler
+    :hook (prog-mode . ws-butler-mode)
+    :config (ws-butler-global-mode 1))
+
+  ;; (use-package editorconfig
+  ;;   :config
+  ;;   (editorconfig-mode 1))
+
+  (use-package flycheck
+    ;; :init (global-flycheck-mode) ;; no longer want this becasue of eglot
+    )
+
+  (use-package expand-region
+    :config
+    (global-set-key (kbd "C-=") 'er/expand-region))
+
+  (use-package company
+    :init (global-company-mode)
+    :config
+    (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+    ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
+    )
+
+  (global-set-key (kbd "M-'") #'xref-find-references)
+
+  ;; NOTE since upgrading to emacs29 I am trying out not using a hook to better understand my multiple server issue.
+  ;; (use-package eglot
+  ;;   :init
+  ;;   ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
+  ;;   (add-hook 'prog-mode-hook #'eglot-ensure)
+  ;;   ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
+  ;;   )
+
+(use-package hideshow
+  :bind (("C-\\" . hs-toggle-hiding)
+         ("M-+" . hs-show-all)
+         ("M--" . hs-hide-all))
+  :init (add-hook #'prog-mode-hook #'hs-minor-mode)
+  :diminish hs-minor-mode
+  :config
+  ;; Add `json-mode' and `javascript-mode' to the list
+  (setq hs-special-modes-alist
+        (mapcar 'purecopy
+                '((c-mode "{" "}" "/[*/]" nil nil)
+                  (c++-mode "{" "}" "/[*/]" nil nil)
+                  (java-mode "{" "}" "/[*/]" nil nil)
+                  (js-mode "{" "}" "/[*/]" nil)
+                  (json-mode "{" "}" "/[*/]" nil)
+                  (javascript-mode  "{" "}" "/[*/]" nil)))))
+
+  (defun duplicate-line()
+    (interactive)
+    (move-beginning-of-line 1)
+    (kill-line)
+    (yank)
+    (open-line 1)
+    (next-line 1)
+    (yank))
+  (global-set-key (kbd "C-c D") 'duplicate-line)
+
+  ;; (use-package highlight-indent-guides
+  ;;     :hook (python-mode . highlight-indent-guides-mode)
+  ;;     :config
+  ;;     (setq highlight-indent-guides-method 'character)
+  ;;     (setq highlight-indent-guides-character 9615) ;; left-align vertical bar
+  ;;     (setq highlight-indent-guides-auto-character-face-perc 20))
+
+  ;; (use-package symbol-overlay)
 
 (defun paredit-delete-indentation (&optional arg)
   "Handle joining lines that end in a comment."
@@ -920,14 +1104,25 @@ current buffer's, reload dir-locals."
 
 (use-package markdown-toc)
 
+(use-package markdown-mode
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  ;; make sure to `apt install pandoc`
+  :init (setq markdown-command "pandoc --standalone --from gfm Form-Curator.md --highlight-style kate"))
+
+(use-package markdown-toc)
+
 (add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-tail-mode))
 
-(add-to-list 'auto-mode-alist '("\\.env\\'" . sh-mode))
+(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+(define-key emacs-lisp-mode-map (kbd "C-c C-e") 'eval-last-sexp)
+(define-key emacs-lisp-mode-map (kbd "C-c e") 'eval-last-sexp)
 
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-
-(use-package yaml-mode
-  :mode ("\\.yml$" . yaml-mode))
+(define-key emacs-lisp-mode-map (kbd "C-c C-e") 'eval-last-sexp)
+(define-key emacs-lisp-mode-map (kbd "C-c e") 'eval-last-sexp)
 
 (use-package rjsx-mode
   :init
@@ -966,7 +1161,42 @@ current buffer's, reload dir-locals."
   :mode (("\\.ts\\'" . typescript-mode)
          ("\\.tsx\\'" . typescript-mode)))
 
+(use-package rjsx-mode
+  :init
+  (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+  (setq-default js2-basic-indent 2
+                ;; js2-basic-offset 2 ;; may need to use js-indent-level. js2-basic-offset is just an alias
+                js2-auto-indent-p t
+                js2-cleanup-whitespace t
+                js2-enter-indents-newline t
+                js2-indent-on-enter-key t
+                js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$"))
 
+  (add-hook 'rjsx-mode-hook
+            (lambda ()
+              ;; (flycheck-select-checker "javascript-eslint")
+              (electric-pair-mode 1)))
+
+  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+
+;; Idk what this does
+;; (use-package tern
+;;    :init (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+;;    :config
+;;      (use-package company-tern
+;;         :ensure t
+;;         :init (add-to-list 'company-backends 'company-tern)))
+
+(use-package js2-refactor
+  :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
+  :config (js2r-add-keybindings-with-prefix "C-c ."))
+
+;; Not sure what this does
+(provide 'init-javascript)
+
+(use-package typescript-mode
+  :mode (("\\.ts\\'" . typescript-mode)
+         ("\\.tsx\\'" . typescript-mode)))
 
 ;; (use-package go-projectile
 ;;   :init)
@@ -1084,7 +1314,27 @@ current buffer's, reload dir-locals."
 ;; (use-package flycheck-rust
 ;;   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
-;; (use-package glsl-mode)
+;; (use-package toml-mode)
+
+;; (use-package rust-mode
+;;   :hook (rust-mode . lsp)
+;;   :config
+;;   (add-hook 'rust-mode-hook
+;;             (lambda ()
+;;               (electric-pair-mode 1)))
+;;   )
+
+;; ;; Add keybindings for interacting with Cargo
+;; (use-package cargo
+;;   :hook (rust-mode . cargo-minor-mode)
+;;   :config
+;;   ;; (define-key cargo-minor-mode-map (kbd "C-c C-c C-r") (lambda ()
+;;   ;;                                                        (interactive)
+;;   ;;                                                        (message "hey")))
+;;   )
+
+;; (use-package flycheck-rust
+;;   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 ;; (use-package slime-company)
 
@@ -1126,6 +1376,7 @@ current buffer's, reload dir-locals."
  (setq clojure-indent-style 'align-arguments
        clojure-align-forms-automatically t)
  :config
+ ;; (add-hook 'eldoc-documentation-functions #'cider-eldoc)
  ;; (add-hook 'clojure-mode-hook 'paredit-mode)
  ;; (add-hook 'clojure-mode-hook 'eglot-ensure)
  ;; (add-hook 'clojurescript-mode-hook 'eglot-ensure)
@@ -1206,6 +1457,105 @@ Then the Clojure buffer is activated as if nothing happened."
 
 (advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)
 
-(use-package php-mode)
+;; TODO these exec paths probably should be at a much more primitive place in this settings.org
+(add-to-list 'exec-path "/usr/local/bin/")
+(add-to-list 'exec-path "/home/benwiz/bin/")
 
-(use-package dockerfile-mode)
+;; TODO Configure clojure-lsp, using as a starting point ~/.emacs.d/.clj-kondo/
+
+(defun insert-discard ()
+  "Insert #_ at current location."
+  (interactive)
+  (insert "#_"))
+
+(use-package clojure-mode
+ :bind (("C-c d f" . cider-code)
+        ("C-c d g" . cider-grimoire)
+        ("C-c d w" . cidler-grimoire-web)
+        ("C-c d c" . clojure-cheatsheet)
+        ("C-c d d" . dash-at-point)
+        ("C-c C-;" . insert-discard))
+ :init
+ (setq clojure-indent-style 'align-arguments
+       clojure-align-forms-automatically t)
+ :config
+ ;; (add-hook 'eldoc-documentation-functions #'cider-eldoc)
+ ;; (add-hook 'clojure-mode-hook 'paredit-mode)
+ ;; (add-hook 'clojure-mode-hook 'eglot-ensure)
+ ;; (add-hook 'clojurescript-mode-hook 'eglot-ensure)
+ )
+
+(defun cider-send-and-evaluate-sexp ()
+  "Sends the sexp located before the point or
+the active region to the REPL and evaluates it.
+Then the Clojure buffer is activated as if nothing happened."
+  (interactive)
+  (if (not (region-active-p))
+      (cider-insert-last-sexp-in-repl)
+    (cider-insert-in-repl
+     (buffer-substring (region-beginning) (region-end)) nil))
+  (cider-switch-to-repl-buffer)
+  (cider-repl-closing-return)
+  (cider-switch-to-last-clojure-buffer)
+  (message ""))
+
+(defun ha/cider-append-comment ()
+  (when (null (nth 8 (syntax-ppss)))
+    (insert " ; ")))
+
+(defun benwiz/cider-test-run-ns-tests ()
+  (interactive)
+  (cider-load-buffer)
+  (cider-test-run-ns-tests nil))
+
+(use-package cider
+  :commands (cider cider-connect cider-jack-in cider-jack-in-clj cider-jack-in-cljs)
+
+  :init
+  (setq cider-auto-select-error-buffer t
+        cider-repl-pop-to-buffer-on-connect nil
+        cider-repl-display-in-current-window t
+        cider-repl-use-clojure-font-lock t
+        cider-repl-wrap-history t
+        cider-repl-history-size 1000
+        cider-show-error-buffer t
+        nrepl-hide-special-buffers t
+        ;; Stop error buffer from popping up while working in buffers other than the REPL:
+        nrepl-popup-stacktraces nil)
+
+  ;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  (add-hook 'cider-mode-hook 'company-mode)
+
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  (add-hook 'cider-repl-mode-hook 'superword-mode)
+  (add-hook 'cider-repl-mode-hook 'company-mode)
+  (add-hook 'cider-test-report-mode 'jcf-soft-wrap)
+
+  :bind (:map cider-mode-map
+              ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
+              ("C-c C-p"     . cider-pprint-eval-last-sexp-to-comment)
+              ("C-c C-<tab>" . cider-format-edn-region)
+              ("C-c C-t n"   . benwiz/cider-test-run-ns-tests))
+  (:map cider-repl-mode-map
+        ("C-c C-l"     . cider-repl-clear-buffer)
+        ("C-c C-<tab>" . cider-format-edn-region))
+
+  :config
+  (setq exec-path (append exec-path '("/home/benwiz/.yarn/bin")))
+  (setq exec-path (append exec-path '("/home/benwiz/bin")))
+  ;; (setq exec-path (append '("/Users/benwiz/.nvm/versions/node/v12.16.1/bin") exec-path))
+  (add-to-list 'exec-path "/home/benwiz/.nvm/versions/node/v14.4.0/bin")
+  (setq exec-path (append '("/Users/benwiz/.yarn/bin") exec-path))
+  (setq cider-cljs-repl-types '((nashorn "(do (require 'cljs.repl.nashorn) (cider.piggieback/cljs-repl (cljs.repl.nashorn/repl-env)))" cider-check-nashorn-requirements)
+                                (figwheel "(do (require 'figwheel-sidecar.repl-api) (figwheel-sidecar.repl-api/start-figwheel!) (figwheel-sidecar.repl-api/cljs-repl))" cider-check-figwheel-requirements)
+                                (figwheel-main cider-figwheel-main-init-form cider-check-figwheel-main-requirements)
+                                (figwheel-connected "(figwheel-sidecar.repl-api/cljs-repl)" cider-check-figwheel-requirements)
+                                (node "(do (require 'cljs.repl.node) (cider.piggieback/cljs-repl (cljs.repl.node/repl-env)))" cider-check-node-requirements)
+                                (weasel "(do (require 'weasel.repl.websocket) (cider.piggieback/cljs-repl (weasel.repl.websocket/repl-env :ip \"127.0.0.1\" :port 9001)))" cider-check-weasel-requirements)
+                                (boot "(do (require 'adzerk.boot-cljs-repl) (adzerk.boot-cljs-repl/start-repl))" cider-check-boot-requirements)
+                                (app cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements) ;; this is what is being added
+                                (shadow cider-shadow-cljs-init-form cider-check-shadow-cljs-requirements)
+                                (shadow-select cider-shadow-select-cljs-init-form cider-check-shadow-cljs-requirements)
+                                (custom cider-custom-cljs-repl-init-form nil))))
+
+(advice-add 'cider-eval-print-last-sexp :before #'ha/cider-append-comment)

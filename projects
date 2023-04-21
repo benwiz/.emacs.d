@@ -1,3 +1,7 @@
 ;;; -*- lisp-data -*-
-(("/home/benwiz/master-at-arms2/tools/npi-to-fhir/")
- ("/home/benwiz/master-at-arms2/jib/"))
+(("/home/benwiz/master-at-arms2/credentialing-server/")
+ ("/home/benwiz/master-at-arms2/furl/")
+ ("/home/benwiz/master-at-arms2/tools/npi-to-fhir/")
+ ("/home/benwiz/master-at-arms2/jib/")
+ ("/home/benwiz/master-at-arms2/form-elements/")
+ ("/home/benwiz/master-at-arms2/breeze_scratch/"))

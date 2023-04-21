@@ -641,33 +641,30 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
     ;; (global-set-key (kbd "C-c a") 'counsel-linux-app)
     )
 
-  (use-package projectile
-    :config
-    (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
-    ;; TODO may want to add ".gitignore" to this list
-    (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
-          projectile-project-root-files-functions #'(projectile-root-top-down
-                                                     projectile-root-top-down-recurring
-                                                     projectile-root-bottom-up
+  ;; (use-package projectile
+  ;;   :config
+  ;;   (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
+  ;;   ;; TODO may want to add ".gitignore" to this list
+  ;;   (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
+  ;;         projectile-project-root-files-functions #'(projectile-root-top-down
+  ;;                                                    projectile-root-top-down-recurring
+  ;;                                                    projectile-root-bottom-up
 
-                                   projectile-root-local))
-    (projectile-mode 1))
+  ;;                                  projectile-root-local))
+  ;;   (projectile-mode 1))
 
-  (use-package counsel-projectile
-    :config
-    (counsel-projectile-mode))
+  ;; (use-package counsel-projectile
+  ;;   :config
+  ;;   (counsel-projectile-mode))
 
-  ;; Hopefully replacing projectile with built-in project.el, I had pretty much stopped using projectile but I had wrong type argument, listp error after doing a clean install of emacs28-nativecomp on a fresh ubuntu 22.04 install.
-  ;; But I'd like to return to it.
-
-  (defun project-override (dir)
-    (message (concat "dir " dir))
-    ;; TODO dir-locals probably isn't the best solution, maybe should do dedicated .project
-    (let ((override (or (locate-dominating-file dir "deps.edn")
-                        (locate-dominating-file dir ".dir-locals.el"))))
-      (message (concat "override " override))
-      ;; TODO I think this output shape is broken? I've currently set up project-find-functions to use project-projectile as the primary search. Not ideal.
-      (when override (cons 'vc (list override)))))
+(defun project-override (dir)
+  (message (concat "dir " dir))
+  ;; TODO dir-locals probably isn't the best solution, maybe should do dedicated .project
+  (let ((override (or (locate-dominating-file dir "deps.edn")
+                      (locate-dominating-file dir ".dir-locals.el"))))
+    (message (concat "override " override))
+    ;; TODO I think this output shape is broken? I've currently set up project-find-functions to use project-projectile as the primary search. Not ideal.
+    (when override (cons 'vc (list override)))))
 
   ;; (project-projectile "~/master-at-arms2/jib/")
   ;; (project-try-vc "~/master-at-arms2/jib/")
@@ -680,6 +677,7 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
   (setq project-vc-merge-submodules nil)
   ;; (add-hook 'project-find-functions #'project-override)
   ;; important for not trying vc where there is no git file, the try vc should fail better
+  ;; NOTE if project-projectile stops working, may need to re-install projectile above, but could do a minimally configged "off" version
   (setq project-find-functions '(project-projectile project-try-vc)
         ;; project-switch-commands #'project-switch-to-buffer ;; TODO rather, I'd like to show the 5 most recently opened buffers from this project
         ))
@@ -774,6 +772,7 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 #+END_SRC
 ** Eldoc
 #+BEGIN_SRC emacs-lisp
+  ;; TODO I'd like to show cider in the command line but eglot when inspected
   (use-package eldoc
     :init
     )
@@ -1284,9 +1283,7 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
           ;; Stop error buffer from popping up while working in buffers other than the REPL:
           nrepl-popup-stacktraces nil)
 
-    ;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
     (add-hook 'cider-mode-hook 'company-mode)
-
     (add-hook 'cider-repl-mode-hook 'paredit-mode)
     (add-hook 'cider-repl-mode-hook 'superword-mode)
     (add-hook 'cider-repl-mode-hook 'company-mode)
