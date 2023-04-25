@@ -641,17 +641,18 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
     ;; (global-set-key (kbd "C-c a") 'counsel-linux-app)
     )
 
-  ;; (use-package projectile
-  ;;   :config
-  ;;   (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
-  ;;   ;; TODO may want to add ".gitignore" to this list
-  ;;   (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
-  ;;         projectile-project-root-files-functions #'(projectile-root-top-down
-  ;;                                                    projectile-root-top-down-recurring
-  ;;                                                    projectile-root-bottom-up
 
-  ;;                                  projectile-root-local))
-  ;;   (projectile-mode 1))
+  (use-package projectile
+    :config
+    (define-key projectile-mode-map (kbd "M-p") 'projectile-command-map)
+    ;; TODO may want to add ".gitignore" to this list
+    (setq projectile-project-root-files (cons ".dir-locals.el" (cons ".projectile" projectile-project-root-files))
+          projectile-project-root-files-functions #'(projectile-root-top-down
+                                                     projectile-root-top-down-recurring
+                                                     projectile-root-bottom-up
+
+                                                     projectile-root-local))
+    (projectile-mode 1))
 
   ;; (use-package counsel-projectile
   ;;   :config
@@ -1070,7 +1071,8 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 #+END_SRC
 ** Python
 #+BEGIN_SRC emacs-lisp
-
+  (use-package python-mode
+    :bind (("C-c C-q" . python-shell-restart)))
 #+END_SRC
 ** Go
 #+BEGIN_SRC emacs-lisp
@@ -1293,7 +1295,9 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
                 ("C-c C-v C-c" . cider-send-and-evaluate-sexp)
                 ("C-c C-p"     . cider-pprint-eval-last-sexp-to-comment)
                 ("C-c C-<tab>" . cider-format-edn-region)
-                ("C-c C-t n"   . benwiz/cider-test-run-ns-tests))
+                ("C-c C-t n"   . benwiz/cider-test-run-ns-tests)
+                ;; ("<return>" . cider-repl-closing-return)
+                )
     (:map cider-repl-mode-map
           ("C-c C-l"     . cider-repl-clear-buffer)
           ("C-c C-<tab>" . cider-format-edn-region))

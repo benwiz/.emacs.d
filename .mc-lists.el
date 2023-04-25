@@ -44,6 +44,7 @@
         org-self-insert-command
         org-todo
         outline-show-children
+        paredit-C-j
         paredit-backward
         paredit-backward-down
         paredit-backward-kill-word
@@ -52,6 +53,7 @@
         paredit-close-curly
         paredit-close-round
         paredit-close-square
+        paredit-delete-char
         paredit-delete-indentation
         paredit-doublequote
         paredit-forward
