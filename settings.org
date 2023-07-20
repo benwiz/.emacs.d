@@ -377,11 +377,14 @@
 
   (use-package dired
     :ensure nil ;; dired is not package.el
+    :bind (:map dired-mode-map
+           ("<tab>" . dired-hide-subdir)
+           ("C-i" . dired-kill-subdir))
     :config
     (setq dired-omit-files "^.~$")
 
-    ;; dired - reuse current buffer by pressing 'a'
-    ;; (put 'dired-find-alternate-file 'disabled nil)
+    ;; dired - reuse current buffer by pressing 'a' instead of 'enter'
+    (put 'dired-find-alternate-file 'disabled nil)
 
     ;; always delete and copy recursively
     (setq dired-recursive-deletes 'always)

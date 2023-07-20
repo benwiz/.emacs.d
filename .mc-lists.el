@@ -17,6 +17,7 @@
         clojure-sort-ns
         comment-line
         company-indent-or-complete-common
+        complete-symbol
         counsel-yank-pop
         dabbrev-expand
         default-indent-new-line
