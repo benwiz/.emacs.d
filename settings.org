@@ -1,6 +1,7 @@
 # #+TITLE: settings.org | Ben Wiz
 * To Do
 ** project opener should create dedicated tab
+** clojure should be able to navigate to java source. May need to set `cider-jdk-src-paths`.
 ** clojure lsp
 *** customize eldoc
 *** cusotmize/learn xref
@@ -1071,6 +1072,14 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
   (use-package typescript-mode
     :mode (("\\.ts\\'" . typescript-mode)
            ("\\.tsx\\'" . typescript-mode)))
+#+END_SRC
+** JSON
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'json-mode-hook
+            (lambda ()
+            (make-local-variable 'js-indent-level)
+              (setq tab-width 2)
+            (setq js-indent-level 2)))
 #+END_SRC
 ** Python
 #+BEGIN_SRC emacs-lisp
