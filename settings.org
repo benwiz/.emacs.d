@@ -22,50 +22,50 @@
 ** better git counsel grep `M-P s i` https://emacs.stackexchange.com/questions/37247/specifying-filetype-when-using-counsel-git-grep
 * Operating System
 #+BEGIN_SRC emacs-lisp
-(defconst *is-a-mac* (eq system-type 'darwin))
+  (defconst *is-a-mac* (eq system-type 'darwin))
 (when *is-a-mac*
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
-(setq mac-command-modifier 'meta)
+  (setq mac-command-modifier 'meta)
 #+END_SRC
 * emacs.d
 [[https://github.com/benwiz/emacs.d][repo]]
 #+BEGIN_SRC emacs-lisp
   (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
-  (when (file-exists-p custom-file)
-    (load custom-file))
+(when (file-exists-p custom-file)
+  (load custom-file))
 
-  (defun load-init-el ()
-    (interactive)
-    (load-file "~/.emacs.d/init.el"))
-  (global-set-key (kbd "C-c i") 'load-init-el)
+(defun load-init-el ()
+  (interactive)
+  (load-file "~/.emacs.d/init.el"))
+(global-set-key (kbd "C-c i") 'load-init-el)
 #+END_SRC
 ** settings.org HTML Export
 [[https://benwiz.com/emacs][html export]]
 #+BEGIN_SRC emacs-lisp
   ;; Place the following at the very top of this org file: `-*- eval: (add-hook 'after-save-hook 'org-html-export-to-html t t); -*-`
-  ;; ;; See top of file for eval that updates the html file
-  ;; (use-package htmlize)
-  ;; (setq org-html-validation-link "")
+;; ;; See top of file for eval that updates the html file
+;; (use-package htmlize)
+;; (setq org-html-validation-link "")
 
 
-  ;; ;; FIXME there is a bug here, these endlessly appends to the head, it need to not do this forever
-  ;; (defun org-inline-css-hook (exporter)
-  ;;   "Insert custom inline css to automatically set the
-  ;;   background of code to whatever theme I'm using's background"
-  ;;   (when (eq exporter 'html)
-  ;;     (let* ((my-pre-bg (face-background 'default))
-  ;;            (my-pre-fg (face-foreground 'default)))
-  ;;       (setq org-html-head-extra
-  ;;             (concat org-html-head-extra
-  ;;                     (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
-  ;;                             my-pre-bg my-pre-fg)
-  ;;                     (format "<style type=\"text/css\">\n pre.src-emacs-lisp:before {background-color: %s; color: %s;}</style>\n"
-  ;;                             my-pre-fg my-pre-bg))))))
+;; ;; FIXME there is a bug here, these endlessly appends to the head, it need to not do this forever
+;; (defun org-inline-css-hook (exporter)
+;;   "Insert custom inline css to automatically set the
+;;   background of code to whatever theme I'm using's background"
+;;   (when (eq exporter 'html)
+;;     (let* ((my-pre-bg (face-background 'default))
+;;            (my-pre-fg (face-foreground 'default)))
+;;       (setq org-html-head-extra
+;;             (concat org-html-head-extra
+;;                     (format "<style type=\"text/css\">\n pre.src {background-color: %s; color: %s;}</style>\n"
+;;                             my-pre-bg my-pre-fg)
+;;                     (format "<style type=\"text/css\">\n pre.src-emacs-lisp:before {background-color: %s; color: %s;}</style>\n"
+;;                             my-pre-fg my-pre-bg))))))
 
-  ;; (add-hook 'org-export-before-processing-hook 'org-inline-css-hook)
+;; (add-hook 'org-export-before-processing-hook 'org-inline-css-hook)
 #+END_SRC
 * Mouse / Touchpad
-  #+begin_src emacs-lisp
+#+begin_src emacs-lisp
     ;; ;; Shut off mouse clicks because my work computer's trackpad is super annoying, resizing windows with mouse still works
     ;; (global-unset-key (kbd "<down-mouse-1>"))
     ;; (global-unset-key (kbd "<mouse-1>"))
@@ -782,6 +782,23 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
     :init
     )
 #+END_SRC
+** Xref
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-'") #'xref-find-references)
+  ;; xref-after-jump-hook ;; this is not the hook I'm looking for
+  ;;
+  ;; pulse-momentary-highlight-region
+  ;; xref-pulse-momentarily
+
+ ;; set to non-nil to pulse. nil to hold until next keypress
+(setq pulse-flag nil)
+;; weird quirk, set pulse-flat to t and pulse-iterations to very high and can keep it highlighted while pressing keys
+;; (setq pulse-iterations 10)
+
+(defun eglot-code-actions' ()
+  (interactive)
+  (eglot-code-actions))
+#+END_SRC
 * Emacs Application Framework
 #+BEGIN_SRC emacs-lisp
   ;; (use-package eaf
@@ -872,15 +889,14 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
     ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
     )
 
-  (global-set-key (kbd "M-'") #'xref-find-references)
-
   ;; NOTE since upgrading to emacs29 I am trying out not using a hook to better understand my multiple server issue.
-  ;; (use-package eglot
-  ;;   :init
-  ;;   ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
-  ;;   (add-hook 'prog-mode-hook #'eglot-ensure)
-  ;;   ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
-  ;;   )
+  ;(use-package eglot
+  ;  :bind (("C-c C-a" . eglot-code-actions))
+    ;; :init
+    ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
+    ;; (add-hook 'prog-mode-hook #'eglot-ensure)
+    ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
+  ;  )
 
 (use-package hideshow
   :bind (("C-\\" . hs-toggle-hiding)

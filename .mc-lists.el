@@ -77,6 +77,7 @@
         sgml-slash
         suspend-frame
         toggle-truncate-lines
+        xref-find-definitions
         zap-up-to-char
         ))
 

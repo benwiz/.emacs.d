@@ -799,13 +799,18 @@ current buffer's, reload dir-locals."
 
   (global-set-key (kbd "M-'") #'xref-find-references)
 
+  (defun eglot-code-actions' ()
+    (interactive)
+    (eglot-code-actions))
+
   ;; NOTE since upgrading to emacs29 I am trying out not using a hook to better understand my multiple server issue.
-  ;; (use-package eglot
-  ;;   :init
-  ;;   ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
-  ;;   (add-hook 'prog-mode-hook #'eglot-ensure)
-  ;;   ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
-  ;;   )
+  ;(use-package eglot
+  ;  :bind (("C-c C-a" . eglot-code-actions))
+    ;; :init
+    ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
+    ;; (add-hook 'prog-mode-hook #'eglot-ensure)
+    ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
+  ;  )
 
 (use-package hideshow
   :bind (("C-\\" . hs-toggle-hiding)
