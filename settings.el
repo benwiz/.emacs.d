@@ -1,7 +1,7 @@
 (defconst *is-a-mac* (eq system-type 'darwin))
 (when *is-a-mac*
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
-(setq mac-command-modifier 'meta)
+  (setq mac-command-modifier 'meta)
 
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
@@ -710,9 +710,20 @@
 (use-package request)
 
 ;; TODO I'd like to show cider in the command line but eglot when inspected
-(use-package eldoc
-  :init
-  )
+;; (use-package eldoc
+;;   :init
+;;   )
+
+(global-set-key (kbd "M-'") #'xref-find-references)
+  ;; xref-after-jump-hook ;; this is not the hook I'm looking for
+  ;;
+  ;; pulse-momentary-highlight-region
+  ;; xref-pulse-momentarily
+
+ ;; set to non-nil to pulse. nil to hold until next keypress
+(setq pulse-flag nil)
+;; weird quirk, set pulse-flat to t and pulse-iterations to very high and can keep it highlighted while pressing keys
+;; (setq pulse-iterations 10)
 
 ;; (use-package eaf
 ;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
@@ -797,20 +808,18 @@ current buffer's, reload dir-locals."
     ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
     )
 
-  (global-set-key (kbd "M-'") #'xref-find-references)
-
   (defun eglot-code-actions' ()
     (interactive)
     (eglot-code-actions))
 
   ;; NOTE since upgrading to emacs29 I am trying out not using a hook to better understand my multiple server issue.
-  ;(use-package eglot
-  ;  :bind (("C-c C-a" . eglot-code-actions))
+  (use-package eglot
+    :bind (("C-c C-a" . eglot-code-actions))
     ;; :init
     ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
     ;; (add-hook 'prog-mode-hook #'eglot-ensure)
     ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
-  ;  )
+    )
 
 (use-package hideshow
   :bind (("C-\\" . hs-toggle-hiding)
@@ -1190,8 +1199,11 @@ Then the Clojure buffer is activated as if nothing happened."
         cider-repl-history-size 1000
         cider-show-error-buffer t
         nrepl-hide-special-buffers t
-        ;; Stop error buffer from popping up while working in buffers other than the REPL:
-        nrepl-popup-stacktraces nil)
+        nrepl-popup-stacktraces nil ;; Stop error buffer from popping up while working in buffers other than the REPL:
+        cider-jdk-src-paths '("/usr/lib/jvm/openjdk-17/source" "/usr/lib/jvm/openjdk-17/source/java.base")
+        cider-enrich-classpath t
+        )
+  ;; (cider-add-to-alist 'cider-jack-in-dependencies "mx.cider/tools.deps.enrich-classpath" "1.18.5")
 
   (add-hook 'cider-mode-hook 'company-mode)
   (add-hook 'cider-repl-mode-hook 'paredit-mode)

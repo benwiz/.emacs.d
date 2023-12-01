@@ -136,33 +136,9 @@
  '(jabber-mode-line-mode nil)
  '(linum-format " %7i ")
  '(package-selected-packages
-   '(htmlize yaml-mode ws-butler use-package undo-tree switch-buffer-functions scratch restclient restart-emacs redtick pomodoro paradox markdown-mode magit load-env-vars gnu-elpa-keyring-update git-link flycheck-clj-kondo fic-mode exwm expand-region exec-path-from-shell editorconfig doom-modeline diff-hl dictionary counsel-projectile company clojure-snippets clj-refactor auto-package-update))
+   '(cider htmlize yaml-mode ws-butler use-package undo-tree switch-buffer-functions scratch restclient restart-emacs redtick pomodoro paradox markdown-mode magit load-env-vars gnu-elpa-keyring-update git-link flycheck-clj-kondo fic-mode exwm expand-region exec-path-from-shell editorconfig doom-modeline diff-hl dictionary counsel-projectile company clojure-snippets clj-refactor auto-package-update))
  '(safe-local-variable-values
-   '((eval add-hook 'cider-connected-hook
-           (lambda nil
-             (shell-command "./git-version.sh"))
-           nil t)
-     (cider-clojure-cli-global-options . "-A:emacs:valcache:dev")
-     (cider-preferred-build-tool . clojure-cli)
-     (eval progn
-           (setenv "breeze.ehr.services.config-url" "file:dev-resources/prod-service-config.edn")
-           (setenv "breeze.ehr.services.account-service-key" "accounts")
-           (setenv "breeze.ehr.session.cookie-attrs.secure" "false")
-           (setenv "breeze.ehr.session.cookie-name" "mast-ec")
-           (setenv "breeze.ehr.session.store.impl" "encrypted-cookie")
-           (setenv "breeze.ehr.session.store.encrypted-cookie.key" "00000000000000000000000000000000")
-           (setenv "breeze.ehr.goog.app-name" "mast")
-           (setenv "breeze.ehr.goog.service-account-id" "mast-service@breeze-ehr.breezeehr.com.iam.gserviceaccount.com")
-           (setenv "breeze.ehr.goog.p12-file" "dev-resources/Breeze-EHR_local-development_a3f4668ebdc0.p12")
-           (setenv "breeze.ehr.goog.do-document-uploads" "true")
-           (setenv "breeze.ehr.rule-engine.do-receive" "true")
-           (setenv "breeze.ehr.http.do-send-stacktrace" "true")
-           (setenv "breeze.ehr.use-shared-hitch-graph" "true")
-           (setenv "breeze.ehr.rule-engine.kafka-return"
-                   (concat
-                    (user-login-name)
-                    "-test-rule-return")))
-     (eval add-hook 'after-save-hook 'org-html-export-to-html t t))))
+   '((eval add-hook 'after-save-hook 'org-html-export-to-html t t))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
