@@ -1,9 +1,9 @@
 ;;; -*- lisp-data -*-
-(("/home/benwiz/code/scratch/clj-scratch/")
+(("/home/benwiz/master-at-arms2/gangway-kafka-connect/")
+ ("/home/benwiz/code/scratch/clj-scratch/")
  ("/home/benwiz/code/temptest/")
  ("/home/benwiz/code/xreftest/")
  ("/home/benwiz/code/orchard/")
- ("/home/benwiz/master-at-arms2/gangway-kafka-connect/")
  ("/home/benwiz/master-at-arms2/mast/")
  ("/home/benwiz/master-at-arms2/breeze_scratch/")
  ("/home/benwiz/master-at-arms2/jib/")

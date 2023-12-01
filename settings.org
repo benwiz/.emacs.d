@@ -172,12 +172,12 @@
 
   ;; Suggest to upgrade packages occasionally, TODO would be better to ask the first time emacs is opened each month
   ;; TODO I never see this because of emacsclient. So I've shut it off for now.
-  ;; (when (eq 0 (random 50)))
-  (when (y-or-n-p-with-timeout "Do you want to check packages for upgrades? " 6 nil)
-    (package-list-packages)
-    (message "Run `Shift-U x` to upgrade"))
+  ;; (when (eq 0 (random 50))
+  ;;   (when (y-or-n-p-with-timeout "Do you want to check packages for upgrades? " 6 nil)
+  ;;     (package-list-packages)
+  ;;     (message "Run `Shift-U x` to upgrade")))
 
-  ;; force packages to always be installed, no need to defer with emacsclient, I think
+  ;; ;; force packages to always be installed, no need to defer with emacsclient, I think
   ;; NOTE must set `:ensure nil` if not a package.el package, like dired
   (require 'use-package-ensure)
   (setq use-package-always-ensure t)

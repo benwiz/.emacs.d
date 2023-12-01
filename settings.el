@@ -140,7 +140,7 @@
 ;;     (package-list-packages)
 ;;     (message "Run `Shift-U x` to upgrade")))
 
-;; force packages to always be installed, no need to defer with emacsclient, I think
+;; ;; force packages to always be installed, no need to defer with emacsclient, I think
 ;; NOTE must set `:ensure nil` if not a package.el package, like dired
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
