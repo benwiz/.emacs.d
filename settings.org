@@ -1,4 +1,7 @@
 # #+TITLE: settings.org | Ben Wiz
+* Notes
+C-x v ~     change version of file
+magit-log-buffer-file      history of file, this is amazing
 * To Do
 ** make the colors of scroll margin dimmer to signal it's out of the main scroll area. Super cool!
 ** project opener should create dedicated tab
