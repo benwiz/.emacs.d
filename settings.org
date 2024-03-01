@@ -444,7 +444,6 @@ magit-log-buffer-file      history of file, this is amazing
  #+END_SRC
 ** Misc. Packages
 #+BEGIN_SRC emacs-lisp
-  (use-package restart-emacs)
   (use-package dictionary)
   (use-package wgrep) ;; edit file in grep buffer
   ;; (use-package itail) ;; tail file within emacs
