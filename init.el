@@ -5,9 +5,11 @@
 (package-initialize)
 
 (require 'org)
-(org-babel-load-file
- (expand-file-name "settings.org"
-                   user-emacs-directory))
+;; I got fed up with the org stuff
+;; (org-babel-load-file
+;;  (expand-file-name "settings.org"
+;;                    user-emacs-directory))
+(load-file (expand-file-name "settings.el" user-emacs-directory)) 
 (put 'narrow-to-region 'disabled nil)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

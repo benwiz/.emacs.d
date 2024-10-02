@@ -3,13 +3,10 @@
 C-x v ~     change version of file
 magit-log-buffer-file      history of file, this is amazing
 * To Do
+** Organize this file
 ** make the colors of scroll margin dimmer to signal it's out of the main scroll area. Super cool!
 ** project opener should create dedicated tab
 ** clojure should be able to navigate to java source. May need to set `cider-jdk-src-paths`.
-** clojure lsp
-*** customize eldoc
-*** cusotmize/learn xref
-*** lsp-mode looking better again. check this https://clojure-lsp.io/features/#show-all-workspaceproject-symbols
 ** look into tabs for emacs
 ** Set up dashboard
 *** list the windows in each tab
@@ -27,8 +24,8 @@ magit-log-buffer-file      history of file, this is amazing
 * Operating System
 #+BEGIN_SRC emacs-lisp
   (defconst *is-a-mac* (eq system-type 'darwin))
-(when *is-a-mac*
-  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
+  (when *is-a-mac*
+    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
   (setq mac-command-modifier 'meta)
 #+END_SRC
 * emacs.d
@@ -133,14 +130,16 @@ magit-log-buffer-file      history of file, this is amazing
   ;;(if (eq window-system 'ns)
   ;;  (add-to-list 'default-frame-alist '(maximized .))
   ;;  (add-to-list 'default-frame-alist '(fullscreen .)))
-  (add-hook 'after-make-frame-functions
-            (lambda (frame)
-              (set-frame-parameter frame 'fullscreen 'fullboth)
-              (tool-bar-mode 0)
-              (scroll-bar-mode 0)))
-  (set-frame-parameter nil 'fullscreen 'fullboth)
 
-  (add-hook 'focus-out-hook #'garbage-collect)
+  ;; uncomment to start in full screen:
+  ;; (add-hook 'after-make-frame-functions
+  ;;         (lambda (frame)
+  ;;           (set-frame-parameter frame 'fullscreen 'fullboth)
+  ;;           (tool-bar-mode 0)
+  ;;           (scroll-bar-mode 0)))
+  ;; (set-frame-parameter nil 'fullscreen 'fullboth)
+
+(add-hook 'focus-out-hook #'garbage-collect)
   (display-battery-mode 0)
 
   (setq backup-directory-alist
@@ -222,7 +221,9 @@ magit-log-buffer-file      history of file, this is amazing
 * Theme, Modeline, and Tabs
 #+BEGIN_SRC emacs-lisp
   (if *is-a-mac*
-      (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
+      (progn
+        (add-to-list 'custom-theme-load-path "/Users/benwiz/.emacs.d/themes")
+        (add-to-list 'custom-theme-load-path "/Users/j/.emacs.d/themes"))
     (add-to-list 'custom-theme-load-path "/home/benwiz/.emacs.d/themes"))
 
   ;; Try to speed up font lock, I have identified it using the profiler as the major bottleneck in my lag
@@ -288,9 +289,8 @@ magit-log-buffer-file      history of file, this is amazing
   (global-set-key (kbd "<f10>") 'toggle-theme)
 
   ;; Modeline
-  (use-package all-the-icons)
+  (use-package nerd-icons) ;; NOTE Must run `M-x nerd-icons-install-fonts` to install icons
   (use-package doom-modeline
-    ;; NOTE Must run `M-x all-the-icons-install-fonts` to install icons
     ;; https://github.com/seagle0128/doom-modeline#customize
     :hook (window-setup . doom-modeline-mode) ;; (after-init . doom-modeline-mode)
     :config
@@ -785,6 +785,15 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
   ;;   :init
   ;;   )
 #+END_SRC
+** Shell
+#+BEGIN_SRC emacs-lisp
+#+END_SRC
+** Flymake
+#+BEGIN_SRC emacs-lisp
+#+END_SRC
+** Flycheck
+#+BEGIN_SRC emacs-lisp
+#+END_SRC
 ** Xref
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "M-'") #'xref-find-references)
@@ -798,6 +807,93 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 ;; weird quirk, set pulse-flat to t and pulse-iterations to very high and can keep it highlighted while pressing keys
 ;; (setq pulse-iterations 10)
 #+END_SRC
+** dape - debug adapter protocol
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package dape
+  ;;   :preface
+  ;;   ;; By default dape shares the same keybinding prefix as `gud'
+  ;;   ;; If you do not want to use any prefix, set it to nil.
+  ;;   (setq dape-key-prefix "\C-x\C-a")
+
+
+  ;;   :hook
+  ;;   ;; Save breakpoints on quit
+  ;;   ((kill-emacs . dape-breakpoint-save)
+  ;;   ;; Load breakpoints on startup
+  ;;    (after-init . dape-breakpoint-load))
+
+  ;;   ;; :init
+  ;;   ;; To use window configuration like gud (gdb-mi)
+  ;;   ;; (setq dape-buffer-window-arrangement 'gud)
+
+  ;;   :config
+  ;;   ;; Info buffers to the right
+  ;;   ;; (setq dape-buffer-window-arrangement 'right)
+
+  ;;   ;; Global bindings for setting breakpoints with mouse
+  ;;   (dape-breakpoint-global-mode)
+
+  ;;   ;; Pulse source line (performance hit)
+  ;;   ;; (add-hook 'dape-display-source-hook 'pulse-momentary-highlight-one-line)
+
+  ;;   ;; To not display info and/or buffers on startup
+  ;;   ;; (remove-hook 'dape-start-hook 'dape-info)
+  ;;   ;; (remove-hook 'dape-start-hook 'dape-repl)
+
+  ;;   ;; To display info and/or repl buffers on stopped
+  ;;   ;; (add-hook 'dape-stopped-hook 'dape-info)
+  ;;   ;; (add-hook 'dape-stopped-hook 'dape-repl)
+
+  ;;   ;; Kill compile buffer on build success
+  ;;   ;; (add-hook 'dape-compile-hook 'kill-buffer)
+
+  ;;   ;; Save buffers on startup, useful for interpreted languages
+  ;;   ;; (add-hook 'dape-start-hook (lambda () (save-some-buffers t t)))
+
+  ;;   ;; Projectile users
+  ;;   ;; (setq dape-cwd-fn 'projectile-project-root)
+  ;;   )
+#+END_SRC
+** eglot
+#+begin_src emacs-lisp
+  ;; (defun eglot-code-actions' ()
+  ;;   (interactive)
+  ;;   (eglot-code-actions))
+
+  ;; ;; NOTE since upgrading to emacs29 I am trying out not using a hook to better understand my multiple server issue.
+  ;; (use-package eglot
+  ;;   :bind (("C-c C-a" . eglot-code-actions))
+  ;;   :init
+  ;;   ;; (add-hook 'prog-mode-hook #'eglot-ensure)
+  ;;   (setq eglot-server-programs '(;; (clojure-mode . ("clojure-lsp")) ;; clojure-lsp is too memory heavy to always open
+  ;;                                 (python-mode . ("ruff" "server"))
+  ;;                                 (python-ts-mode . ("ruff" "server"))
+  ;;                                 ))
+  ;;   )
+#+end_src
+** lsp-mode
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :init
+    (setq lsp-keymap-prefix "C-c l")
+    ;; :hook (
+    ;;        (python-mode . lsp)
+    ;;        (python-ts-mode . lsp)
+    ;;        )
+    :commands lsp)
+
+  (use-package lsp-ivy
+    :commands lsp-ivy-workspace-symbol)
+
+  (use-package lsp-pyright
+    :ensure t
+    :hook ((python-mode . (lambda ()
+                             (require 'lsp-pyright)
+                             (lsp)))
+           (python-ts-mode . (lambda ()
+                               (require 'lsp-pyright)
+                               (lsp)))))
+#+end_src
 * Emacs Application Framework
 #+BEGIN_SRC emacs-lisp
   ;; (use-package eaf
@@ -846,36 +942,9 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 * File Types
 ** All
 #+BEGIN_SRC emacs-lisp
-  ;; So I was able to build ~/.tree-sitter/bin/tree_sitter_clojure_binding.node but I can't figure out how to use it
-  ;; (tree-sitter-require 'clojure) causes a crash, it should be a .so file. using tree-sitter cli the .node file works.
-  ;; actually this may have worked: gcc -shared obj.target/tree_sitter_clojure_binding/bindings/node/binding.o -o clojure.so
-  ;; supposedly tree-ssitter-hl-mode overrides many of the font-lock features, so I'm hoping that minimizing font-lock
-  ;; actions helps with my highlighting bottleneck while typing fast.
-  ;; TODO look into using eglot for code highlighting instead of tree-sitter or jit-lock
-  ;; NOTE just don't worry about this, it is built-in native in emacs29
-  ;; (use-package tree-sitter
-  ;;   :hook ((clojure-mode . tree-sitter-mode)
-  ;;          (clojure-script . tree-sitter-mode)
-  ;;          (tree-sitter-mode . tree-sitter-hl-mode))
-  ;;   :config
-  ;;   (setq tree-sitter-major-mode-language-alist ;; directory stored in tree-sitter-load-path
-  ;;         (append tree-sitter-major-mode-language-alist
-  ;;                 '((clojure-mode . clojure)
-  ;;                   (clojurescript-mode . clojure)))))
-  ;;
-  ;; (use-package tree-sitter-langs)
-
   (use-package ws-butler
     :hook (prog-mode . ws-butler-mode)
     :config (ws-butler-global-mode 1))
-
-  ;; (use-package editorconfig
-  ;;   :config
-  ;;   (editorconfig-mode 1))
-
-  (use-package flycheck
-    ;; :init (global-flycheck-mode) ;; no longer want this becasue of eglot
-    )
 
   (use-package expand-region
     :config
@@ -888,36 +957,29 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
     ;; TODO consider fuzzy matching https://docs.cider.mx/cider/usage/code_completion.html#_fuzzy_candidate_matching
     )
 
-  (defun eglot-code-actions' ()
-    (interactive)
-    (eglot-code-actions))
+  (use-package treesit-auto
+    :custom
+    (treesit-auto-install 'prompt)
+    :config
+    (treesit-auto-add-to-auto-mode-alist 'all)
+    (global-treesit-auto-mode))
 
-  ;; NOTE since upgrading to emacs29 I am trying out not using a hook to better understand my multiple server issue.
-  (use-package eglot
-    :bind (("C-c C-a" . eglot-code-actions))
-    ;; :init
-    ;; TODO problem: eglot starts new server for each project, the servers do not communicate and use way more memory than I'd like
-    ;; (add-hook 'prog-mode-hook #'eglot-ensure)
-    ;; (setq eglot-server-programs '((clojure-mode . ("clojure-lsp"))))
-    )
-
-(use-package hideshow
-  :bind (("C-\\" . hs-toggle-hiding)
-         ("M-+" . hs-show-all)
-         ("M--" . hs-hide-all))
-  :init (add-hook #'prog-mode-hook #'hs-minor-mode)
-  :diminish hs-minor-mode
-  :config
-  ;; Add `json-mode' and `javascript-mode' to the list
-  (setq hs-special-modes-alist
-        (mapcar 'purecopy
-                '((c-mode "{" "}" "/[*/]" nil nil)
-                  (c++-mode "{" "}" "/[*/]" nil nil)
-                  (java-mode "{" "}" "/[*/]" nil nil)
-                  (js-mode "{" "}" "/[*/]" nil)
-                  (json-mode "{" "}" "/[*/]" nil)
-                  (javascript-mode  "{" "}" "/[*/]" nil)))))
-
+  (use-package hideshow
+    :bind (("C-\\" . hs-toggle-hiding)
+           ("M-+" . hs-show-all)
+           ("M--" . hs-hide-all))
+    :init (add-hook #'prog-mode-hook #'hs-minor-mode)
+    :diminish hs-minor-mode
+    :config
+    ;; Add `json-mode' and `javascript-mode' to the list
+    (setq hs-special-modes-alist
+          (mapcar 'purecopy
+                  '((c-mode "{" "}" "/[*/]" nil nil)
+                    (c++-mode "{" "}" "/[*/]" nil nil)
+                    (java-mode "{" "}" "/[*/]" nil nil)
+                    (js-mode "{" "}" "/[*/]" nil)
+                    (json-mode "{" "}" "/[*/]" nil)
+                    (javascript-mode  "{" "}" "/[*/]" nil)))))
   (defun duplicate-line()
     (interactive)
     (move-beginning-of-line 1)
@@ -1068,7 +1130,6 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 
     (add-hook 'rjsx-mode-hook
               (lambda ()
-                ;; (flycheck-select-checker "javascript-eslint")
                 (electric-pair-mode 1)))
 
     (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
@@ -1103,7 +1164,16 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
 ** Python
 #+BEGIN_SRC emacs-lisp
   (use-package python-mode
-    :bind (("C-c C-q" . python-shell-restart)))
+    :bind (("C-c C-q" . python-shell-restart)
+           (""))
+    ;; :hook ((python-mode . eglot-ensure)
+    ;;        (python-ts-mode . eglot-ensure))
+    )
+  ;; (use-package flymake-ruff
+  ;; :ensure t
+  ;; :hook ((eglot-managed-mode . flymake-ruff-load)
+  ;;        (python-mode . flymake-ruff-load)
+  ;;        (python-ts-mode . flymake-ruff-load)))
 #+END_SRC
 ** Go
 #+BEGIN_SRC emacs-lisp
@@ -1187,19 +1257,6 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
   ;;   :config
   ;;   (add-hook 'go-mode-hook 'go-eldoc-setup))
 
-  ;; ;; Linting
-  ;; (use-package flycheck-gometalinter
-  ;;   :config
-  ;;   (progn
-  ;;     (flycheck-gometalinter-setup))
-  ;;     ;; skip linting for vendor dirs
-  ;;     (setq flycheck-gometalinter-vendor t)
-  ;;     ;; use in test files
-  ;;     (setq flycheck-gometalinter-test t)
-  ;;     ;; only use fast linters
-  ;;     (setq flycheck-gometalinter-fast t)
-  ;;     ;; explicitly disable 'gotype' linter
-  ;;     (setq flycheck-gometalinter-disable-linters '("gotype")))
 #+END_SRC
 ** Rust
 #+BEGIN_SRC emacs-lisp
@@ -1222,8 +1279,6 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
   ;;   ;;                                                        (message "hey")))
   ;;   )
 
-  ;; (use-package flycheck-rust
-  ;;   :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 #+END_SRC
 ** GLSL
 #+BEGIN_SRC emacs-lisp
