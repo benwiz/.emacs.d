@@ -48,7 +48,8 @@
   )
 
 (use-package flymake-ruff
-  :hook (((python-mode python-ts-mode) . flymake-mode)
+  :hook ((eglot-managed-mode . flymake-ruff-load)
+         ((python-mode python-ts-mode) . flymake-mode)
          ((python-mode python-ts-mode) . flymake-ruff-load)))
 
 (use-package reformatter
@@ -58,7 +59,10 @@
   :config
   (reformatter-define ruff-format ;; note this creates ruff-format-buffer, ruff-format-region, ruff-format-on-save-mode
     :program "ruff"
-    :args `("format" "--stdin-filename" ,buffer-file-name "-")))
+    :args `("format" "--stdin-filename" ,buffer-file-name "-"))
+  (reformatter-define ruff-check-fix ;; this is definitely a hack shoving it into reformatter but it's kind of convenient
+    :program "ruff"
+    :args `("check" "--fix" "--stdin-filename" ,buffer-file-name "-")))
 
 (use-package dape
   :preface
