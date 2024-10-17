@@ -876,10 +876,10 @@ startx ~/.emacs.d/exwm_initrc -- /usr/bin/Xephyr :4 -screen 1885x1016 -dpi 96
   (use-package lsp-mode
     :init
     (setq lsp-keymap-prefix "C-c l")
-    ;; :hook (
-    ;;        (python-mode . lsp)
-    ;;        (python-ts-mode . lsp)
-    ;;        )
+    :hook (
+           (python-mode . flymake-mode)
+           (python-ts-mode . flymake-mode)
+           )
     :commands lsp)
 
   (use-package lsp-ivy

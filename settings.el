@@ -8,6 +8,7 @@
 (load "theme.el")
 (load "env.el")
 (load "keybindings.el")
+(load "lsp-debugger-linter-formatter.el")
 
 (use-package docker)
 
@@ -399,134 +400,6 @@
 ;; weird quirk, set pulse-flat to t and pulse-iterations to very high and can keep it highlighted while pressing keys
 ;; (setq pulse-iterations 10)
 
-(use-package pet
-  :ensure-system-package (dasel sqlite3)
-  :config
-  (add-hook 'python-base-mode-hook
-            ;; 'pet-mode -10
-            (lambda ()
-              (setq-local python-shell-interpreter (pet-executable-find "python")
-                          python-shell-virtualenv-root (pet-virtualenv-root))
-              ;; (pet-eglot-setup)
-              ;; (eglot-ensure)
-              ))
-  )
-
-(use-package dape
-  :preface
-  ;; By default dape shares the same keybinding prefix as `gud'
-  ;; If you do not want to use any prefix, set it to nil.
-  (setq dape-key-prefix "\C-x\C-a")
-
-
-  ;; :hook
-  ;; ;; Save breakpoints on quit
-  ;; ((kill-emacs . dape-breakpoint-save)
-  ;;  ;; Load breakpoints on startup
-  ;;  (after-init . dape-breakpoint-load))
-
-  ;; :init
-  ;; To use window configuration like gud (gdb-mi)
-  ;; (setq dape-buffer-window-arrangement 'gud)
-
-  :config
-  ;; Info buffers to the right
-  ;; (setq dape-buffer-window-arrangement 'right)
-
-  ;; Global bindings for setting breakpoints with mouse
-  (dape-breakpoint-global-mode)
-
-  ;; Pulse source line (performance hit)
-  ;; (add-hook 'dape-display-source-hook 'pulse-momentary-highlight-one-line)
-
-  ;; To not display info and/or buffers on startup
-  ;; (remove-hook 'dape-start-hook 'dape-info)
-  ;; (remove-hook 'dape-start-hook 'dape-repl)
-
-  ;; To display info and/or repl buffers on stopped
-  ;; (add-hook 'dape-stopped-hook 'dape-info)
-  ;; (add-hook 'dape-stopped-hook 'dape-repl)
-
-  ;; Kill compile buffer on build success
-  ;; (add-hook 'dape-compile-hook 'kill-buffer)
-
-  ;; Save buffers on startup, useful for interpreted languages
-  ;; (add-hook 'dape-start-hook (lambda () (save-some-buffers t t)))
-
-  ;; Projectile users
-  ;; (setq dape-cwd-fn 'projectile-project-root)
-  )
-
-(defun eglot-code-actions' ()
-  (interactive)
-  (eglot-code-actions))
-
-;; NOTE since upgrading to emacs29 I am trying out not using a hook to better understand my multiple server issue.
-(use-package eglot
-  :bind (("C-c C-a" . eglot-code-actions))
-  :init
-  ;; (add-hook 'prog-mode-hook #'eglot-ensure)
-  (setq eglot-server-programs '(;; (clojure-mode . ("clojure-lsp")) ;; clojure-lsp is too memory heavy to always open
-                                (python-mode . ("ruff" "server"))
-                                (python-ts-mode . ("ruff" "server"))
-                                ))
-  )
-
-;; (use-package flymake-ruff
-;; :ensure t
-;; :hook ((eglot-managed-mode . flymake-ruff-load)
-;;        (python-mode . flymake-ruff-load)
-;;        (python-ts-mode . flymake-ruff-load)))
-
-(use-package lsp-mode
-  :commands lsp lsp-deferred
-  ;; :hook ((python-mode . lsp-deferred)
-  ;;        (python-ts-mode . lsp-deferred))
-  :init
-  (setq lsp-keymap-prefix "C-c l"
-        lsp-headerline-breadcrumb-enable nil
-        lsp-modeline-diagnostics-enable nil
-        )
-  )
-
-(use-package lsp-ivy
-  :bind (("C-c l g s" . lsp-ivy-workspace-symbol))
-  :commands lsp-ivy-workspace-symbol)
-
-(use-package lsp-pyright
-  :ensure t
-  :hook ((python-mode . (lambda ()
-                           (require 'lsp-pyright)
-                           ;; (lsp)
-                           ))
-         (python-ts-mode . (lambda ()
-                             (require 'lsp-pyright)
-                             ;; (lsp)
-                             )))
-  )
-
-(use-package with-venv)
-
-(use-package dap-mode
-  :after lsp-mode
-  :commands dap-debug
-  :hook ((python-mode . dap-ui-mode)
-         (python-mode . dap-mode)
-         (python-ts-mode . dap-ui-mode)
-         (python-ts-mode . dap-mode))
-  :config
-  (require 'dap-python)
-  (setq dap-python-debugger 'debugpy)
-  ;; (defun dap-python--pyenv-executable-find (command)
-  ;;   (with-venv (executable-find "python")))
-  ;; (add-hook 'dap-stopped-hook
-  ;;           (lambda (arg) (call-interactively #'dap-hydra)))
-  )
-
-(use-package company
-  :bind (("C-<return>" . company-complete-common-or-cycle))
-  :hook (prog-mode . company-mode))
-
 ;; (use-package eaf
 ;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
 ;;   :custom
@@ -544,8 +417,6 @@
 ;;   )
 ;; (require 'eaf-browser)
 ;; (require 'eaf-pdf-viewer)
-
-(define-key prog-mode-map (kbd "<tab>") #'indent-for-tab-command)
 
 (defun paredit-delete-indentation (&optional arg)
   "Handle joining lines that end in a comment."

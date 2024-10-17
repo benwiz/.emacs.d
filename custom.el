@@ -8,7 +8,15 @@
  '(ansi-color-names-vector
    ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
  '(connection-local-criteria-alist
-   '(((:application tramp :machine "pc0lf5t7.lennar.lennarcorp.com")
+   '(((:application tramp :machine "LT-PF2QGQ7L.Lennar.LennarCorp.com")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "LT-PF2YZ0LL.Lennar.LennarCorp.com")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "LT-PF41D4KF.Lennar.LennarCorp.com")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "LT-PF3YFNH0.Lennar.LennarCorp.com")
+      tramp-connection-local-darwin-ps-profile)
+     ((:application tramp :machine "pc0lf5t7.lennar.lennarcorp.com")
       tramp-connection-local-darwin-ps-profile)
      ((:application tramp :protocol "kubernetes")
       tramp-kubernetes-connection-local-default-profile)
@@ -110,15 +118,7 @@
  '(jabber-mode-line-compact t)
  '(jabber-mode-line-mode nil)
  '(linum-format " %7i ")
- '(package-selected-packages
-   '(auto-package-update clj-refactor clojure-snippets company counsel-projectile
-                         dictionary diff-hl doom-modeline editorconfig
-                         exec-path-from-shell expand-region exwm fic-mode
-                         flycheck-clj-kondo git-link gnu-elpa-keyring-update
-                         htmlize load-env-vars magit markdown-mode paradox pet
-                         pomodoro redtick restart-emacs restclient scratch
-                         switch-buffer-functions undo-tree use-package ws-butler
-                         yaml-mode))
+ '(package-selected-packages nil)
  '(safe-local-variable-values
    '((eval add-hook 'after-save-hook 'org-html-export-to-html t t))))
 (custom-set-faces
